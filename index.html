@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance API Request</title>
+    <script>
+        // Function to make API request
+        async function makeApiRequest() {
+            try {
+                const response = await fetch('https://8qbqvbcdsb.execute-api.eu-west-3.amazonaws.com/Production', {
+                    method: 'GET', // or 'POST', 'PUT', 'DELETE', etc., depending on your API
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Include other headers as required, such as Authorization for secured endpoints
+                    },
+                    // Include body if method is POST or PUT
+                    // body: JSON.stringify({ key: 'value' })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+                alert("API Request Successful!\nCheck the console for response.");
+            } catch (error) {
+                console.error('Error making API request:', error);
+                alert("API Request Failed:\n" + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Attendance API Request Demo 2</h2>
+    <!-- Button to trigger API request -->
+    <button onclick="makeApiRequest()">Log Attendance</button>
+</body>
+</html>
+
