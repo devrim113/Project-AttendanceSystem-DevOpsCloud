@@ -132,6 +132,113 @@ resource "aws_api_gateway_integration_response" "options_integration_response" {
     ]
 }
 
+resource "aws_api_gateway_method" "get_mypath" {
+    rest_api_id   = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id   = aws_api_gateway_resource.root.id
+    http_method   = "GET"
+    authorization = "NONE"
+
+    request_parameters = {
+        "method.request.path.proxy" = true
+    }
+}
+
+resource "aws_api_gateway_integration" "get_mypath_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id             = aws_api_gateway_resource.root.id
+    http_method             = aws_api_gateway_method.get_mypath.http_method
+    integration_http_method = "GET"
+    type                    = "MOCK"
+    request_templates = {
+        "application/json" = "{\"statusCode\": 200}"
+    }
+}
+
+resource "aws_api_gateway_method_response" "get_mypath_response" {
+    rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id = aws_api_gateway_resource.root.id
+    http_method = aws_api_gateway_method.get_mypath.http_method
+    status_code = "200"
+
+    response_parameters = {
+        "method.response.header.Access-Control-Allow-Headers" = true,
+        "method.response.header.Access-Control-Allow-Methods" = true,
+        "method.response.header.Access-Control-Allow-Origin"  = true
+    }
+}
+
+resource "aws_api_gateway_integration_response" "get_mypath_integration_response" {
+    rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id = aws_api_gateway_resource.root.id
+    http_method = aws_api_gateway_method.get_mypath.http_method
+    status_code = aws_api_gateway_method_response.get_mypath_response.status_code
+
+    response_parameters = {
+        "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+        "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    }
+
+    depends_on = [
+        aws_api_gateway_method.get_mypath,
+        aws_api_gateway_integration.get_mypath_integration,
+    ]
+}
+
+resource "aws_api_gateway_method" "put_mypath" {
+    rest_api_id   = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id   = aws_api_gateway_resource.root.id
+    http_method   = "PUT"
+    authorization = "NONE"
+
+    request_parameters = {
+        "method.request.path.proxy" = true
+    }
+}
+
+resource "aws_api_gateway_integration" "put_mypath_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id             = aws_api_gateway_resource.root.id
+    http_method             = aws_api_gateway_method.put_mypath.http_method
+    integration_http_method = "PUT"
+    type                    = "MOCK"
+    request_templates = {
+        "application/json" = "{\"statusCode\": 200}"
+    }
+}
+
+resource "aws_api_gateway_method_response" "put_mypath_response" {
+    rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id = aws_api_gateway_resource.root.id
+    http_method = aws_api_gateway_method.put_mypath.http_method
+    status_code = "200"
+
+    response_parameters = {
+        "method.response.header.Access-Control-Allow-Headers" = true,
+        "method.response.header.Access-Control-Allow-Methods" = true,
+        "method.response.header.Access-Control-Allow-Origin"  = true
+    }
+}
+
+resource "aws_api_gateway_integration_response" "put_mypath_integration_response" {
+    rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+    resource_id = aws_api_gateway_resource.root.id
+    http_method = aws_api_gateway_method.put_mypath.http_method
+    status_code = aws_api_gateway_method_response.put_mypath_response.status_code
+
+    response_parameters = {
+        "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+        "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    }
+
+    depends_on = [
+        aws_api_gateway_method.put_mypath,
+        aws_api_gateway_integration.put_mypath_integration,
+    ]
+}
+
+
 
 resource "aws_api_gateway_deployment" "deployment" {
     depends_on = [
