@@ -41,11 +41,6 @@ resource "aws_dynamodb_table" "table" {
     type = "B"
   }
 
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = false
-  }
-
   # User's attendance on specific date for all courses
   local_secondary_index {
     name            = "UserAttendance"
