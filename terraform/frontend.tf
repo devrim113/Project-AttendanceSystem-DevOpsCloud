@@ -10,6 +10,11 @@ resource "aws_s3_bucket" "S3_Bucket" {
   }
 }
 
+resource "aws_s3_bucket_acl" "b_acl" {
+  bucket = aws_s3_bucket.S3_Bucket.id
+  acl    = "public-read"
+}
+
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
