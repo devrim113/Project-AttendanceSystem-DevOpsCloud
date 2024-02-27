@@ -6,11 +6,6 @@ on:
       - main
     paths:
       - 'lambda/*.py'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'lambda/*.py'
 
 jobs:
   deploy-lambda:
