@@ -14,7 +14,6 @@ on:
 
 jobs:
   deploy-lambda:
-    name: Deploy Lambda Functions
     runs-on: ubuntu-latest
 
     steps:
@@ -33,12 +32,11 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-central-1
 
-    - name: Deploy Updated Lambda Functions
+    - name: Deploy Lambda Functions
       run: |
-        for file in $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'lambda/.*\.py'); do
+        for file in lambda/*.py; do
           function_name=$(basename $file .py)
           echo "Deploying $function_name..."
-          # Ensure the Python file is zipped before deployment
           zip -j "$function_name.zip" "$file"
           aws lambda update-function-code --function-name $function_name --zip-file fileb://"$function_name.zip"
         done
