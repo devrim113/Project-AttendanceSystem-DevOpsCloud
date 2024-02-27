@@ -1,6 +1,8 @@
 # This file contains CRUD functions for an AWS Lambda node which interacts with a DynamoDB table
 # to store and retrieve student data.
 
+#! We need a partition key (PK) of UserId, CourseId, and Date to uniquely identify a record.
+
 import logging
 import json
 import boto3
@@ -12,7 +14,7 @@ logger.setLevel(logging.INFO)
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('UserData')
 
-# Create or Update a record
+# Create or Update a student record
 def put_attendance_record(user_id, course_id, course_name, date, present, user_name, user_type):
     response = table.put_item(
         Item={
@@ -28,21 +30,33 @@ def put_attendance_record(user_id, course_id, course_name, date, present, user_n
     return response
 
 # Read a record
-def get_attendance_record(user_id, course_id):
+def get_attendance_record(user_id, course_id, date):
     response = table.get_item(
+        Key={
+            'UserId': user_id,
+            'CourseId': course_id,
+            'Date': date
+        }
+    )
+    return response.get('Item')
+
+# Read all records for a user
+def get_all_attendance_records(user_id, course_id):
+    response = table.query(
         Key={
             'UserId': user_id,
             'CourseId': course_id
         }
     )
-    return response.get('Item')
+    return response.get('Items')
 
 # Delete a record
-def delete_attendance_record(user_id, course_id):
+def delete_attendance_record(user_id, course_id, date):
     response = table.delete_item(
         Key={
             'UserId': user_id,
-            'CourseId': course_id
+            'CourseId': course_id,
+            'Date': date
         }
     )
     return response
@@ -61,7 +75,7 @@ def lambda_handler(event, context):
     
     if operation == 'put':
         response = put_attendance_record(
-            event['UserId'], event['CourseId'], event['CourseName'], 
+            event['UserId'], event['CourseId'], event['CourseName'],
             event['Date'], event['Present'], event['UserName'], event['UserType']
         )
         return {
@@ -72,7 +86,7 @@ def lambda_handler(event, context):
             }
         }
     elif operation == 'get':
-        item = get_attendance_record(event['UserId'], event['CourseId'])
+        item = get_attendance_record(event['UserId'], event['CourseId'], event['Date'])
         if item:
             return {
                 'statusCode': 200,
@@ -90,7 +104,7 @@ def lambda_handler(event, context):
                 }
             }
     elif operation == 'delete':
-        delete_attendance_record(event['UserId'], event['CourseId'])
+        delete_attendance_record(event['UserId'], event['CourseId'], event['Date'])
         return {
             'statusCode': 200,
             'body': json.dumps('Record deleted successfully.'),

@@ -1,12 +1,11 @@
 # Defining the locals to store the lambda functions and their handlers
 locals {
   lambda_functions = {
-    # "student"    = "student.lambda_handler",
-    # "admin"      = "admin.lambda_handler",
-    # "teacher"    = "teacher.lambda_handler",
-    # "course"     = "course.lambda_handler",
-    # "department" = "department.lambda_handler"
-    "crud" = "crud.lambda_handler"
+    "student"    = "student.lambda_handler",
+    "admin"      = "admin.lambda_handler",
+    "teacher"    = "teacher.lambda_handler",
+    "course"     = "course.lambda_handler",
+    "department" = "department.lambda_handler"
   }
 }
 
