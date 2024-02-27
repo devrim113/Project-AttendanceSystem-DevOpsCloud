@@ -10,6 +10,22 @@ resource "aws_s3_bucket" "S3_Bucket" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "S3_Bucket" {
+  bucket = aws_s3_bucket.S3_Bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "S3_Bucket" {
+  bucket = aws_s3_bucket.S3_Bucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
 resource "aws_s3_bucket_acl" "b_acl" {
   bucket = aws_s3_bucket.S3_Bucket.id
   acl    = "public-read"
