@@ -1,0 +1,35 @@
+# Ignore local development files
+.vscode/
+.idea/
+*.pyc
+*.pyo
+*.swp
+
+# Ignore Python virtual environment
+venv/
+env/
+
+# Ignore Terraform state files
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+
+# Ignore AWS credentials
+.aws/
+
+# Ignore local environment variables
+.env
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore generated zip files
+*.zip
