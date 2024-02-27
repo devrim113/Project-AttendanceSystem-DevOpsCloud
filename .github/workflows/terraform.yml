@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - '**.tf'
-      - '**.tfvars'
+      - 'terraform/**.tf'
+      - 'terraform/**.tfvars'
   pull_request:
     branches:
       - main
     paths:
-      - '**.tf'
-      - '**.tfvars'
+      - 'terraform/**.tf'
+      - 'terraform/**.tfvars'
 
 jobs:
   terraform:
@@ -37,13 +37,17 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
+      working-directory: ./terraform
 
     - name: Terraform Format
       run: terraform fmt -check
+      working-directory: ./terraform
 
     - name: Terraform Plan
       run: terraform plan
+      working-directory: ./terraform
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
+      working-directory: ./terraform
