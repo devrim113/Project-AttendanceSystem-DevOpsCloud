@@ -13,8 +13,8 @@ locals {
 data "archive_file" "lambda_package" {
   for_each    = local.lambda_functions
   type        = "zip"
-  source_file = "../lambda/${each.key}.py"
-  output_path = "../lambda/${each.key}.zip"
+  source_file = "../lambda_functions/${each.key}.py"
+  output_path = "../lambda_functions/${each.key}.zip"
 }
 
 # Creating the lambda functions with the respective handlers and names
