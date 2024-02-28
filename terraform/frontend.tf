@@ -59,7 +59,7 @@ POLICY
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.S3_Bucket.bucket_regional_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.origin_access_identity_s3.id
+    # origin_access_control_id = aws_cloudfront_origin_access_control.origin_access_identity_s3.id
     origin_id                = local.s3_origin_id
   }
 
