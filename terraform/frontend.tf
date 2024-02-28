@@ -83,6 +83,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
     forwarded_values {
       query_string = false
+      headers      = ["Authorization", "Host", "Origin", "Referer", "User-Agent"]
 
       cookies {
         forward = "none"
