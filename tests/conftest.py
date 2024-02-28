@@ -13,6 +13,7 @@ lambda_functions_path = os.path.join(project_root, 'lambda_functions')
 if lambda_functions_path not in sys.path:
     sys.path.insert(0, lambda_functions_path)
 
+
 @pytest.fixture(autouse=True)
 def aws_credentials():
     """Mocked AWS Credentials for moto."""
@@ -28,17 +29,19 @@ def aws_credentials():
     os.environ.pop('AWS_SECURITY_TOKEN', None)
     os.environ.pop('AWS_SESSION_TOKEN', None)
 
+
 @pytest.fixture(scope="function")
 def dynamodb(aws_credentials):
     with mock_aws():
         yield boto3.client("dynamodb", region_name="eu-central-1")
+
 
 @pytest.fixture(scope="function")
 def create_dynamodb_table(dynamodb):
     """Create mock DynamoDB table."""
     table_name = "UserData"
     dynamodb.create_table(
-        TableName='UserData',
+        TableName=table_name,
         KeySchema=[
             {'AttributeName': 'UserId', 'KeyType': 'HASH'},
             {'AttributeName': 'CourseId', 'KeyType': 'RANGE'}
@@ -47,8 +50,32 @@ def create_dynamodb_table(dynamodb):
         AttributeDefinitions=[
             {'AttributeName': 'UserId', 'AttributeType': 'S'},
             {'AttributeName': 'CourseId', 'AttributeType': 'S'},
-            # {'AttributeName': 'Date', 'AttributeType': 'S'}  # If using Date in keys or indexes
+            {'AttributeName': 'UserType', 'AttributeType': 'S'}
         ],
-        ProvisionedThroughput={'ReadCapacityUnits': 1, 'WriteCapacityUnits': 1}
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 1,
+            'WriteCapacityUnits': 1
+        },
+        GlobalSecondaryIndexes=[
+            {
+                'IndexName': 'CourseIDUserTypeIndex',
+                'KeySchema': [
+                    {'AttributeName': 'CourseId', 'KeyType': 'HASH'},
+                    {'AttributeName': 'UserType', 'KeyType': 'RANGE'}
+                ],
+                'Projection': {'ProjectionType': 'ALL'},
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 1,
+                    'WriteCapacityUnits': 1
+                }
+            }
+        ]
     )
-    return table_name
+
+    # Wait for the table to be created
+    dynamodb.get_waiter('table_exists').wait(TableName=table_name)
+
+    yield dynamodb
+
+    # Clean up
+    dynamodb.delete_table(TableName=table_name)
