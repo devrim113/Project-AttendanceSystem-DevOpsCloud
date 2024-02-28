@@ -5,9 +5,9 @@ def lambda_handler(event, context):
     return {
         'statusCode': 200,
         'headers': {
-            'Access-Control-Allow-Origin': '*',  # Allows requests from any origin
-            'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE',  # Adjust based on your needs
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Access-Control-Allow-Origin'  # Ensure this matches the headers your client may send
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Access-Control-Allow-Origin'
         },
         'body': json.dumps('Hello from Lambda!')
     }
