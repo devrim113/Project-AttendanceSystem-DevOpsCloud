@@ -100,3 +100,15 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
   stage_name  = "dev"
 }
+
+# Creating the deployment for the API Gateway
+resource "aws_api_gateway_deployment" "deployment_production" {
+  depends_on = [
+    aws_api_gateway_integration.integrations,
+    aws_api_gateway_method.methods,
+    aws_api_gateway_resource.paths,
+  ]
+
+  rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+  stage_name  = "prod"
+}
