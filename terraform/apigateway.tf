@@ -102,6 +102,8 @@ resource "aws_api_gateway_deployment" "deployment_production" {
     aws_api_gateway_integration.integrations,
     aws_api_gateway_method.methods,
     aws_api_gateway_resource.paths,
+    aws_api_gateway_method_response.responses,
+    aws_api_gateway_integration_response.integration_responses
   ]
 
   rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
