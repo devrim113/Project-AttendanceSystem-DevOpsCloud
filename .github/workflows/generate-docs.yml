@@ -34,20 +34,19 @@ jobs:
         run: |
           terraform-docs markdown table ./terraform > TERRAFORM.md
 
-      - name: Install Sphinx and m2r2 for Python Documentation
+      - name: Install Sphinx, m2r2, and sphinx-markdown-builder for Python Documentation
         run: |
-          pip install sphinx m2r2
+          pip install sphinx m2r2 sphinx-markdown-builder
 
       - name: Generate Python Documentation
         run: |
           sphinx-apidoc -o docs/source ./lambda_functions
           sphinx-apidoc -o docs/source ./tests --append-syspath
-          cd docs
-          make markdown
-          cat source/*.md > ../PYTHON.md
+          sphinx-build -b markdown docs/source docs/build/markdown
+          find docs/build/markdown -name '*.md' -exec cat {} + > PYTHON.md
 
       - name: Setup Node.js 20
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -74,5 +73,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add README.md
-          git commit -m "Update documentation" || echo "No changes to commit"
+          git commit -m "Update documentation" -a || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
           git push origin main
+

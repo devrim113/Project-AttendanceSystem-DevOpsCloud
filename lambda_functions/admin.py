@@ -2,7 +2,7 @@ import json
 
 def lambda_handler(event, context):
     """
-    Trying for auto generated documentation
+    Trying for auto generated documentation, this does not work.
     """
     # TODO implement
     return {
