@@ -12,7 +12,7 @@ resource "aws_api_gateway_rest_api" "AttendanceAPI" {
 # Combine the path and methods with flatten to create a list of objects that can be accessed by the for_each method
 locals {
   to_define_paths   = ["admin", "teacher", "course", "department", "student"]
-  to_define_methods = ["GET", "OPTIONS", "PUT", "POST", "DELETE", "HEAD"]
+  to_define_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
 
   paths_and_methods = flatten([
     for path in local.to_define_paths : [
