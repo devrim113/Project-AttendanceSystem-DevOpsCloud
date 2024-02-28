@@ -1,8 +1,13 @@
-# This file contains CRUD functions for an AWS Lambda node which interacts with a DynamoDB table
-# to store and retrieve teacher data.
-# Teachers are also able to change the attendance of students that are in their courses.
+"""
+This module contains functions for managing attendance records for teachers in a DynamoDB table.
 
-#! We need a partition key (PK) of UserId, CourseId, and Date to uniquely identify a record.
+Functions:
+- put_attendance_record: Put attendance record for a teacher.
+- get_all_courses: Get all courses for a teacher.
+- get_all_course_attendance: Get all attendance records of students for a teacher's course.
+- delete_attendance_record: Delete attendance record for a teacher.
+- lambda_handler: Lambda handler function to interact with the DynamoDB table.
+"""
 
 import logging
 import json

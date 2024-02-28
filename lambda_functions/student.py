@@ -1,5 +1,14 @@
-# This file contains CRUD functions for an AWS Lambda node which interacts with a DynamoDB table
-# to store and retrieve student data.
+"""
+This module contains functions for managing attendance records for students in a DynamoDB table.
+
+Functions:
+- create_student_record: Create a student record in the database.
+- update_attendance_record: Update the attendance record for a student.
+- get_student: Retrieves all the attendance records for all courses of a student.
+- get_student_course_attendance: Retrieves the attendance record of a student for a specific course.
+- delete_student_record: Deletes a student record from the table.
+- lambda_handler: Lambda handler function to interact with the DynamoDB table.
+"""
 
 import logging
 import json
