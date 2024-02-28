@@ -47,14 +47,29 @@ resource "aws_api_gateway_method" "methods" {
 
 # Creating the integrations for the API Gateway, one for each path and method
 resource "aws_api_gateway_integration" "integrations" {
-  for_each                = { for pm in local.paths_and_methods : "${pm.path}-${pm.method}" => pm }
-  rest_api_id             = aws_api_gateway_rest_api.AttendanceAPI.id
-  resource_id             = aws_api_gateway_resource.paths[each.value.path].id
-  http_method             = aws_api_gateway_method.methods[each.key].http_method
+  for_each    = { for pm in local.paths_and_methods : "${pm.path}-${pm.method}" => pm }
+  rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+  resource_id = aws_api_gateway_resource.paths[each.value.path].id
+  http_method = aws_api_gateway_method.methods[each.key].http_method
+
+  # Conditional logic for integration_http_method and type based on the method being OPTIONS
   integration_http_method = "POST"
   type                    = each.value.method == "OPTIONS" ? "MOCK" : "AWS_PROXY"
-  uri                     = each.value.method == "OPTIONS" ? null : aws_lambda_function.lambda[each.value.path].invoke_arn
+
+  # Conditional assignment for the uri attribute for non-OPTIONS methods
+  dynamic "uri" {
+    for_each = each.value.method == "OPTIONS" ? [] : [aws_lambda_function.lambda[each.value.path].invoke_arn]
+    content {
+      uri = uri.value
+    }
+  }
+
+  # Additional configurations for MOCK integrations (specifically for OPTIONS methods)
+  request_templates = each.value.method == "OPTIONS" ? {
+    "application/json" = "{\"statusCode\": 200}"
+  } : {}
 }
+
 
 # Creating the method responses for the API Gateway, one for each path and method
 resource "aws_api_gateway_method_response" "responses" {
