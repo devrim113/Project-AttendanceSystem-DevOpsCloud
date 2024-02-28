@@ -13,7 +13,7 @@ lambda_functions_path = os.path.join(project_root, 'lambda_functions')
 if lambda_functions_path not in sys.path:
     sys.path.insert(0, lambda_functions_path)
 
-@pytest.fixture(scope="session")
+@pytest.fixture(autouse=True)
 def aws_credentials():
     """Mocked AWS Credentials for moto."""
     import os
@@ -21,13 +21,19 @@ def aws_credentials():
     os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
     os.environ["AWS_SESSION_TOKEN"] = "testing"
+    yield
+    # Remove the environment variables after the test is done
+    os.environ.pop('AWS_ACCESS_KEY_ID', None)
+    os.environ.pop('AWS_SECRET_ACCESS_KEY', None)
+    os.environ.pop('AWS_SECURITY_TOKEN', None)
+    os.environ.pop('AWS_SESSION_TOKEN', None)
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def dynamodb(aws_credentials):
     with mock_aws():
         yield boto3.client("dynamodb", region_name="eu-central-1")
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_dynamodb_table(dynamodb):
     """Create mock DynamoDB table."""
     table_name = "UserData"
