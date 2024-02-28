@@ -7,6 +7,11 @@ resource "aws_dynamodb_table" "attendance_table" {
   range_key      = "CourseID"
 
   attribute {
+    name = "CourseUserDate"
+    type = "S"
+  }
+
+  attribute {
     name = "UserID"
     type = "S"
   }
