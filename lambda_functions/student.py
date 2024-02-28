@@ -3,6 +3,8 @@
 
 #! We need a partition key (PK) of UserId, CourseId, and Date to uniquely identify a record.
 
+
+
 import logging
 import json
 import boto3
