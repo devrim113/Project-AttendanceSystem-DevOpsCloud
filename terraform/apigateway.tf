@@ -144,7 +144,7 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attachment" {
 # Enabling CloudWatch logging for the API Gateway
 resource "aws_api_gateway_stage" "stage_logging" {
   rest_api_id   = aws_api_gateway_rest_api.AttendanceAPI.id
-  stage_name    = "prod"
+  stage_name    = "prodv2"
   deployment_id = aws_api_gateway_deployment.deployment_production.id
 
   xray_tracing_enabled = true
