@@ -57,7 +57,7 @@ jobs:
 
       - name: Generate JavaScript Documentation
         run: |
-          jsdoc2md ./frontend/js/**/*.js > JS.md
+          jsdoc2md ./frontend/js/*.js > JS.md
 
       - name: Combine Documentation into Single Markdown File
         run: |
