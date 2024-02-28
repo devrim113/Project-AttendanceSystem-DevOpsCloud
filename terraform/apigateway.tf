@@ -115,3 +115,48 @@ resource "aws_api_gateway_deployment" "deployment_production" {
     create_before_destroy = true
   }
 }
+
+# Creating the CloudWatch role for API Gateway
+resource "aws_iam_role" "cloudwatch_role" {
+  name               = "api_gateway_cloudwatch_role"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+# Attaching the CloudWatch policy to the role
+resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attachment" {
+  role       = aws_iam_role.cloudwatch_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}
+
+# Enabling CloudWatch logging for the API Gateway
+resource "aws_api_gateway_stage" "stage" {
+  rest_api_id   = aws_api_gateway_rest_api.AttendanceAPI.id
+  stage_name    = "prod"
+  deployment_id = aws_api_gateway_deployment.deployment_production.id
+
+  xray_tracing_enabled = true
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
+    format          = "$context.requestId"
+  }
+}
+
+# Creating the CloudWatch log group for API Gateway
+resource "aws_cloudwatch_log_group" "api_gateway_logs" {
+  name              = "/aws/api-gateway/${aws_api_gateway_rest_api.AttendanceAPI.id}"
+  retention_in_days = 7
+}
