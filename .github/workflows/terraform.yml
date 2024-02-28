@@ -4,15 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'terraform/**.tf'
-      - 'terraform/**.tfvars'
   pull_request:
     branches:
       - main
-    paths:
-      - 'terraform/**.tf'
-      - 'terraform/**.tfvars'
 
 jobs:
   terraform:
