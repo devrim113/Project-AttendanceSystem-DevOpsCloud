@@ -52,8 +52,9 @@ resource "aws_api_gateway_integration" "integrations" {
   resource_id             = aws_api_gateway_resource.paths[each.value.path].id
   http_method             = aws_api_gateway_method.methods[each.key].http_method
   integration_http_method = "POST"
-  type                    = each.value.method == "OPTIONS" ? "MOCK" : "AWS_PROXY"
-  uri                     = each.value.method == "OPTIONS" ? null : aws_lambda_function.lambda[each.value.path].invoke_arn
+  # type                    = each.value.method == "OPTIONS" ? "MOCK" : "AWS_PROXY"
+  type = "AWS_PROXY"
+  uri  = each.value.method == "OPTIONS" ? null : aws_lambda_function.lambda[each.value.path].invoke_arn
 }
 
 # Creating the method responses for the API Gateway, one for each path and method
