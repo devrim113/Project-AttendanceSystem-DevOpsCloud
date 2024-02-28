@@ -31,11 +31,39 @@ resource "aws_s3_bucket_acl" "b_acl" {
   acl    = "public-read"
 }
 
+resource "aws_cloudfront_origin_access_identity" "origin_access_identity_s3" {
+  comment = "Let the cloudfront access the S3"
+}
+
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  bucket = aws_s3_bucket.S3_Bucket.id
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudFrontAccesstoBucket",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.origin_access_identity_s3.id}"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.S3_Bucket.id}/*"
+    }
+  ]
+}
+POLICY
+}
+
+
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.S3_Bucket.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity_s3.cloudfront_access_identity_path
+    }
   }
 
   enabled             = true
