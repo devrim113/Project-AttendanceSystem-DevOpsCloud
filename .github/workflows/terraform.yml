@@ -4,15 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'terraform/**.tf'
-      - 'terraform/**.tfvars'
   pull_request:
     branches:
       - main
-    paths:
-      - 'terraform/**.tf'
-      - 'terraform/**.tfvars'
 
 jobs:
   terraform:
@@ -31,7 +25,7 @@ jobs:
         aws-region: eu-central-1
 
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: 1.7.4
 
