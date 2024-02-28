@@ -90,18 +90,6 @@ resource "aws_api_gateway_integration_response" "integration_responses" {
 }
 
 # Creating the deployment for the API Gateway
-resource "aws_api_gateway_deployment" "deployment" {
-  depends_on = [
-    aws_api_gateway_integration.integrations,
-    aws_api_gateway_method.methods,
-    aws_api_gateway_resource.paths,
-  ]
-
-  rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
-  stage_name  = "dev"
-}
-
-# Creating the deployment for the API Gateway
 resource "aws_api_gateway_deployment" "deployment_production" {
   depends_on = [
     aws_api_gateway_integration.integrations,
@@ -111,4 +99,12 @@ resource "aws_api_gateway_deployment" "deployment_production" {
 
   rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
   stage_name  = "prod"
+
+  triggers = {
+    redeployment = "${timestamp()}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
