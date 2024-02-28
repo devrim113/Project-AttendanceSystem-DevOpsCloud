@@ -1,5 +1,6 @@
 # This file contains CRUD functions for an AWS Lambda node which interacts with a DynamoDB table
-# to store and retrieve student data.
+# to store and retrieve teacher data.
+# Teachers are also able to change the attendance of students that are in their courses.
 
 #! We need a partition key (PK) of UserId, CourseId, and Date to uniquely identify a record.
 
@@ -30,7 +31,7 @@ def put_attendance_record(user_id, course_id, course_name, date, present, user_n
     return response
 
 # Read a record
-def get_attendance_record(user_id, course_id, date):
+def get_specific_attendance_record(user_id, course_id, date):
     response = table.get_item(
         Key={
             'UserId': user_id,
@@ -41,11 +42,20 @@ def get_attendance_record(user_id, course_id, date):
     return response.get('Item')
 
 # Read all records for a user
-def get_all_attendance_records(user_id, course_id):
+def get_all_student_attendance_records(user_id, course_id):
     response = table.query(
         Key={
             'UserId': user_id,
             'CourseId': course_id
+        }
+    )
+    return response.get('Items')
+
+def get_all_attendance_records(course_id):
+    response = table.query(
+        Key={
+            'CourseId': course_id,
+            'UserType': 'Student'
         }
     )
     return response.get('Items')
@@ -89,7 +99,13 @@ def lambda_handler(event, context):
             }
         }
     elif operation == 'get':
-        item = get_attendance_record(event['UserId'], event['CourseId'], event['Date'])
+        if event['Date'] == None:
+            if event['UserId'] == None:
+                item = get_all_attendance_records(event['CourseId'])
+            else:
+                item = get_all_student_attendance_records(event['UserId'], event['CourseId'])
+        else:
+            item = get_specific_attendance_record(event['UserId'], event['CourseId'], event['Date'])
         if item:
             return {
                 'statusCode': 200,

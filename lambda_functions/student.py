@@ -56,13 +56,14 @@ def delete_attendance_record(user_id, course_id, date):
 # This is not necessary for our use case.
 def lambda_handler(event, context):
     # Add logging of context information
-    try:
-        logger.info(f'AWS request ID: {context.aws_request_id}')
-        logger.info(f'Lambda function ARN: {context.invoked_function_arn}')
-        logger.info(f'CloudWatch log stream name: {context.log_stream_name}')
-        logger.info(f'Remaining execution time: {context.get_remaining_time_in_millis()} ms')
-    except:
-        pass
+    if context:
+        try:
+            logger.info(f'AWS request ID: {context.aws_request_id}')
+            logger.info(f'Lambda function ARN: {context.invoked_function_arn}')
+            logger.info(f'CloudWatch log stream name: {context.log_stream_name}')
+            logger.info(f'Remaining execution time: {context.get_remaining_time_in_millis()} ms')
+        except:
+            pass
     operation = event.get('operation')
     
     if operation == 'put':
