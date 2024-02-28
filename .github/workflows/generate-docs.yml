@@ -1,0 +1,78 @@
+name: Generate Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - auto_doc
+    paths:
+      - 'terraform/*.tf'
+      - 'lambda_functions/*.py'
+      - 'tests/*.py'
+      - 'frontend/js/*.js'
+
+jobs:
+  documentation:
+    name: Generate Unified Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Terraform-docs
+        run: |
+          wget https://github.com/terraform-docs/terraform-docs/releases/download/v0.17.0/terraform-docs-v0.17.0-linux-amd64.tar.gz
+          tar -xzf terraform-docs-v0.17.0-linux-amd64.tar.gz
+          sudo mv terraform-docs /usr/local/bin
+
+      - name: Generate Terraform Documentation
+        run: |
+          terraform-docs markdown table ./terraform > TERRAFORM.md
+
+      - name: Install Sphinx and m2r2 for Python Documentation
+        run: |
+          pip install sphinx m2r2
+
+      - name: Generate Python Documentation
+        run: |
+          sphinx-apidoc -o docs/source ./lambda_functions
+          sphinx-apidoc -o docs/source ./tests --append-syspath
+          cd docs
+          make markdown
+          cat source/*.md > ../PYTHON.md
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install JSDoc and jsdoc-to-markdown
+        run: |
+          npm install -g jsdoc jsdoc-to-markdown
+
+      - name: Generate JavaScript Documentation
+        run: |
+          jsdoc2md ./frontend/js/**/*.js > JS.md
+
+      - name: Combine Documentation into Single Markdown File
+        run: |
+          echo "# Project Documentation" > README.md
+          echo "\n## Terraform Documentation\n" >> README.md
+          cat TERRAFORM.md >> README.md
+          echo "\n## Python Documentation\n" >> README.md
+          cat PYTHON.md >> README.md
+          echo "\n## JavaScript Documentation\n" >> README.md
+          cat JS.md >> README.md
+
+      - name: Commit and Push Documentation
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update documentation" || echo "No changes to commit"
+          git push origin main
