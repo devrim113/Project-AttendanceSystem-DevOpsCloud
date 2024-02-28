@@ -153,6 +153,10 @@ resource "aws_api_gateway_stage" "stage_logging" {
     destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
     format          = "$context.requestId"
   }
+
+  lifecycle {
+    ignore_changes = [deployment_id]
+  }
 }
 
 # Creating the CloudWatch log group for API Gateway
