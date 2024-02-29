@@ -1,4 +1,14 @@
-# Defining the locals to store the lambda functions and their handlers
+/* Lambda
+* This is the terraform file for the Lambda functions, the workflow is as follows:
+* 1. Defining the locals to store the lambda functions and their handlers
+* 2. Archiving the python files and creating the lambda functions
+* 3. Creating the IAM role for execution of the lambda functions
+* 4. Creating an IAM policy for writing to CloudWatch logs
+*/
+
+# ----------------- Defining the locals -----------------
+
+# Defining the locals to store the lambda functions and their handlers and log group names.
 locals {
   lambda_functions = {
     "student"    = "student.lambda_handler",
@@ -7,9 +17,13 @@ locals {
     "course"     = "course.lambda_handler",
     "department" = "department.lambda_handler"
   }
+
+  log_group_names = [for function_name, _ in local.lambda_functions : "/aws/lambda/${function_name}-logs"]
 }
 
-# Archiving the python files and creating the lambda functions
+# ----------------- Preparing the python file and creating the lambda functions -----------------
+
+# Archiving the python files and creating the lambda functions.
 data "archive_file" "lambda_package" {
   for_each    = local.lambda_functions
   type        = "zip"
@@ -17,7 +31,7 @@ data "archive_file" "lambda_package" {
   output_path = "../lambda_functions/${each.key}.zip"
 }
 
-# Creating the lambda functions with the respective handlers and names
+# Creating the lambda functions with the respective handlers and names.
 resource "aws_lambda_function" "lambda" {
   for_each = local.lambda_functions
 
@@ -26,9 +40,12 @@ resource "aws_lambda_function" "lambda" {
   handler       = each.value
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_role.arn
+  depends_on    = [aws_cloudwatch_log_group.lambda_log_group]
 }
 
-# Creating the IAM role for the lambda functions so that they can be invoked by the API Gateway
+# ----------------- Creating the IAM role for execution of the lambda functions -----------------
+
+# Creating the IAM role for the lambda functions so that they can be invoked by the API Gateway.
 resource "aws_iam_role" "lambda_role" {
   name = "lambda-role"
   assume_role_policy = jsonencode({
@@ -45,13 +62,13 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-# Attaching the AWSLambdaBasicExecutionRole policy to the lambda role
+# Attaching the AWSLambdaBasicExecutionRole policy to the lambda role.
 resource "aws_iam_role_policy_attachment" "lambda_basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   role       = aws_iam_role.lambda_role.name
 }
 
-# Creating the lambda permissions so that the API Gateway can invoke the lambda functions
+# Creating the lambda permissions so that the API Gateway can invoke the lambda functions.
 resource "aws_lambda_permission" "api_gateway_invoke" {
   for_each = local.lambda_functions
 
@@ -60,4 +77,43 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
   function_name = aws_lambda_function.lambda[each.key].function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.AttendanceAPI.execution_arn}/*/*/*"
+}
+
+# ----------------- CloudWatch logs -----------------
+
+# Creating log groups for each separate lambda function.
+resource "aws_cloudwatch_log_group" "lambda_log_group" {
+  count = length(locals.log_group_names)
+  name  = local.log_group_names[count.index]
+}
+
+# Creating the IAM policy for writing to CloudWatch logs.
+resource "aws_iam_policy" "lambda_cloudwatch_policy" {
+  name        = "lambda-cloudwatch-policy"
+  description = "Allows Lambda functions to write to CloudWatch logs"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = [
+          aws_cloudwatch_log_group.lambda_log_group.arn,
+          "${aws_cloudwatch_log_group.lambda_log_group.arn}:*"
+        ]
+      }
+    ]
+  })
+}
+
+# Attaching the IAM policy to the Lambda role.
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" {
+  policy_arn = aws_iam_policy.lambda_cloudwatch_policy.arn
+  # We reuse the lambda role that was created for execution of the lambda functions.
+  role = aws_iam_role.lambda_role.name
 }
