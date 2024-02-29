@@ -1,8 +1,16 @@
 import json
 
 def lambda_handler(event, context):
+    """
+    Trying for auto generated documentation, this does not work.
+    """
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda admin v2!')
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Access-Control-Allow-Origin'
+        },
+        'body': json.dumps('Hello from Lambda!')
     }
