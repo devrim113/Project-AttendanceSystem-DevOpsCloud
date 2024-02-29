@@ -40,20 +40,6 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="../course/course.html">
-                            <i class="align-middle" data-feather="book-open"></i> <span
-                                class="align-middle">Course</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="../department/department.html">
-                            <i class="align-middle" data-feather="server"></i> <span
-                                class="align-middle">Department</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
                         <a class="sidebar-link" href="../admin/admin.html">
                             <i class="align-middle" data-feather="layers"></i> <span class="align-middle">Admin</span>
                         </a>
@@ -69,24 +55,6 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item dropdown">
-                            <a class="nav-flag dropdown-toggle" href="#" id="languageDropdown"
-                                data-bs-toggle="dropdown">
-                                <img src="../../img/flags/us.png" alt="English" />
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <img src="../../img/flags/us.png" alt="English" width="20"
-                                        class="align-middle me-1" />
-                                    <span class="align-middle">English</span>
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <img src="../../img/flags/nl.png" alt="Dutch" width="20"
-                                        class="align-middle me-1" />
-                                    <span class="align-middle">Dutch</span>
-                                </a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
                                 data-bs-toggle="dropdown">
                                 <i class="align-middle" data-feather="settings"></i>
@@ -94,8 +62,7 @@
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown">
-                                <img src="../../img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle me-1"
-                                    alt="Chris Wood" /> <span class="text-dark">Chris Wood</span>
+                                <span class="text-dark">Chris Wood</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#">Sign out</a>
@@ -115,17 +82,41 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title">Courses</h5>
-                                    <h6 class="card-subtitle text-muted">These are all the courses you have registered
-                                        for.</h6>
+                                    <h6 class="card-subtitle text-muted">These are all the courses you have enrolled in.
+                                    </h6>
                                 </div>
                                 <div class="card-body">
                                     <table id="datatables-responsive" class="table table-striped" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Course Name</th>
+                                                <th>View</th>
                                             </tr>
                                         </thead>
                                         <tbody id="data-student-courses">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Enroll in Course</h5>
+                                    <h6 class="card-subtitle text-muted">Choose one of the courses to enroll in.</h6>
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatables-responsive-2" class="table table-striped"
+                                        style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Course Name</th>
+                                                <th>Enroll</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data-enroll-courses">
                                         </tbody>
                                     </table>
                                 </div>
@@ -236,7 +227,7 @@
             }
         ]
 
-        fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin')
+        fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/student')
             .then(response => response.json())
             .then(data => {
                 data = mock_data;
@@ -244,11 +235,18 @@
                 data.forEach(course => {
                     const tr = document.createElement('tr');
                     const td = document.createElement('td');
-                    const link = document.createElement('a');
-                    link.href = `student-attendance.html?course_id=${course.courseId}&course_name=${encodeURIComponent(course.courseName)}`;
-                    link.textContent = course.courseName;
-                    td.appendChild(link);
+                    const td2 = document.createElement('td');
+                    const button = document.createElement('button');
+                    button.onclick = function () {
+                        window.location.href = `student-attendance.html?course_id=${course.courseId}&course_name=${encodeURIComponent(course.courseName)}`;;
+                    };
+                    button.textContent = 'View';
+                    button.append
+                    button.classList.add('btn', 'btn-primary');
+                    td.textContent = course.courseName;
+                    td2.appendChild(button);
                     tr.appendChild(td);
+                    tr.appendChild(td2);
                     tbody.appendChild(tr);
                 });
                 $("#datatables-responsive").DataTable({
@@ -258,6 +256,54 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+
+        fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/student')
+            .then(response => response.json())
+            .then(data => {
+                data = mock_data;
+                const tbody = document.getElementById('data-enroll-courses');
+                data.forEach(course => {
+                    const tr = document.createElement('tr');
+                    const td1 = document.createElement('td');
+                    const td2 = document.createElement('td');
+                    td1.textContent = course.courseName;
+                    const button = document.createElement('button');
+                    button.textContent = 'Enroll';
+                    button.classList.add('btn', 'btn-primary');
+                    button.onclick = enrollCourse.bind(null, course.courseId);
+                    td2.appendChild(button);
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tbody.appendChild(tr);
+                });
+                $("#datatables-responsive-2").DataTable({
+                    responsive: true,
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        function enrollCourse(courseId) {
+            fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    courseId: courseId,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Course enrolled successfully');
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    alert('Error enrolling course');
+                    console.error('Error:', error);
+                });
+        }
     </script>
 </body>
 
