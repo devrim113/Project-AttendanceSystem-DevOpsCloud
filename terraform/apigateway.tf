@@ -188,43 +188,17 @@ resource "aws_iam_role" "api_gateway_cloudwatch_logs_role" {
   })
 }
 
-# Creating a policy for the IAM role to write to CloudWatch logs
-resource "aws_iam_policy" "api_gateway_cloudwatch_logs_policy" {
-  name        = "api_gateway_cloudwatch_logs_policy"
-  description = "Policy for API Gateway to write to CloudWatch logs"
-
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ],
-        "Resource" : "arn:aws:logs:*:*:*"
-      }
-    ]
-  })
-}
-
-# Attaching the policy to the IAM role
+# Attaching the standard policy to the IAM role
 resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch_logs_attachment" {
   role       = aws_iam_role.api_gateway_cloudwatch_logs_role.name
-  policy_arn = aws_iam_policy.api_gateway_cloudwatch_logs_policy.arn
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
 
-resource "time_sleep" "wait_for_iam_role" {
-  depends_on = [aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment]
-
-  create_duration = "60s"
-}
-
+# Creating the API Gateway account
 resource "aws_api_gateway_account" "api_gateway_account" {
   cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
 
   depends_on = [
-    time_sleep.wait_for_iam_role
+    aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment
   ]
 }
