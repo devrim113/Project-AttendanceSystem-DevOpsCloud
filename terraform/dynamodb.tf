@@ -11,10 +11,10 @@ resource "aws_dynamodb_table" "attendance_table" {
     type = "S"
   }
 
-  # attribute {
-  #   name = "UserType"
-  #   type = "S"
-  # }
+  attribute {
+    name = "UserType"
+    type = "S"
+  }
 
   # attribute {
   #   name = "UserName"
