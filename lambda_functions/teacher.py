@@ -19,17 +19,15 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
-table = dynamodb.Table('UserData')
+table = dynamodb.Table('AllData')
 
 
-def put_attendance_record(user_id, course_id, course_name, user_name):
+def create_teacher_record(item_id, user_name):
     """
-    Put attendance record for a teacher.
+    Create object for a teacher.
 
     Args:
         user_id (str): The ID of the user.
-        course_id (str): The ID of the course.
-        course_name (str): The name of the course.
         user_name (str): The name of the user.
 
     Returns:
@@ -41,11 +39,9 @@ def put_attendance_record(user_id, course_id, course_name, user_name):
     try:
         response = table.put_item(
             Item={
-                'UserId': user_id,
-                'CourseId': course_id,
-                'CourseName': course_name,
+                'ItemId': item_id,
                 'UserName': user_name,
-                'UserType': 'Teacher'
+                'ItemType': 'Teacher'
             }
         )
         return response
@@ -54,7 +50,96 @@ def put_attendance_record(user_id, course_id, course_name, user_name):
         return None
 
 
-def get_all_courses(user_id):
+def update_teacher_record(item_id, user_name):
+    """
+    Update object for a teacher.
+
+    Args:
+        item_id (str): The ID of the user.
+        user_name (str): The name of the user.
+
+    Returns:
+        dict: The response from the table.update_item() operation.
+
+    Raises:
+        ClientError: If an error occurs while updating the item.
+    """
+    try:
+        response = table.update_item(
+            Key={
+                'ItemId': item_id,
+                'ItemType': 'Teacher'
+            },
+            UpdateExpression="set UserName = :n",
+            ExpressionAttributeValues={
+                ':n': user_name
+            },
+            ReturnValues="UPDATED_NEW"
+        )
+        return response
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return None
+
+
+def assign_course_to_teacher(item_id, course_id, user_id):
+    """
+    Assign a course to a teacher.
+
+    Args:
+        course_id (str): The ID of the course.
+        user_id (str): The ID of the user.
+
+    Returns:
+        dict: The response from the table.put_item() operation.
+
+    Raises:
+        ClientError: If an error occurs while putting the item.
+    """
+    try:
+        response = table.put_item(
+            Item={
+                'ItemId': item_id,
+                'UserId': user_id,
+                'CourseId': course_id,
+                'ItemType': 'TeachesCourse'
+            }
+        )
+        return response
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return None
+
+
+def get_teacher(user_id):
+    """
+    Get a teacher.
+
+    Args:
+        user_id (str): The ID of the user.
+
+    Returns:
+        dict: The teacher object.
+
+    Raises:
+        ClientError: If an error occurs while getting the item.
+    """
+    try:
+        response = table.get_item(
+            Key={
+                'ItemId': user_id,
+                'ItemType': 'Teacher'
+            }
+        )
+        if 'Item' not in response:
+            return None
+        return response['Item']
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return None
+
+
+def get_teacher_courses(user_id):
     """
     Get all courses for a teacher.
 
@@ -69,9 +154,10 @@ def get_all_courses(user_id):
     """
     try:
         response = table.query(
+            IndexName='UserIDCourseIDIndex',
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
-        return response['Items']
+        return response.get('Items')
     except ClientError as e:
         print(e.response['Error']['Message'])
         return None
@@ -93,9 +179,9 @@ def get_all_course_attendance(course_id):
     """
     try:
         response = table.query(
-            IndexName='CourseIDUserTypeIndex',
+            IndexName='CourseIDItemTypeIndex',
             KeyConditionExpression=Key('CourseId').eq(
-                course_id) & Key('UserType').eq('Student')
+                course_id) & Key('ItemType').eq('Attendance')
         )
         return response['Items']
     except ClientError as e:
@@ -103,13 +189,12 @@ def get_all_course_attendance(course_id):
         return None
 
 
-def delete_attendance_record(user_id, course_id):
+def delete_teacher(user_id):
     """
-    Delete attendance record for a teacher.
+    Delete teacher's record.
 
     Args:
         user_id (str): The ID of the user.
-        course_id (str): The ID of the course.
 
     Returns:
         dict: The response from the table.delete_item() operation.
@@ -120,8 +205,8 @@ def delete_attendance_record(user_id, course_id):
     try:
         response = table.delete_item(
             Key={
-                'UserId': user_id,
-                'CourseId': course_id
+                'ItemId': user_id,
+                'ItemType': 'Teacher'
             }
         )
         return response
@@ -137,12 +222,14 @@ def lambda_handler(event, context):
     The following operations are supported:
     - 'put': Creates a new record for a teacher.
     - 'get': Retrieves all courses for a teacher or all attendance records for a teacher's course.
-    - 'delete': Deletes a record for a teacher.
+    - 'update': Updates a teacher's record.
+    - 'delete': Deletes a teacher's record.
 
     The corresponding functions called for each operation are:
-    - 'put': put_attendance_record()
-    - 'get': get_all_course_attendance() or get_all_courses()
-    - 'delete': delete_attendance_record()
+    - 'put': create_teacher_record()
+    - 'get': get_teacher_courses() or get_all_course_attendance()
+    - 'update': update_teacher_record()
+    - 'delete': delete_teacher()
 
     Args:
         event (dict): The event data passed to the Lambda function.
@@ -163,10 +250,12 @@ def lambda_handler(event, context):
     operation = event.get('operation')
     match operation:
         case 'put':
-            response = put_attendance_record(
-                event['UserId'], event['CourseId'], event['CourseName'],
-                event['UserName']
-            )
+            if 'ItemType' in event and event['ItemType'] == 'TeachesCourse':
+                response = assign_course_to_teacher(
+                    event['ItemId'], event['CourseId'], event['UserId'])
+            else:
+                response = create_teacher_record(
+                    event['ItemId'], event['UserName'])
             if response:
                 return {
                     'statusCode': 200,
@@ -183,47 +272,53 @@ def lambda_handler(event, context):
                         'Content-Type': 'application/json'
                     }
                 }
+
         case 'get':
-            if 'CourseId' in event:
+            if 'ItemType' in event and event['ItemType'] == 'Teacher':
+                response = get_teacher(event['ItemId'])
+            elif 'CourseId' in event:
                 response = get_all_course_attendance(event['CourseId'])
-                if response:
-                    return {
-                        'statusCode': 200,
-                        'body': json.dumps(response),
-                        'headers': {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                else:
-                    return {
-                        'statusCode': 400,
-                        'body': json.dumps('No records found.'),
-                        'headers': {
-                            'Content-Type': 'application/json'
-                        }
-                    }
             else:
-                response = get_all_courses(event['UserId'])
-                if response:
-                    return {
-                        'statusCode': 200,
-                        'body': json.dumps(response),
-                        'headers': {
-                            'Content-Type': 'application/json'
-                        }
+                response = get_teacher_courses(event['UserId'])
+            if response:
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps(response),
+                    'headers': {
+                        'Content-Type': 'application/json'
                     }
-                else:
-                    return {
-                        'statusCode': 400,
-                        'body': json.dumps('No courses found.'),
-                        'headers': {
-                            'Content-Type': 'application/json'
-                        }
+                }
+            else:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps('No records found.'),
+                    'headers': {
+                        'Content-Type': 'application/json'
                     }
+                }
+
+        case 'update':
+            response = update_teacher_record(
+                event['ItemId'], event['UserName'])
+            if response:
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps('Record updated successfully.'),
+                    'headers': {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            else:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps('Record not updated.'),
+                    'headers': {
+                        'Content-Type': 'application/json'
+                    }
+                }
+
         case 'delete':
-            response = delete_attendance_record(
-                event['UserId'], event['CourseId']
-            )
+            response = delete_teacher(event['ItemId'])
             if response:
                 return {
                     'statusCode': 200,
@@ -240,3 +335,12 @@ def lambda_handler(event, context):
                         'Content-Type': 'application/json'
                     }
                 }
+
+        case _:
+            return {
+                'statusCode': 400,
+                'body': json.dumps('Invalid operation.'),
+                'headers': {
+                    'Content-Type': 'application/json'
+                }
+            }

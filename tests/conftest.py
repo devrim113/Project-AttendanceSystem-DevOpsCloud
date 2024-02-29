@@ -39,18 +39,19 @@ def dynamodb(aws_credentials):
 @pytest.fixture(scope="function")
 def create_dynamodb_table(dynamodb):
     """Create mock DynamoDB table."""
-    table_name = "UserData"
+    table_name = "AllData"
     dynamodb.create_table(
         TableName=table_name,
         KeySchema=[
-            {'AttributeName': 'UserId', 'KeyType': 'HASH'},
-            {'AttributeName': 'CourseId', 'KeyType': 'RANGE'}
-            # Add Date as part of the attribute definitions if using it in KeySchema or as an index
+            {'AttributeName': 'ItemId', 'KeyType': 'HASH'},
+            {'AttributeName': 'ItemType', 'KeyType': 'RANGE'}
         ],
         AttributeDefinitions=[
+            {'AttributeName': 'ItemId', 'AttributeType': 'S'},
             {'AttributeName': 'UserId', 'AttributeType': 'S'},
             {'AttributeName': 'CourseId', 'AttributeType': 'S'},
-            {'AttributeName': 'UserType', 'AttributeType': 'S'}
+            {'AttributeName': 'ItemType', 'AttributeType': 'S'},
+            {'AttributeName': 'DepartmentID', 'AttributeType': 'S'}
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 1,
@@ -58,10 +59,34 @@ def create_dynamodb_table(dynamodb):
         },
         GlobalSecondaryIndexes=[
             {
-                'IndexName': 'CourseIDUserTypeIndex',
+                'IndexName': 'CourseIDItemTypeIndex',
                 'KeySchema': [
                     {'AttributeName': 'CourseId', 'KeyType': 'HASH'},
-                    {'AttributeName': 'UserType', 'KeyType': 'RANGE'}
+                    {'AttributeName': 'ItemType', 'KeyType': 'RANGE'}
+                ],
+                'Projection': {'ProjectionType': 'ALL'},
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 1,
+                    'WriteCapacityUnits': 1
+                }
+            },
+            {
+                'IndexName': 'ItemIdDepartmentIDIndex',
+                'KeySchema': [
+                    {'AttributeName': 'ItemId', 'KeyType': 'HASH'},
+                    {'AttributeName': 'DepartmentID', 'KeyType': 'RANGE'}
+                ],
+                'Projection': {'ProjectionType': 'ALL'},
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 1,
+                    'WriteCapacityUnits': 1
+                }
+            },
+            {
+                'IndexName': 'UserIDCourseIDIndex',
+                'KeySchema': [
+                    {'AttributeName': 'UserId', 'KeyType': 'HASH'},
+                    {'AttributeName': 'CourseId', 'KeyType': 'RANGE'}
                 ],
                 'Projection': {'ProjectionType': 'ALL'},
                 'ProvisionedThroughput': {

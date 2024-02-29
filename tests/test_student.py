@@ -9,24 +9,11 @@ def student_lambda(dynamodb):
 
 
 def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
-    # Create record
+    # Create student record
     object = {
-        'UserId': '1',
-        'CourseId': '101',
-        'CourseName': 'Math',
-        'Attendance': {
-            '2022-01-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'present'
-            },
-            '2022-02-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'present'
-            }
-        },
-        'UserName': 'John Doe'
+        'ItemId': '1',
+        'UserName': 'John Doe',
+        'ItemType': 'Student'
     }
     create_event = {
         'operation': 'put',
@@ -38,115 +25,121 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     # Get created record
     get_event = {
         'operation': 'get',
-        'UserId': '1',
-        'CourseId': '101',
+        'ItemId': '1',
+        'ItemType': 'Student'
     }
     response = student_lambda(get_event, {})
     assert response['statusCode'] == 200
     retrieved_object = json.loads(response['body'])
+    assert len(retrieved_object) == 1
+    assert object == retrieved_object[0]
 
-    for key in object:
-        assert object[key] == retrieved_object[
-            key], f"Value mismatch for {key}: expected {object[key]}, got {retrieved_object[key]}"
-
-    # Update created record's attendance
-    updated_object = {
-        'UserId': '1',
+    # Create student attendance record
+    attendance_object = {
+        'ItemId': '2',
         'CourseId': '101',
-        'CourseName': 'Math',
+        'UserId': '1',
+        'ItemType': 'Attendance',
         'Attendance': {
             '2022-01-01': {
                 'from': '09:00',
                 'to': '12:00',
                 'status': 'present'
-            },
-            '2022-02-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'present'
-            },
-            '2022-03-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'absent'
             }
-        },
-        'UserName': 'John Doe'
+        }
     }
 
+    enlist_event = {
+        'operation': 'put',
+        **attendance_object
+    }
+
+    response = student_lambda(enlist_event, {})
+    assert response['statusCode'] == 200
+
+    # Update student attendence to get correct attendance
     update_event = {
         'operation': 'update',
-        **updated_object,
-        'Present': False
+        **attendance_object
     }
 
     response = student_lambda(update_event, {})
     assert response['statusCode'] == 200
 
     # Get updated record
-    response = student_lambda(get_event, {})
+    get_attendance_event = {
+        'operation': 'get',
+        'UserId': '1',
+        'CourseId': '101'
+    }
+
+    response = student_lambda(get_attendance_event, {})
     assert response['statusCode'] == 200
     retrieved_object = json.loads(response['body'])
 
-    for key in updated_object:
-        assert updated_object[key] == retrieved_object[
-            key], f"Value mismatch for {key}: expected {updated_object[key]}, got {retrieved_object[key]}"
+    for key in attendance_object:
+        assert attendance_object[key] == retrieved_object[
+            key], f"Value mismatch for {key}: expected {attendance_object[key]}, got {retrieved_object[key]}"
 
     # Add another record
-    object = {
-        'UserId': '1',
+    attendance_object = {
+        'ItemId': '3',
         'CourseId': '102',
-        'CourseName': 'Science',
-        'Attendance': {
-            '2022-01-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'present'
-            },
-            '2022-02-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'absent'
-            }
-        },
-        'UserName': 'John Doe'
+        'UserId': '1',
+        'ItemType': 'Attendance',
+        'Attendance': {}
     }
 
     create_event = {
         'operation': 'put',
-        **object
+        **attendance_object
     }
 
     response = student_lambda(create_event, {})
     assert response['statusCode'] == 200
 
     # Get all student records
-    get_all_event = {
+    get_courses = {
         'operation': 'get',
         'UserId': '1'
     }
 
-    response = student_lambda(get_all_event, {})
-    print(json.loads(response['body']))
+    response = student_lambda(get_courses, {})
     assert response['statusCode'] == 200
+    retrieved_courses = json.loads(response['body'])
+    assert len(retrieved_courses) == 2
 
     # Delete created records
     delete_event = {
         'operation': 'delete',
-        'UserId': '1',
-        'CourseId': '101'
+        'ItemId': '2',
+        'ItemType': 'Attendance'
     }
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
 
     delete_event = {
         'operation': 'delete',
-        'UserId': '1',
-        'CourseId': '102'
+        'ItemId': '3',
+        'ItemType': 'Attendance'
     }
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
 
     # Verify deletion
-    response = student_lambda(get_all_event, {})
+    response = student_lambda(get_courses, {})
+    assert response['statusCode'] == 404
+
+    # delete student record
+    delete_event = {
+        'operation': 'delete',
+        'ItemId': '1',
+        'ItemType': 'Student'
+    }
+
+    response = student_lambda(delete_event, {})
+    assert response['statusCode'] == 200
+
+    # Verify deletion
+    response = student_lambda(get_event, {})
     assert response['statusCode'] == 404
