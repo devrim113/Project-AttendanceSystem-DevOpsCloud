@@ -215,11 +215,16 @@ resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch_logs_attachmen
   policy_arn = aws_iam_policy.api_gateway_cloudwatch_logs_policy.arn
 }
 
-# Creating the API Gateway account
-# resource "aws_api_gateway_account" "api_gateway_account" {
-#   cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
+resource "time_sleep" "wait_for_iam_role" {
+  depends_on = [aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment]
 
-#   depends_on = [
-#     aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment
-#   ]
-# }
+  create_duration = "60s"
+}
+
+resource "aws_api_gateway_account" "api_gateway_account" {
+  cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
+
+  depends_on = [
+    time_sleep.wait_for_iam_role
+  ]
+}
