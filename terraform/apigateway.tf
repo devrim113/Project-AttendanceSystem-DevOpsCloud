@@ -123,20 +123,20 @@ resource "aws_api_gateway_stage" "production_stage" {
   deployment_id = aws_api_gateway_deployment.deployment_production.id
 
   # Specifying some common access logs settings which can help with monitoring and debugging.
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gateway_access_logs.arn
-    format = jsonencode({
-      "httpMethod"       = "$context.httpMethod",
-      "ip"               = "$context.identity.sourceIp",
-      "protocol"         = "$context.protocol",
-      "resourcePath"     = "$context.resourcePath",
-      "responseLength"   = "$context.responseLength",
-      "status"           = "$context.status",
-      "requestId"        = "$context.requestId",
-      "requestTime"      = "$context.requestTime",
-      "requestTimeEpoch" = "$context.requestTimeEpoch"
-    })
-  }
+  # access_log_settings {
+  #   destination_arn = aws_cloudwatch_log_group.api_gateway_access_logs.arn
+  #   format = jsonencode({
+  #     "httpMethod"       = "$context.httpMethod",
+  #     "ip"               = "$context.identity.sourceIp",
+  #     "protocol"         = "$context.protocol",
+  #     "resourcePath"     = "$context.resourcePath",
+  #     "responseLength"   = "$context.responseLength",
+  #     "status"           = "$context.status",
+  #     "requestId"        = "$context.requestId",
+  #     "requestTime"      = "$context.requestTime",
+  #     "requestTimeEpoch" = "$context.requestTimeEpoch"
+  #   })
+  # }
 }
 
 # Creating the deployment for the API Gateway.
@@ -166,39 +166,39 @@ resource "aws_api_gateway_deployment" "deployment_production" {
 
 # ----------------- CloudWatch Logs -----------------
 
-# Creating the log group for API gateway
-resource "aws_cloudwatch_log_group" "api_gateway_access_logs" {
-  name = "/aws/api-gateway/AttendanceAPI-access-logs"
-}
+# # Creating the log group for API gateway
+# resource "aws_cloudwatch_log_group" "api_gateway_access_logs" {
+#   name = "/aws/api-gateway/AttendanceAPI-access-logs"
+# }
 
-# Creating an IAM role for API Gateway to write to CloudWatch logs
-resource "aws_iam_role" "api_gateway_cloudwatch_logs_role" {
-  name = "api_gateway_cloudwatch_logs_role"
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "apigateway.amazonaws.com"
-        },
-        "Action" : "sts:AssumeRole"
-      }
-    ]
-  })
-}
+# # Creating an IAM role for API Gateway to write to CloudWatch logs
+# resource "aws_iam_role" "api_gateway_cloudwatch_logs_role" {
+#   name = "apiGatewayCloudWatchLogsRole"
+#   assume_role_policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [
+#       {
+#         "Effect" : "Allow",
+#         "Principal" : {
+#           "Service" : "apigateway.amazonaws.com"
+#         },
+#         "Action" : "sts:AssumeRole"
+#       }
+#     ]
+#   })
+# }
 
-# Attaching the standard policy to the IAM role
-resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch_logs_attachment" {
-  role       = aws_iam_role.api_gateway_cloudwatch_logs_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-}
+# # Attaching the standard policy to the IAM role
+# resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch_logs_attachment" {
+#   role       = aws_iam_role.api_gateway_cloudwatch_logs_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+# }
 
-# Creating the API Gateway account
-resource "aws_api_gateway_account" "api_gateway_account" {
-  cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
+# # Creating the API Gateway account
+# resource "aws_api_gateway_account" "api_gateway_account" {
+#   cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
 
-  depends_on = [
-    aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment
-  ]
-}
+#   depends_on = [
+#     aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment
+#   ]
+# }
