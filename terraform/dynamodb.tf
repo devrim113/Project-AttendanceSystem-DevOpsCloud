@@ -1,15 +1,10 @@
 resource "aws_dynamodb_table" "attendance_table" {
-  name           = "AllData"
+  name           = "SchoolData"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
-  hash_key       = "CourseUserDate"
-  range_key      = "CourseID"
-
-  attribute {
-    name = "CourseUserDate"
-    type = "S"
-  }
+  hash_key       = "CourseID"
+  range_key      = "UserID"
 
   attribute {
     name = "UserID"
@@ -21,65 +16,51 @@ resource "aws_dynamodb_table" "attendance_table" {
     type = "S"
   }
 
+  # attribute {
+  #   name = "UserName"
+  #   type = "S"
+  # }
+
   attribute {
     name = "CourseID"
     type = "S"
   }
+
+  # attribute {
+  #   name = "CourseName"
+  #   type = "S"
+  # }
 
   attribute {
     name = "Date"
     type = "S"
   }
 
+  # View user information of every user in course
   local_secondary_index {
-    name            = "UserData"
-    projection_type = "ALL"
-    range_key       = "UserID"
-  }
-
-  # Attendance on specific date for all courses
-  local_secondary_index {
-    name            = "Attendance"
-    projection_type = "ALL"
-    range_key       = "Date"
-  }
-
-  local_secondary_index {
-    name            = "UserData"
-    projection_type = "ALL"
-    range_key       = "UserType"
-  }
-
-
-  # Course's attendance on specific date for all students
-  global_secondary_index {
-    name            = "CourseDate"
-    hash_key        = "CourseID"
-    range_key       = "Date"
-    write_capacity  = 5
-    read_capacity   = 5
-    projection_type = "ALL"
-  }
-
-  # To sort teachers from students in course
-  global_secondary_index {
     name               = "CourseUsers"
-    hash_key           = "CourseID"
     range_key          = "UserType"
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["UserID", "UserName"]
+  }
+
+  # Attendance on specific date for a course
+  local_secondary_index {
+    name               = "CourseAttendance"
+    range_key          = "Date"
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["UserID", "UserType", "UserName", "Present"]
+  }
+
+  # View a student's course attendance
+  global_secondary_index {
+    name               = "UserData"
+    hash_key           = "UserID"
+    range_key          = "CourseID"
     write_capacity     = 5
     read_capacity      = 5
     projection_type    = "INCLUDE"
-    non_key_attributes = ["UserID"]
-  }
-
-  # User's attendance for specific course
-  global_secondary_index {
-    name            = "UserCourse"
-    hash_key        = "UserID"
-    range_key       = "CourseID"
-    write_capacity  = 5
-    read_capacity   = 5
-    projection_type = "ALL"
+    non_key_attributes = ["CourseName", "Date", "Present"]
   }
 
   tags = {
