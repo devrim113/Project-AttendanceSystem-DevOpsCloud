@@ -93,11 +93,11 @@ resource "aws_iam_policy" "lambda_cloudwatch_policy" {
   description = "Allows Lambda functions to write to CloudWatch logs"
 
   policy = jsonencode({
-    Version   = "2012-10-17"
+    Version = "2012-10-17"
     Statement = [
       for index, log_group_name in local.log_group_names : {
-        Effect   = "Allow"
-        Action   = [
+        Effect = "Allow"
+        Action = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
@@ -115,5 +115,5 @@ resource "aws_iam_policy" "lambda_cloudwatch_policy" {
 resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" {
   policy_arn = aws_iam_policy.lambda_cloudwatch_policy.arn
   # We reuse the lambda role that was created for execution of the lambda functions.
-  role       = aws_iam_role.lambda_role.name
+  role = aws_iam_role.lambda_role.name
 }
