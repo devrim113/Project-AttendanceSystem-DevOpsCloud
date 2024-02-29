@@ -24,9 +24,7 @@
                 <a class="sidebar-brand" href="index.html">
                     <span class="align-middle me-3">Attendance System</span>
                 </a>
-
                 <ul class="sidebar-nav">
-
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="pages/student/student.html">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Student</span>
@@ -36,20 +34,6 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="pages/teacher/teacher.html">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Teacher</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/course/course.html">
-                            <i class="align-middle" data-feather="book-open"></i> <span
-                                class="align-middle">Course</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/department/department.html">
-                            <i class="align-middle" data-feather="server"></i> <span
-                                class="align-middle">Department</span>
                         </a>
                     </li>
 
@@ -69,22 +53,6 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item dropdown">
-                            <a class="nav-flag dropdown-toggle" href="#" id="languageDropdown"
-                                data-bs-toggle="dropdown">
-                                <img src="img/flags/us.png" alt="English" />
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <img src="img/flags/us.png" alt="English" width="20" class="align-middle me-1" />
-                                    <span class="align-middle">English</span>
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <img src="img/flags/nl.png" alt="Dutch" width="20" class="align-middle me-1" />
-                                    <span class="align-middle">Dutch</span>
-                                </a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
                                 data-bs-toggle="dropdown">
                                 <i class="align-middle" data-feather="settings"></i>
@@ -92,8 +60,7 @@
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown">
-                                <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle me-1"
-                                    alt="Chris Wood" /> <span class="text-dark">Chris Wood</span>
+                                <span class="text-dark">Chris Wood</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#">Sign out</a>
@@ -142,10 +109,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*'
-                        // Include other headers as required, such as Authorization for secured endpoints
                     },
-                    // Include body if method is POST or PUT
-                    // body: JSON.stringify({ key: 'value' })
                 });
 
                 if (!response.ok) {

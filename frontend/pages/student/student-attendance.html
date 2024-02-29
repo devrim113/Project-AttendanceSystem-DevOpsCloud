@@ -40,20 +40,6 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="../course/course.html">
-                            <i class="align-middle" data-feather="book-open"></i> <span
-                                class="align-middle">Course</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="../department/department.html">
-                            <i class="align-middle" data-feather="server"></i> <span
-                                class="align-middle">Department</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
                         <a class="sidebar-link" href="../admin/admin.html">
                             <i class="align-middle" data-feather="layers"></i> <span class="align-middle">Admin</span>
                         </a>
@@ -69,24 +55,6 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item dropdown">
-                            <a class="nav-flag dropdown-toggle" href="#" id="languageDropdown"
-                                data-bs-toggle="dropdown">
-                                <img src="../../img/flags/us.png" alt="English" />
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <img src="../../img/flags/us.png" alt="English" width="20"
-                                        class="align-middle me-1" />
-                                    <span class="align-middle">English</span>
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <img src="../../img/flags/nl.png" alt="Dutch" width="20"
-                                        class="align-middle me-1" />
-                                    <span class="align-middle">Dutch</span>
-                                </a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
                                 data-bs-toggle="dropdown">
                                 <i class="align-middle" data-feather="settings"></i>
@@ -94,8 +62,7 @@
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown">
-                                <img src="../../img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle me-1"
-                                    alt="Chris Wood" /> <span class="text-dark">Chris Wood</span>
+                                <span class="text-dark">Chris Wood</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#">Sign out</a>
@@ -129,14 +96,6 @@
                                         </thead>
                                         <tbody id="data-student-attendance">
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Time</th>
-                                                <th>Attendance</th>
-                                                <th>Change</th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -218,6 +177,7 @@
                     const changeTd = document.createElement('td');
                     const changeButton = document.createElement('button');
                     changeButton.textContent = 'Change';
+                    changeButton.classList.add('btn', 'btn-primary');
                     changeButton.onclick = changeAttendance;
                     changeTd.appendChild(changeButton);
                     tr.appendChild(changeTd);
@@ -233,7 +193,28 @@
             });
 
         function changeAttendance() {
-            alert('Change attendance');
+            fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/student', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    course_id: courseId,
+                    date: '2022-10-01',
+                    start_time: '09:00 AM',
+                    end_time: '10:00 AM',
+                    attendance: 'Absent'
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Attendance changed successfully');
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    alert('Error changing attendance');
+                    console.error('Error:', error);
+                });
         }
     </script>
 
