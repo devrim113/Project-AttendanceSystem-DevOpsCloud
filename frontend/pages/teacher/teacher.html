@@ -146,7 +146,7 @@
                                         <div class="mb-3">
                                             <label for="courseName" class="form-label">Course Name</label>
                                             <input type="text" class="form-control" id="courseName"
-                                                placeholder="Course Name">
+                                                placeholder="Course Name" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Create</button>
                                     </form>
@@ -282,6 +282,10 @@
         document.getElementById('create-course').addEventListener('submit', function (event) {
             event.preventDefault();
             const courseName = document.getElementById('courseName').value;
+            if (!courseName) {
+                alert('Please enter a course name!');
+                return;
+            }
             fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin', {
                 method: 'POST',
                 headers: {
