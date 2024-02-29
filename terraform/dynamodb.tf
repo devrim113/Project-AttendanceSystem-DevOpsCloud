@@ -4,7 +4,7 @@ resource "aws_dynamodb_table" "attendance_table" {
   read_capacity  = 5
   write_capacity = 5
   hash_key       = "CourseID"
-  range_key      = "UserID"
+  # range_key      = "UserID"
 
   attribute {
     name = "UserID"
@@ -36,6 +36,19 @@ resource "aws_dynamodb_table" "attendance_table" {
     type = "S"
   }
 
+  # attribute {
+  #   name = "Present"
+  #   type = "B"
+  # }
+
+  # View a student's course attendance
+  local_secondary_index {
+    name               = "CourseUsers"
+    range_key          = "UserID"
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["Date", "Present"]
+  }
+
   # View user information of every user in course
   local_secondary_index {
     name               = "CourseUsers"
@@ -52,15 +65,14 @@ resource "aws_dynamodb_table" "attendance_table" {
     non_key_attributes = ["UserID", "UserType", "UserName", "Present"]
   }
 
-  # View a student's course attendance
+  # View a student's information
   global_secondary_index {
     name               = "UserData"
     hash_key           = "UserID"
-    range_key          = "CourseID"
     write_capacity     = 5
     read_capacity      = 5
     projection_type    = "INCLUDE"
-    non_key_attributes = ["UserName", "UserType", "CourseName", "Date", "Present"]
+    non_key_attributes = ["UserName", "UserType", "CourseID"]
   }
 
   tags = {
