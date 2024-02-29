@@ -167,55 +167,55 @@ resource "aws_api_gateway_deployment" "deployment_production" {
 # ----------------- CloudWatch Logs -----------------
 
 # Creating the log group for API gateway
-# resource "aws_cloudwatch_log_group" "api_gateway_access_logs" {
-#   name = "/aws/api-gateway/AttendanceAPI-access-logs"
-# }
+resource "aws_cloudwatch_log_group" "api_gateway_access_logs" {
+  name = "/aws/api-gateway/AttendanceAPI-access-logs"
+}
 
-# # Creating an IAM role for API Gateway to write to CloudWatch logs
-# resource "aws_iam_role" "api_gateway_cloudwatch_logs_role" {
-#   name = "api_gateway_cloudwatch_logs_role"
-#   assume_role_policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [
-#       {
-#         "Effect" : "Allow",
-#         "Principal" : {
-#           "Service" : "apigateway.amazonaws.com"
-#         },
-#         "Action" : "sts:AssumeRole"
-#       }
-#     ]
-#   })
-# }
+# Creating an IAM role for API Gateway to write to CloudWatch logs
+resource "aws_iam_role" "api_gateway_cloudwatch_logs_role" {
+  name = "api_gateway_cloudwatch_logs_role"
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "apigateway.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+}
 
-# # Creating a policy for the IAM role to write to CloudWatch logs
-# resource "aws_iam_policy" "api_gateway_cloudwatch_logs_policy" {
-#   name        = "api_gateway_cloudwatch_logs_policy"
-#   description = "Policy for API Gateway to write to CloudWatch logs"
+# Creating a policy for the IAM role to write to CloudWatch logs
+resource "aws_iam_policy" "api_gateway_cloudwatch_logs_policy" {
+  name        = "api_gateway_cloudwatch_logs_policy"
+  description = "Policy for API Gateway to write to CloudWatch logs"
 
-#   policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [
-#       {
-#         "Effect" : "Allow",
-#         "Action" : [
-#           "logs:CreateLogGroup",
-#           "logs:CreateLogStream",
-#           "logs:PutLogEvents"
-#         ],
-#         "Resource" : "arn:aws:logs:*:*:*"
-#       }
-#     ]
-#   })
-# }
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource" : "arn:aws:logs:*:*:*"
+      }
+    ]
+  })
+}
 
-# # Attaching the policy to the IAM role
-# resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch_logs_attachment" {
-#   role       = aws_iam_role.api_gateway_cloudwatch_logs_role.name
-#   policy_arn = aws_iam_policy.api_gateway_cloudwatch_logs_policy.arn
-# }
+# Attaching the policy to the IAM role
+resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch_logs_attachment" {
+  role       = aws_iam_role.api_gateway_cloudwatch_logs_role.name
+  policy_arn = aws_iam_policy.api_gateway_cloudwatch_logs_policy.arn
+}
 
-# # Creating the API Gateway account
+# Creating the API Gateway account
 # resource "aws_api_gateway_account" "api_gateway_account" {
 #   cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
 
