@@ -111,27 +111,30 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Attendance of Student</h5>
+                                    <h5 class="card-title">Attendance of Student for course <span
+                                            id="course-name"></span> with id <span id="course-id"></span>
+                                    </h5>
                                     <h6 class="card-subtitle text-muted">The attendance of the student can be found in
                                         the table below. </h6>
                                 </div>
                                 <div class="card-body">
-                                    <table id="datatables-ajax" class="table table-striped" style="width:100%">
+                                    <table id="datatables-responsive" class="table table-striped" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Course</th>
                                                 <th>Date</th>
                                                 <th>Time</th>
                                                 <th>Attendance</th>
-
+                                                <th>Change</th>
                                             </tr>
                                         </thead>
+                                        <tbody id="data-student-attendance">
+                                        </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Course</th>
                                                 <th>Date</th>
                                                 <th>Time</th>
                                                 <th>Attendance</th>
+                                                <th>Change</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -160,9 +163,78 @@
 
     <script src="../../js/app.js"></script>
     <script>
-        $('#datatables-ajax').DataTable({
-            "ajax": 'tables-datatables-ajax.json'
-        });
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('course_id');
+        const courseName = decodeURIComponent(urlParams.get('course_name'));
+
+        document.getElementById('course-id').textContent = courseId;
+        document.getElementById('course-name').textContent = courseName;
+
+        const mock_data = [
+            {
+                date: "2022-10-01",
+                start_time: "09:00 AM",
+                end_time: "10:00 AM",
+                attendance: "Present"
+            },
+            {
+                date: "2022-10-02",
+                start_time: "10:30 AM",
+                end_time: "11:30 AM",
+                attendance: "Absent"
+            },
+            {
+                date: "2022-10-03",
+                start_time: "11:45 AM",
+                end_time: "12:45 PM",
+                attendance: "Present"
+            }
+        ];
+
+        fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin')
+            .then(response => response.json())
+            .then(data => {
+                data = mock_data;
+                const tbody = document.getElementById('data-student-attendance');
+                data.forEach(entry => {
+                    const tr = document.createElement('tr');
+
+                    // Date
+                    const dateTd = document.createElement('td');
+                    dateTd.textContent = entry.date;
+                    tr.appendChild(dateTd);
+
+                    // Time
+                    const timeTd = document.createElement('td');
+                    timeTd.textContent = entry.start_time + ' - ' + entry.end_time;
+                    tr.appendChild(timeTd);
+
+                    // Attendance
+                    const attendanceTd = document.createElement('td');
+                    attendanceTd.textContent = entry.attendance;
+                    tr.appendChild(attendanceTd);
+
+                    // Change
+                    const changeTd = document.createElement('td');
+                    const changeButton = document.createElement('button');
+                    changeButton.textContent = 'Change';
+                    changeButton.onclick = changeAttendance;
+                    changeTd.appendChild(changeButton);
+                    tr.appendChild(changeTd);
+
+                    tbody.appendChild(tr);
+                });
+                $("#datatables-responsive").DataTable({
+                    responsive: true,
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        function changeAttendance() {
+            alert('Change attendance');
+        }
     </script>
 
 </body>

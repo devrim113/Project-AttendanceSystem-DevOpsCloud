@@ -107,37 +107,27 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <div class="row mb-2 mb-xl-3">
-                        <div class="col-auto d-none d-sm-block">
-                            <h3>Courses</h3>
-                        </div>
-                    </div>
-                    <div class="row" id="courses">
-                        <div class="col-md-6 col-xxl-3 d-flex">
-                            <div class="card flex-fill">
-                                <div class="card-body">
-                                    <h1><a href="student-attendance.html?course=course1">Course 1</a></h1>
+                    <h1 class="h3 mb-3">Student Dashboard</h1>
+                    <p class="mb-3">Welcome to the student dashboard. Here you can view all the courses you have
+                        registered for and view your attendance for each course by clicking on a course.</p>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Courses</h5>
+                                    <h6 class="card-subtitle text-muted">These are all the courses you have registered
+                                        for.</h6>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xxl-3 d-flex">
-                            <div class="card flex-fill">
                                 <div class="card-body">
-                                    <h1><a href="student-attendance.html?course=course2">Course 2</a></h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xxl-3 d-flex">
-                            <div class="card flex-fill">
-                                <div class="card-body">
-                                    <h1><a href="student-attendance.html?course=course3">Course 3</a></h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xxl-3 d-flex">
-                            <div class="card flex-fill">
-                                <div class="card-body">
-                                    <h1><a href="student-attendance.html?course=course4">Course 4</a></h1>
+                                    <table id="datatables-responsive" class="table table-striped" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Course Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data-student-courses">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -163,33 +153,111 @@
 
     <script src="../../js/app.js"></script>
     <script>
-        fetch('https://example.com/api/courses')
+        mock_data = [
+            {
+                "courseId": 1,
+                "courseName": "Introduction to Programming"
+            },
+            {
+                "courseId": 2,
+                "courseName": "Web Development Fundamentals"
+            },
+            {
+                "courseId": 3,
+                "courseName": "Database Design and Management"
+            },
+            {
+                "courseId": 4,
+                "courseName": "Software Engineering Principles"
+            },
+            {
+                "courseId": 5,
+                "courseName": "Data Structures and Algorithms"
+            },
+            {
+                "courseId": 6,
+                "courseName": "Object-Oriented Programming"
+            },
+            {
+                "courseId": 7,
+                "courseName": "Mobile App Development"
+            },
+            {
+                "courseId": 8,
+                "courseName": "Artificial Intelligence"
+            },
+            {
+                "courseId": 9,
+                "courseName": "Cloud Computing"
+            },
+            {
+                "courseId": 10,
+                "courseName": "Cybersecurity Fundamentals"
+            },
+            {
+                "courseId": 11,
+                "courseName": "Data Science and Analytics"
+            },
+            {
+                "courseId": 12,
+                "courseName": "Human-Computer Interaction"
+            },
+            {
+                "courseId": 13,
+                "courseName": "Software Testing and Quality Assurance"
+            },
+            {
+                "courseId": 14,
+                "courseName": "Network Security"
+            },
+            {
+                "courseId": 15,
+                "courseName": "Operating Systems"
+            },
+            {
+                "courseId": 16,
+                "courseName": "Computer Graphics"
+            },
+            {
+                "courseId": 17,
+                "courseName": "Big Data Analytics"
+            },
+            {
+                "courseId": 18,
+                "courseName": "Internet of Things"
+            },
+            {
+                "courseId": 19,
+                "courseName": "Blockchain Technology"
+            },
+            {
+                "courseId": 20,
+                "courseName": "Software Project Management"
+            }
+        ]
+
+        fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin')
             .then(response => response.json())
             .then(data => {
-                // Iterate over the courses and generate the HTML code
+                data = mock_data;
+                const tbody = document.getElementById('data-student-courses');
                 data.forEach(course => {
-                    const courseName = course.name;
-                    const courseLink = `student-attendance.html?course=${courseName}`;
-
-                    const courseCard = document.createElement('div');
-                    courseCard.className = 'col-md-6 col-xxl-3 d-flex';
-                    courseCard.innerHTML = `
-        <div class="card flex-fill">
-          <div class="card-body">
-            <h1><a href="${courseLink}">${courseName}</a></h1>
-          </div>
-        </div>
-      `;
-
-                    // Append the course card to the container
-                    const container = document.querySelector('#courses');
-                    container.appendChild(courseCard);
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `student-attendance.html?course_id=${course.courseId}&course_name=${encodeURIComponent(course.courseName)}`;
+                    link.textContent = course.courseName;
+                    td.appendChild(link);
+                    tr.appendChild(td);
+                    tbody.appendChild(tr);
+                });
+                $("#datatables-responsive").DataTable({
+                    responsive: true,
                 });
             })
             .catch(error => {
                 console.error('Error:', error);
             });
-
     </script>
 </body>
 

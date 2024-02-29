@@ -107,28 +107,42 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1 class="h3 mb-3">Teacher Dashboard</h1>
-                    <p>Welcome to the teacher dashboard.
-                        Here you can see all the courses you are teaching and create new courses.
-                        Click on a course to see the attendance of the students.
-                        Scroll down to see the create a course card.
+                    <h1 class="h3 mb-3">Teacher attendance</h1>
+                    <p>Here you can see and change the attendance for the course you have selected.
+                        Scroll down to see the create a lesson card.
                     </p>
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Courses</h5>
-                                    <h6 class="card-subtitle text-muted">These are all the courses you are teaching</h6>
+                                    <h5 class="card-title">Attendance for course <span id="course-name"></span> with id
+                                        <span id="course-id"></span>
+                                    </h5>
+                                    <h6 class="card-subtitle text-muted">The attendance can be found in
+                                        the table below. </h6>
                                 </div>
                                 <div class="card-body">
                                     <table id="datatables-responsive" class="table table-striped" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Course Name</th>
+                                                <th>Name</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Attendance</th>
+                                                <th>Change</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="data-student-courses">
+                                        <tbody id="data-student-attendance">
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Attendance</th>
+                                                <th>Change</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -138,21 +152,33 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Create Course</h5>
-                                    <h6 class="card-subtitle text-muted">Create a new course</h6>
+                                    <h5 class="card-title">Create lesson</h5>
+                                    <h6 class="card-subtitle text-muted">Create a new lesson for the course. All
+                                        registered students for this course will be set to absent as standard.</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form id="create-course">
+                                    <form id="create-lesson">
                                         <div class="mb-3">
-                                            <label for="courseName" class="form-label">Course Name</label>
-                                            <input type="text" class="form-control" id="courseName"
-                                                placeholder="Course Name">
+                                            <label for="lesson-date" class="form-label">Date</label>
+                                            <input type="text" class="form-control" id="lesson-date"
+                                                data-mask="00/00/0000">
+                                            <span class="font-13 text-muted">e.g "DD/MM/YYYY"</span>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Create</button>
-                                    </form>
+                                        <div class="mb-3">
+                                            <label for="lesson-start-time" class="form-label mb-0">Start time</label>
+                                            <input type="text" class="form-control" id="lesson-start-time"
+                                                data-mask="00:00">
+                                            <span class="font-13 text-muted">e.g "HH:MM"</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="lesson-end-time" class="form-label mb-0">End time</label>
+                                            <input type="text" class="form-control" id="lesson-end-time"
+                                                data-mask="00:00">
+                                            <span class="font-13 text-muted">e.g "HH:MM"</span>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Create lesson</button>
                                 </div>
                             </div>
-                        </div>
             </main>
 
             <footer class="footer">
@@ -173,102 +199,73 @@
 
     <script src="../../js/app.js"></script>
     <script>
-        mock_data = [
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('course_id');
+        const courseName = decodeURIComponent(urlParams.get('course_name'));
+
+        document.getElementById('course-id').textContent = courseId;
+        document.getElementById('course-name').textContent = courseName;
+
+        const mock_data = [
             {
-                "courseId": 1,
-                "courseName": "Introduction to Programming"
+                name: "John Doe",
+                date: "2022-10-01",
+                start_time: "09:00 AM",
+                end_time: "10:00 AM",
+                attendance: "Present"
             },
             {
-                "courseId": 2,
-                "courseName": "Web Development Fundamentals"
+                name: "Jane Doe",
+                date: "2022-10-02",
+                start_time: "10:30 AM",
+                end_time: "11:30 AM",
+                attendance: "Absent"
             },
             {
-                "courseId": 3,
-                "courseName": "Database Design and Management"
-            },
-            {
-                "courseId": 4,
-                "courseName": "Software Engineering Principles"
-            },
-            {
-                "courseId": 5,
-                "courseName": "Data Structures and Algorithms"
-            },
-            {
-                "courseId": 6,
-                "courseName": "Object-Oriented Programming"
-            },
-            {
-                "courseId": 7,
-                "courseName": "Mobile App Development"
-            },
-            {
-                "courseId": 8,
-                "courseName": "Artificial Intelligence"
-            },
-            {
-                "courseId": 9,
-                "courseName": "Cloud Computing"
-            },
-            {
-                "courseId": 10,
-                "courseName": "Cybersecurity Fundamentals"
-            },
-            {
-                "courseId": 11,
-                "courseName": "Data Science and Analytics"
-            },
-            {
-                "courseId": 12,
-                "courseName": "Human-Computer Interaction"
-            },
-            {
-                "courseId": 13,
-                "courseName": "Software Testing and Quality Assurance"
-            },
-            {
-                "courseId": 14,
-                "courseName": "Network Security"
-            },
-            {
-                "courseId": 15,
-                "courseName": "Operating Systems"
-            },
-            {
-                "courseId": 16,
-                "courseName": "Computer Graphics"
-            },
-            {
-                "courseId": 17,
-                "courseName": "Big Data Analytics"
-            },
-            {
-                "courseId": 18,
-                "courseName": "Internet of Things"
-            },
-            {
-                "courseId": 19,
-                "courseName": "Blockchain Technology"
-            },
-            {
-                "courseId": 20,
-                "courseName": "Software Project Management"
+                name: "John Smith",
+                date: "2022-10-03",
+                start_time: "11:45 AM",
+                end_time: "12:45 PM",
+                attendance: "Present"
             }
-        ]
+        ];
 
         fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin')
             .then(response => response.json())
             .then(data => {
                 data = mock_data;
-                const tbody = document.getElementById('data-student-courses');
-                data.forEach(course => {
+                const tbody = document.getElementById('data-student-attendance');
+                data.forEach(entry => {
                     const tr = document.createElement('tr');
-                    const td = document.createElement('td');
-                    const link = document.createElement('a');
-                    link.href = `teacher-attendance.html?course_id=${course.courseId}&course_name=${encodeURIComponent(course.courseName)}`;
-                    link.textContent = course.courseName;
-                    td.appendChild(link);
-                    tr.appendChild(td);
+
+                    // Name
+                    const nameTd = document.createElement('td');
+                    nameTd.textContent = entry.name;
+                    tr.appendChild(nameTd);
+
+                    // Date
+                    const dateTd = document.createElement('td');
+                    dateTd.textContent = entry.date;
+                    tr.appendChild(dateTd);
+
+                    // Time
+                    const timeTd = document.createElement('td');
+                    timeTd.textContent = entry.start_time + ' - ' + entry.end_time;
+                    tr.appendChild(timeTd);
+
+                    // Attendance
+                    const attendanceTd = document.createElement('td');
+                    attendanceTd.textContent = entry.attendance;
+                    tr.appendChild(attendanceTd);
+
+                    // Change
+                    const changeTd = document.createElement('td');
+                    const changeButton = document.createElement('button');
+                    changeButton.textContent = 'Change';
+                    changeButton.onclick = changeAttendance;
+                    changeTd.appendChild(changeButton);
+                    tr.appendChild(changeTd);
+
                     tbody.appendChild(tr);
                 });
                 $("#datatables-responsive").DataTable({
@@ -279,9 +276,15 @@
                 console.error('Error:', error);
             });
 
-        document.getElementById('create-course').addEventListener('submit', function (event) {
+        function changeAttendance() {
+            alert('Change attendance');
+        }
+
+        document.getElementById('create-lesson').addEventListener('submit', function (event) {
             event.preventDefault();
-            const courseName = document.getElementById('courseName').value;
+            const date = document.getElementById('lesson-date').value;
+            const startTime = document.getElementById('lesson-start-time').value;
+            const endTime = document.getElementById('lesson-end-time').value;
             fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin', {
                 method: 'POST',
                 headers: {
@@ -289,20 +292,23 @@
                     'Access-Control-Allow-Origin': '*'
                 },
                 body: JSON.stringify({
-                    courseName: courseName
+                    course_id: courseId,
+                    date: date,
+                    start_time: startTime,
+                    end_time: endTime
                 })
-            })
-                .then(response => response.json())
+            }).then(response => response.json())
                 .then(data => {
-                    alert('Course created successfully!');
+                    alert('Lesson created successfully!');
                     location.reload();
                 })
                 .catch((error) => {
-                    alert('Error creating course! Check the console for more details.');
+                    alert('Error creating lesson! Check the console for more details.');
                     console.error('Error:', error);
                 });
         });
     </script>
+
 </body>
 
 </html>
