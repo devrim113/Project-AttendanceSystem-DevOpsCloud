@@ -83,7 +83,7 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
 
 # Creating log groups for each separate lambda function.
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  count = length(locals.log_group_names)
+  count = length(local.log_group_names)
   name  = local.log_group_names[count.index]
 }
 
@@ -93,18 +93,18 @@ resource "aws_iam_policy" "lambda_cloudwatch_policy" {
   description = "Allows Lambda functions to write to CloudWatch logs"
 
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
-      {
-        Effect = "Allow",
-        Action = [
+      for index, log_group_name in local.log_group_names : {
+        Effect   = "Allow"
+        Action   = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
-        ],
+        ]
         Resource = [
-          aws_cloudwatch_log_group.lambda_log_group.arn,
-          "${aws_cloudwatch_log_group.lambda_log_group.arn}:*"
+          aws_cloudwatch_log_group.lambda_log_group[index].arn,
+          "${aws_cloudwatch_log_group.lambda_log_group[index].arn}:*"
         ]
       }
     ]
@@ -115,5 +115,5 @@ resource "aws_iam_policy" "lambda_cloudwatch_policy" {
 resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" {
   policy_arn = aws_iam_policy.lambda_cloudwatch_policy.arn
   # We reuse the lambda role that was created for execution of the lambda functions.
-  role = aws_iam_role.lambda_role.name
+  role       = aws_iam_role.lambda_role.name
 }
