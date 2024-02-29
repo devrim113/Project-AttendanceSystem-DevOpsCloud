@@ -46,9 +46,9 @@ resource "aws_dynamodb_table" "table_attendance" {
   global_secondary_index {
     name               = "UserCourses"
     hash_key           = "UserID"
-    range_key          = "courseID"
+    range_key          = "CourseID"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["courseID", "Attendance"]
+    non_key_attributes = ["CourseID", "Attendance"]
   }
 
   tags = {
