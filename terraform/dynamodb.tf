@@ -60,7 +60,7 @@ resource "aws_dynamodb_table" "attendance_table" {
     write_capacity     = 5
     read_capacity      = 5
     projection_type    = "INCLUDE"
-    non_key_attributes = ["CourseName", "Date", "Present"]
+    non_key_attributes = ["UserName", "UserType", "CourseName", "Date", "Present"]
   }
 
   tags = {
