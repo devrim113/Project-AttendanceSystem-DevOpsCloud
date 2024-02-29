@@ -10,51 +10,51 @@
 
     <title>Attendance Dashboard</title>
 
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="../../img/favicon.ico">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <link href="css/light.css" rel="stylesheet">
+    <link href="../../css/light.css" rel="stylesheet">
 </head>
 
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <div class="sidebar-content js-simplebar">
-                <a class="sidebar-brand" href="index.html">
+                <a class="sidebar-brand" href="../../index.html">
                     <span class="align-middle me-3">Attendance System</span>
                 </a>
 
                 <ul class="sidebar-nav">
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/student/student.html">
+                        <a class="sidebar-link" href="../student/student.html">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Student</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/teacher/teacher.html">
+                        <a class="sidebar-link" href="../teacher/teacher.html">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Teacher</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/course/course.html">
+                        <a class="sidebar-link" href="../course/course.html">
                             <i class="align-middle" data-feather="book-open"></i> <span
                                 class="align-middle">Course</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/department/department.html">
+                        <a class="sidebar-link" href="../department/department.html">
                             <i class="align-middle" data-feather="server"></i> <span
                                 class="align-middle">Department</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="pages/admin/admin.html">
+                        <a class="sidebar-link" href="../admin/admin.html">
                             <i class="align-middle" data-feather="layers"></i> <span class="align-middle">Admin</span>
                         </a>
                     </li>
@@ -71,15 +71,17 @@
                         <li class="nav-item dropdown">
                             <a class="nav-flag dropdown-toggle" href="#" id="languageDropdown"
                                 data-bs-toggle="dropdown">
-                                <img src="img/flags/us.png" alt="English" />
+                                <img src="../../img/flags/us.png" alt="English" />
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
                                 <a class="dropdown-item" href="#">
-                                    <img src="img/flags/us.png" alt="English" width="20" class="align-middle me-1" />
+                                    <img src="../../img/flags/us.png" alt="English" width="20"
+                                        class="align-middle me-1" />
                                     <span class="align-middle">English</span>
                                 </a>
                                 <a class="dropdown-item" href="#">
-                                    <img src="img/flags/nl.png" alt="Dutch" width="20" class="align-middle me-1" />
+                                    <img src="../../img/flags/nl.png" alt="Dutch" width="20"
+                                        class="align-middle me-1" />
                                     <span class="align-middle">Dutch</span>
                                 </a>
                             </div>
@@ -92,7 +94,7 @@
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown">
-                                <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle me-1"
+                                <img src="../../img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle me-1"
                                     alt="Chris Wood" /> <span class="text-dark">Chris Wood</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -105,13 +107,37 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Attendance of Student</h5>
+                                    <h6 class="card-subtitle text-muted">The attendance of the student can be found in
+                                        the table below. </h6>
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatables-ajax" class="table table-striped" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Course</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Attendance</th>
 
-                    <div class="row mb-2 mb-xl-3">
-                        <div class="col-auto d-none d-sm-block">
-                            <h3>Welcome to the home page of your attendance!</h3>
-                            <button onclick="makeApiRequest()">Log Attendance</button>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Course</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Attendance</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </main>
@@ -123,7 +149,7 @@
                         </div>
                         <div class="col-6 text-end">
                             <p class="mb-0">
-                                &copy; 2023/2024 - <a href="index.html" class="text-muted">DevOps group 6</a>
+                                &copy; 2023/2024 - <a href="../../index.html" class="text-muted">DevOps group 6</a>
                             </p>
                         </div>
                     </div>
@@ -132,34 +158,11 @@
         </div>
     </div>
 
-    <script src="js/app.js"></script>
-
+    <script src="../../js/app.js"></script>
     <script>
-        async function makeApiRequest() {
-            try {
-                const response = await fetch('https://i7afcdbeif.execute-api.eu-central-1.amazonaws.com/prod/admin', {
-                    method: 'GET', // or 'POST', 'PUT', 'DELETE', etc., depending on your API
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                        // Include other headers as required, such as Authorization for secured endpoints
-                    },
-                    // Include body if method is POST or PUT
-                    // body: JSON.stringify({ key: 'value' })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log(data);
-                alert("API Request Successful!\nCheck the console for response.");
-            } catch (error) {
-                console.error('Error making API request:', error);
-                alert("API Request Failed:\n" + error.message);
-            }
-        }
+        $('#datatables-ajax').DataTable({
+            "ajax": 'tables-datatables-ajax.json'
+        });
     </script>
 
 </body>
