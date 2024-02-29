@@ -43,7 +43,7 @@ resource "aws_dynamodb_table" "attendance_table" {
 
   # View a student's course attendance
   local_secondary_index {
-    name               = "CourseUsers"
+    name               = "UserAttendance"
     range_key          = "UserID"
     projection_type    = "INCLUDE"
     non_key_attributes = ["Date", "Present"]
