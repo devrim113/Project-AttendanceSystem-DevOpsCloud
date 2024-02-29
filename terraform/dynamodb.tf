@@ -168,7 +168,7 @@ resource "aws_dynamodb_table_item" "attendance2" {
 
   item = <<ITEM
     {
-      "ItemID": {"S": "E3"},
+      "ItemID": {"S": "E4"},
       "UserID": {"S": "S1"},
       "UserType": {"S": "Student"},
       "CourseID": {"S": "C2"}
