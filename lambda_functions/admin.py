@@ -1,8 +1,6 @@
 # This file contains CRUD functions for an AWS Lambda node which interacts with a DynamoDB table
 # to store and retrieve student data.
 
-#! We need a partition key (PK) of UserId, CourseId, and Date to uniquely identify a record.
-
 import logging
 import json
 import boto3
