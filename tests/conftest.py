@@ -14,7 +14,7 @@ if lambda_functions_path not in sys.path:
     sys.path.insert(0, lambda_functions_path)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope='session', autouse=True)
 def aws_credentials():
     """Mocked AWS Credentials for moto."""
     import os
@@ -22,12 +22,12 @@ def aws_credentials():
     os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
     os.environ["AWS_SESSION_TOKEN"] = "testing"
-    yield
-    # Remove the environment variables after the test is done
-    os.environ.pop('AWS_ACCESS_KEY_ID', None)
-    os.environ.pop('AWS_SECRET_ACCESS_KEY', None)
-    os.environ.pop('AWS_SECURITY_TOKEN', None)
-    os.environ.pop('AWS_SESSION_TOKEN', None)
+    # yield
+    # # Remove the environment variables after the test is done
+    # os.environ.pop('AWS_ACCESS_KEY_ID', None)
+    # os.environ.pop('AWS_SECRET_ACCESS_KEY', None)
+    # os.environ.pop('AWS_SECURITY_TOKEN', None)
+    # os.environ.pop('AWS_SESSION_TOKEN', None)
 
 
 @pytest.fixture(scope="function")
