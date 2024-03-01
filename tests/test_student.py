@@ -31,8 +31,7 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     response = student_lambda(get_event, {})
     assert response['statusCode'] == 200
     retrieved_object = json.loads(response['body'])
-    assert len(retrieved_object) == 1
-    assert object == retrieved_object[0]
+    assert object == retrieved_object
 
     # Create student attendance record
     attendance_object = {

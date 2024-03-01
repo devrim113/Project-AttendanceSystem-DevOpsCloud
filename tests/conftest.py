@@ -51,7 +51,7 @@ def create_dynamodb_table(dynamodb):
             {'AttributeName': 'UserId', 'AttributeType': 'S'},
             {'AttributeName': 'CourseId', 'AttributeType': 'S'},
             {'AttributeName': 'ItemType', 'AttributeType': 'S'},
-            {'AttributeName': 'DepartmentID', 'AttributeType': 'S'}
+            {'AttributeName': 'DepartmentId', 'AttributeType': 'S'}
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 1,
@@ -71,10 +71,10 @@ def create_dynamodb_table(dynamodb):
                 }
             },
             {
-                'IndexName': 'ItemIdDepartmentIDIndex',
+                'IndexName': 'DepartmentIdItemTypeIndex',
                 'KeySchema': [
-                    {'AttributeName': 'ItemId', 'KeyType': 'HASH'},
-                    {'AttributeName': 'DepartmentID', 'KeyType': 'RANGE'}
+                    {'AttributeName': 'DepartmentId', 'KeyType': 'HASH'},
+                    {'AttributeName': 'ItemType', 'KeyType': 'RANGE'}
                 ],
                 'Projection': {'ProjectionType': 'ALL'},
                 'ProvisionedThroughput': {
