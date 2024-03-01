@@ -1,34 +1,34 @@
 resource "aws_dynamodb_table" "attendance_table" {
-  name           = "AllData"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "ItemId"
-  range_key      = "ItemType"
+  name         = "AllData"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "ItemId"
+  range_key    = "ItemType"
 
   global_secondary_index {
-    name               = "CourseIDITemTypeIndex"
-    hash_key           = "CourseID"
-    range_key = "ItemType"
-    read_capacity  = 5
-    write_capacity = 5
-    projection_type    = "ALL"
+    name            = "CourseIDITemTypeIndex"
+    hash_key        = "CourseID"
+    range_key       = "ItemType"
+    read_capacity   = 5
+    write_capacity  = 5
+    projection_type = "ALL"
   }
 
   global_secondary_index {
-    name              = "DepartmentIdItemTypeIndex"
-    hash_key          = "DepartmentID"
-    range_key = "ItemType"
-    read_capacity  = 5
-    write_capacity = 5
-    projection_type   = "ALL"
+    name            = "DepartmentIdItemTypeIndex"
+    hash_key        = "DepartmentID"
+    range_key       = "ItemType"
+    read_capacity   = 5
+    write_capacity  = 5
+    projection_type = "ALL"
   }
 
   global_secondary_index {
-    name              = "UserIdCourseIdIndex"
-    hash_key          = "UserID"
-    range_key = "CourseID"
-    read_capacity  = 5
-    write_capacity = 5
-    projection_type   = "ALL"
+    name            = "UserIdCourseIdIndex"
+    hash_key        = "UserID"
+    range_key       = "CourseID"
+    read_capacity   = 5
+    write_capacity  = 5
+    projection_type = "ALL"
   }
 
   attribute {
