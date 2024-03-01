@@ -8,8 +8,6 @@ resource "aws_dynamodb_table" "attendance_table" {
     name            = "CourseIDITemTypeIndex"
     hash_key        = "CourseID"
     range_key       = "ItemType"
-    read_capacity   = 5
-    write_capacity  = 5
     projection_type = "ALL"
   }
 
@@ -17,8 +15,6 @@ resource "aws_dynamodb_table" "attendance_table" {
     name            = "DepartmentIdItemTypeIndex"
     hash_key        = "DepartmentID"
     range_key       = "ItemType"
-    read_capacity   = 5
-    write_capacity  = 5
     projection_type = "ALL"
   }
 
@@ -26,8 +22,6 @@ resource "aws_dynamodb_table" "attendance_table" {
     name            = "UserIdCourseIdIndex"
     hash_key        = "UserID"
     range_key       = "CourseID"
-    read_capacity   = 5
-    write_capacity  = 5
     projection_type = "ALL"
   }
 
