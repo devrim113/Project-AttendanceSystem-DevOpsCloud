@@ -210,7 +210,7 @@ def get_student_courses(user_id):
     """
     try:
         response = table.query(
-            IndexName='UserIDCourseIDIndex',
+            IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
         return response.get('Items')
@@ -232,7 +232,7 @@ def get_student_course_attendance(user_id, course_id):
     """
     try:
         response = table.query(
-            IndexName='UserIDCourseIDIndex',
+            IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(
                 user_id) & Key('CourseId').eq(course_id)
         )

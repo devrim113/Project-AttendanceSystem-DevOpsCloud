@@ -154,7 +154,7 @@ def get_teacher_courses(user_id):
     """
     try:
         response = table.query(
-            IndexName='UserIDCourseIDIndex',
+            IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
         return response.get('Items')
@@ -179,7 +179,7 @@ def get_all_course_attendance(course_id):
     """
     try:
         response = table.query(
-            IndexName='CourseIDItemTypeIndex',
+            IndexName='CourseIdItemTypeIndex',
             KeyConditionExpression=Key('CourseId').eq(
                 course_id) & Key('ItemType').eq('Attendance')
         )

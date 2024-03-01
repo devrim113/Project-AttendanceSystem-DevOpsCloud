@@ -59,7 +59,7 @@ def create_dynamodb_table(dynamodb):
         },
         GlobalSecondaryIndexes=[
             {
-                'IndexName': 'CourseIDItemTypeIndex',
+                'IndexName': 'CourseIdItemTypeIndex',
                 'KeySchema': [
                     {'AttributeName': 'CourseId', 'KeyType': 'HASH'},
                     {'AttributeName': 'ItemType', 'KeyType': 'RANGE'}
@@ -83,7 +83,7 @@ def create_dynamodb_table(dynamodb):
                 }
             },
             {
-                'IndexName': 'UserIDCourseIDIndex',
+                'IndexName': 'UserIdCourseIdIndex',
                 'KeySchema': [
                     {'AttributeName': 'UserId', 'KeyType': 'HASH'},
                     {'AttributeName': 'CourseId', 'KeyType': 'RANGE'}
