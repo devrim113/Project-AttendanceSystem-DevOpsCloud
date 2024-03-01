@@ -183,10 +183,13 @@ def get_student(user_id):
         ClientError: If an error occurs while querying the table.
     """
     try:
-        response = table.query(
-            KeyConditionExpression=Key('ItemId').eq(user_id)
+        response = table.get_item(
+            Key={
+                'ItemId': user_id,
+                'ItemType': 'Student'
+            }
         )
-        return response.get('Items')
+        return response.get('Item')
     except ClientError as e:
         print(e.response['Error']['Message'])
         return None

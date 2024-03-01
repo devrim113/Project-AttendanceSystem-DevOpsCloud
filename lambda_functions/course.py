@@ -8,17 +8,18 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
-table = dynamodb.Table('UserData')
+table = dynamodb.Table('AllData')
 
 
-def create_course(course_id, course_name, department_id):
+def create_course(item_id, course_name, department_id, classes):
     """
     Create object for a course.
 
     Args:
-        course_id (str): The ID of the course.
+        item_id (str): The ID of the course.
         course_name (str): The name of the course.
         department_id (str): The ID of the department.
+        classes (dict): The classes for the course.
 
     Returns:
         dict: The response from the table.put_item() operation.
@@ -29,11 +30,11 @@ def create_course(course_id, course_name, department_id):
     try:
         response = table.put_item(
             Item={
-                'ItemId': course_id,
+                'ItemId': item_id,
                 'CourseName': course_name,
-                'DepartmentID': department_id,
+                'DepartmentId': department_id,
                 'ItemType': 'Course',
-                'Courses': {}
+                'Classes': classes
             }
         )
         return response
@@ -42,12 +43,12 @@ def create_course(course_id, course_name, department_id):
         return None
 
 
-def get_course(course_id):
+def get_course(item_id):
     """
     Get a course.
 
     Args:
-        course_id (str): The ID of the course.
+        item_id (str): The ID of the course.
 
     Returns:
         dict: The course object.
@@ -58,7 +59,7 @@ def get_course(course_id):
     try:
         response = table.get_item(
             Key={
-                'ItemId': course_id,
+                'ItemId': item_id,
                 'ItemType': 'Course'
             }
         )
@@ -68,15 +69,15 @@ def get_course(course_id):
         return None
 
 
-def update_course(course_id, course_name, department_id, courses):
+def update_course(item_id, course_name, department_id, classes):
     """
     Update object for a course.
 
     Args:
-        course_id (str): The ID of the course.
+        item_id (str): The ID of the course.
         course_name (str): The name of the course.
         department_id (str): The ID of the department.
-        courses (dict): The courses for the course.
+        classes (dict): The classes for the course.
 
     Returns:
         dict: The response from the table.update_item() operation.
@@ -87,14 +88,14 @@ def update_course(course_id, course_name, department_id, courses):
     try:
         response = table.update_item(
             Key={
-                'ItemId': course_id,
+                'ItemId': item_id,
                 'ItemType': 'Course'
             },
-            UpdateExpression="set CourseName = :n, DepartmentID = :d, Courses = :c",
+            UpdateExpression="set CourseName = :n, DepartmentId = :d, Classes = :c",
             ExpressionAttributeValues={
                 ':n': course_name,
                 ':d': department_id,
-                ':c': courses
+                ':c': classes
             },
             ReturnValues="UPDATED_NEW"
         )
@@ -104,12 +105,12 @@ def update_course(course_id, course_name, department_id, courses):
         return None
 
 
-def delete_course(course_id):
+def delete_course(item_id):
     """
     Delete a course.
 
     Args:
-        course_id (str): The ID of the course.
+        item_id (str): The ID of the course.
 
     Returns:
         dict: The response from the table.delete_item() operation.
@@ -120,7 +121,7 @@ def delete_course(course_id):
     try:
         response = table.delete_item(
             Key={
-                'ItemId': course_id,
+                'ItemId': item_id,
                 'ItemType': 'Course'
             }
         )
@@ -151,7 +152,7 @@ def lambda_handler(event, context):
     match operation:
         case 'put':
             response = create_course(
-                event['CourseId'], event['CourseName'], event['DepartmentID'])
+                event['ItemId'], event['CourseName'], event['DepartmentId'], event['Classes'])
             if response:
                 return {
                     'statusCode': 200,
@@ -169,7 +170,7 @@ def lambda_handler(event, context):
                     }
                 }
         case 'get':
-            response = get_course(event['CourseId'])
+            response = get_course(event['ItemId'])
             if response:
                 return {
                     'statusCode': 200,
@@ -188,7 +189,7 @@ def lambda_handler(event, context):
                 }
         case 'update':
             response = update_course(
-                event['CourseId'], event['CourseName'], event['DepartmentID'], event['Courses'])
+                event['ItemId'], event['CourseName'], event['DepartmentId'], event['Classes'])
             if response:
                 return {
                     'statusCode': 200,
@@ -206,7 +207,7 @@ def lambda_handler(event, context):
                     }
                 }
         case 'delete':
-            response = delete_course(event['CourseId'])
+            response = delete_course(event['ItemId'])
             if response:
                 return {
                     'statusCode': 200,

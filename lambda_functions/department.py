@@ -8,7 +8,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
-table = dynamodb.Table('UserData')
+table = dynamodb.Table('AllData')
 
 
 def create_department(dep_id, dep_name):
@@ -59,7 +59,32 @@ def get_department(dep_id):
                 'ItemType': 'Department'
             }
         )
-        return response['Item']
+        return response.get('Item')
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return None
+
+
+def get_department_courses(dep_id):
+    """
+    Get the courses for a department.
+
+    Args:
+        dep_id (str): The ID of the department.
+
+    Returns:
+        list: The list of courses for the department.
+
+    Raises:
+        ClientError: If an error occurs while querying the items.
+    """
+    try:
+        response = table.query(
+            IndexName='DepartmentIdItemTypeIndex',
+            KeyConditionExpression=Key('DepartmentId').eq(
+                dep_id) & Key('ItemType').eq('Course')
+        )
+        return response['Items']
     except ClientError as e:
         print(e.response['Error']['Message'])
         return None
@@ -163,7 +188,7 @@ def lambda_handler(event, context):
     match operation:
         case 'put':
             response = create_department(
-                event['DepartmentId'], event['DepartmentName'])
+                event['ItemId'], event['DepartmentName'])
             if response:
                 return {
                     'statusCode': 200,
@@ -182,7 +207,10 @@ def lambda_handler(event, context):
                 }
 
         case 'get':
-            response = get_department(event['DepartmentId'])
+            if 'ItemType' in event and event['ItemType'] == 'Course':
+                response = get_department_courses(event['DepartmentId'])
+            else:
+                response = get_department(event['ItemId'])
             if response:
                 return {
                     'statusCode': 200,
@@ -193,7 +221,7 @@ def lambda_handler(event, context):
                 }
             else:
                 return {
-                    'statusCode': 400,
+                    'statusCode': 404,
                     'body': json.dumps('Department not found'),
                     'headers': {
                         'Content-Type': 'application/json'
@@ -202,7 +230,7 @@ def lambda_handler(event, context):
 
         case 'update':
             response = update_department(
-                event['DepartmentId'], event['DepartmentName'])
+                event['ItemId'], event['DepartmentName'])
             if response:
                 return {
                     'statusCode': 200,
@@ -221,7 +249,7 @@ def lambda_handler(event, context):
                 }
 
         case 'delete':
-            response = delete_department(event['DepartmentId'])
+            response = delete_department(event['ItemId'])
             if response:
                 return {
                     'statusCode': 200,
@@ -232,8 +260,8 @@ def lambda_handler(event, context):
                 }
             else:
                 return {
-                    'statusCode': 400,
-                    'body': json.dumps('Department deletion failed'),
+                    'statusCode': 404,
+                    'body': json.dumps('Department not found, nothing deleted.'),
                     'headers': {
                         'Content-Type': 'application/json'
                     }
