@@ -1,8 +1,6 @@
 resource "aws_dynamodb_table" "attendance_table" {
   name           = "AllData"
   billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 5
-  write_capacity = 5
   hash_key       = "ItemId"
   range_key      = "ItemType"
 
