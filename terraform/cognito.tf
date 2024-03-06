@@ -49,6 +49,7 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
   allowed_oauth_flows                  = ["code", "implicit"] # Modify based on needs
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["email", "profile", "openid"]
+  supported_identity_providers         = ["COGNITO"]
   callback_urls                        = ["https://d5j4m0w9schy1.cloudfront.net/", "https://d5j4m0w9schy1.cloudfront.net"]
 }
 
