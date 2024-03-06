@@ -36,10 +36,8 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'httpMethod': 'GET',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'get_student'}),
-        'body': json.dumps({
-            'ItemId': '1'
-        }),
+        'queryStringParameters': json.dumps({'func': 'get_student', 'ItemId': '1'}),
+        'body': None,
         'isBase64Encoded': False
     })
     response = student_lambda(get_event, {})
@@ -113,11 +111,8 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'httpMethod': 'GET',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'get_student_course_attendance'}),
-        'body': json.dumps({
-            'UserId': '1',
-            'CourseId': '101'
-        }),
+        'queryStringParameters': json.dumps({'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '101'}),
+        'body': None,
         'isBase64Encoded': False
     })
 
@@ -159,10 +154,8 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'httpMethod': 'GET',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'get_student_courses'}),
-        'body': json.dumps({
-            'UserId': '1'
-        }),
+        'queryStringParameters': json.dumps({'func': 'get_student_courses', 'UserId': '1'}),
+        'body': None,
         'isBase64Encoded': False
     })
 
