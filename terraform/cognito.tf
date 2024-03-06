@@ -38,7 +38,7 @@ resource "aws_cognito_user_pool" "student_pool" {
     temporary_password_validity_days = 3
   }
 
-  mfa_configuration = "OPTIONAL"
+  mfa_configuration = "OFF"
 }
 
 # Cognito User Pool Client
