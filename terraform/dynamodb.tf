@@ -5,23 +5,23 @@ resource "aws_dynamodb_table" "attendance_table" {
   range_key    = "ItemType"
 
   global_secondary_index {
-    name            = "CourseIDITemTypeIndex"
-    hash_key        = "CourseID"
+    name            = "CourseIdItemTypeIndex"
+    hash_key        = "CourseId"
     range_key       = "ItemType"
     projection_type = "ALL"
   }
 
   global_secondary_index {
     name            = "DepartmentIdItemTypeIndex"
-    hash_key        = "DepartmentID"
+    hash_key        = "DepartmentId"
     range_key       = "ItemType"
     projection_type = "ALL"
   }
 
   global_secondary_index {
     name            = "UserIdCourseIdIndex"
-    hash_key        = "UserID"
-    range_key       = "CourseID"
+    hash_key        = "UserId"
+    range_key       = "CourseId"
     projection_type = "ALL"
   }
 
@@ -36,17 +36,17 @@ resource "aws_dynamodb_table" "attendance_table" {
   }
 
   attribute {
-    name = "UserID"
+    name = "UserId"
     type = "S"
   }
 
   attribute {
-    name = "DepartmentID"
+    name = "DepartmentId"
     type = "S"
   }
 
   attribute {
-    name = "CourseID"
+    name = "CourseId"
     type = "S"
   }
 
