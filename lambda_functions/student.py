@@ -347,11 +347,13 @@ def lambda_handler(event, context):
 
     event = json.loads(event)
     try:
-        function = json.loads(event['queryStringParameters'])['func']
+        query_params = json.loads(event['queryStringParameters'])
+        function = query_params['func']
     except:
         return make_response(400, "Invalid operation.\
                         Make sure to include the 'func' parameter in the query string.")
-    body = json.loads(event['body'])
+    if event['body']:
+        body = json.loads(event['body'])
     match function:
         case 'create_student':
             return create_student_record(body['ItemId'], body['UserName'])
@@ -369,14 +371,14 @@ def lambda_handler(event, context):
                 body['UserId'], body['UserName'])
 
         case 'get_student':
-            return get_student(body['ItemId'])
+            return get_student(query_params['ItemId'])
 
         case 'get_student_courses':
-            return get_student_courses(body['UserId'])
+            return get_student_courses(query_params['UserId'])
 
         case 'get_student_course_attendance':
             return get_student_course_attendance(
-                body['UserId'], body['CourseId'])
+                query_params['UserId'], query_params['CourseId'])
 
         case 'delete_student':
             return delete_record(
