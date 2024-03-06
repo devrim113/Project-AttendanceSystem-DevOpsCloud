@@ -52,6 +52,12 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
   callback_urls                        = ["https://d5j4m0w9schy1.cloudfront.net/"]
 }
 
+resource "aws_cognito_user_pool_domain" "main" {
+  domain       = "student-attendance-system"
+  user_pool_id = aws_cognito_user_pool.student_pool.id
+}
+
+
 # Generate user group
 resource "aws_cognito_user_group" "students" {
   name         = "Students"
