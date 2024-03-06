@@ -47,10 +47,10 @@ resource "aws_api_gateway_resource" "paths" {
 
 # Creating the methods for the API Gateway, one for each path and method.
 resource "aws_api_gateway_method" "methods" {
-  for_each      = { for pm in local.paths_and_methods : "${pm.path}-${pm.method}" => pm }
-  resource_id   = aws_api_gateway_resource.paths[each.value.path].id
-  rest_api_id   = aws_api_gateway_rest_api.AttendanceAPI.id
-  http_method   = each.value.method
+  for_each    = { for pm in local.paths_and_methods : "${pm.path}-${pm.method}" => pm }
+  resource_id = aws_api_gateway_resource.paths[each.value.path].id
+  rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+  http_method = each.value.method
 
   request_parameters = {
     "method.request.path.proxy" = true
