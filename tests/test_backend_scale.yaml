@@ -14,18 +14,29 @@ config:
       arrivalRate: 50
       name: Spike phase
 
+before:
+  flow:
+    - log: "Get auth token"
+    - post:
+        url: "/login" # Authentication endpoint
+        json:
+          username: "username"
+          password: "password"
+        capture:
+          - json: $.id_token
+            as: authToken
+
 scenarios:
   - flow:
-      - post:
-          url: "/authenticate" # Authentication endpoint
-          json:
-            username: "username"
-            password: "password"
-      - save:
-          response:
-            - authToken
-      - loop:
-          - get:
-              url: "/course"
-              headers:
-                Authorization: "Bearer {{ authToken }}"
+      - get:
+          url: "/course"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+
+after:
+  flow:
+    - log: "Invalidate token"
+    - post:
+        url: "/logout"
+        json:
+          token: "{{ authToken }}"
