@@ -77,7 +77,7 @@ def create_student_record(user_id, user_name):
         return make_response(400, 'Record not created.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def delete_record(item_id, item_type):
@@ -102,7 +102,7 @@ def delete_record(item_id, item_type):
         return make_response(400, 'Record not deleted.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def remove_student_course_attendance(user_id, course_id):
@@ -130,7 +130,7 @@ def remove_student_course_attendance(user_id, course_id):
         return make_response(400, 'Record not deleted.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def update_student_record(user_id, user_name):
@@ -161,7 +161,7 @@ def update_student_record(user_id, user_name):
         return make_response(400, 'Record not updated.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def update_attendance_record(item_id, attendance):
@@ -199,7 +199,7 @@ def update_attendance_record(item_id, attendance):
         return make_response(400, 'Record not updated.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def get_student(user_id):
@@ -227,7 +227,7 @@ def get_student(user_id):
         return make_response(404, 'Record not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def get_student_courses(user_id):
@@ -253,7 +253,7 @@ def get_student_courses(user_id):
         return make_response(404, 'Record not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def get_student_course_attendance(user_id, course_id):
@@ -278,7 +278,7 @@ def get_student_course_attendance(user_id, course_id):
         return make_response(404, 'Attendance not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def enlist_student_course(item_id, user_id, course_id, attendance):
@@ -307,7 +307,7 @@ def enlist_student_course(item_id, user_id, course_id, attendance):
         return make_response(400, 'Record not created.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return make_response(400, 'Request not finished succesfully.')
+        return make_response(400, 'Request not finished succesfully: ', e.response['Error']['Message'])
 
 
 def lambda_handler(event, context):
