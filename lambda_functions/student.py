@@ -345,15 +345,13 @@ def lambda_handler(event, context):
         except:
             pass
 
-    event = json.loads(event)
     try:
-        query_params = json.loads(event['queryStringParameters'])
+        query_params = event['queryStringParameters']
         function = query_params['func']
     except:
-        return make_response(400, "Invalid operation.\
-                        Make sure to include the 'func' parameter in the query string.")
+        return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
     if event['body']:
-        body = json.loads(event['body'])
+        body = event['body']
     match function:
         case 'create_student':
             return create_student_record(body['ItemId'], body['UserName'])

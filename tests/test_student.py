@@ -15,31 +15,31 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'UserName': 'John Doe',
         'ItemType': 'Student'
     }
-    create_event = json.dumps({
+    create_event = {
         'path': '/student',
         'httpMethod': 'PUT',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'create_student'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'create_student'},
+        'body': {
             **object
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(create_event, {})
     assert response['statusCode'] == 200
 
     # Get created record
-    get_event = json.dumps({
+    get_event = {
         'path': '/student',
         'httpMethod': 'GET',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'get_student', 'ItemId': '1'}),
+        'queryStringParameters': {'func': 'get_student', 'ItemId': '1'},
         'body': None,
         'isBase64Encoded': False
-    })
+    }
     response = student_lambda(get_event, {})
     assert response['statusCode'] == 200
     retrieved_object = json.loads(response['body'])
@@ -60,17 +60,17 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         }
     }
 
-    enlist_event = json.dumps({
+    enlist_event = {
         'path': '/student',
         'httpMethod': 'PUT',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'enlist_student'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'enlist_student'},
+        'body': {
             **attendance_object
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(enlist_event, {})
     assert response['statusCode'] == 200
@@ -90,31 +90,31 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         }
     }
 
-    update_event = json.dumps({
+    update_event = {
         'path': '/student',
         'httpMethod': 'PUT',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'update_attendance'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'update_attendance'},
+        'body': {
             **updated_attendance_object
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(update_event, {})
     assert response['statusCode'] == 200
 
     # Get updated record
-    get_attendance_event = json.dumps({
+    get_attendance_event = {
         'path': '/student/',
         'httpMethod': 'GET',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '101'}),
+        'queryStringParameters': {'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '101'},
         'body': None,
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(get_attendance_event, {})
     assert response['statusCode'] == 200
@@ -133,31 +133,31 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'Attendance': {}
     }
 
-    enlist_event2 = json.dumps({
+    enlist_event2 = {
         'path': '/student',
         'httpMethod': 'PUT',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'enlist_student'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'enlist_student'},
+        'body': {
             **attendance_object
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(enlist_event2, {})
     assert response['statusCode'] == 200
 
     # Get all student records
-    get_courses = json.dumps({
+    get_courses = {
         'path': '/student',
         'httpMethod': 'GET',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'get_student_courses', 'UserId': '1'}),
+        'queryStringParameters': {'func': 'get_student_courses', 'UserId': '1'},
         'body': None,
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(get_courses, {})
     assert response['statusCode'] == 200
@@ -165,34 +165,34 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     assert len(retrieved_courses) == 2
 
     # Delete created records, either student or attendance
-    delete_event = json.dumps({
+    delete_event = {
         'path': '/student',
         'httpMethod': 'DELETE',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'delete_student'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'delete_student'},
+        'body': {
             'ItemId': '2',
             'ItemType': 'Attendance'
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
 
-    delete_event = json.dumps({
+    delete_event = {
         'path': '/student',
         'httpMethod': 'DELETE',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'delete_student'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'delete_student'},
+        'body': {
             'ItemId': '3',
             'ItemType': 'Attendance'
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
@@ -202,23 +202,22 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     assert response['statusCode'] == 404
 
     # delete student record
-    delete_event = json.dumps({
+    delete_event = {
         'path': '/student',
         'httpMethod': 'DELETE',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': json.dumps({'func': 'delete_student'}),
-        'body': json.dumps({
+        'queryStringParameters': {'func': 'delete_student'},
+        'body': {
             'ItemId': '1',
             'ItemType': 'Student'
-        }),
+        },
         'isBase64Encoded': False
-    })
+    }
 
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
 
     # Verify deletion
     response = student_lambda(get_event, {})
-    print(response)
     assert response['statusCode'] == 404
