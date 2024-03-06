@@ -50,12 +50,13 @@ resource "aws_api_gateway_method" "methods" {
   for_each      = { for pm in local.paths_and_methods : "${pm.path}-${pm.method}" => pm }
   resource_id   = aws_api_gateway_resource.paths[each.value.path].id
   rest_api_id   = aws_api_gateway_rest_api.AttendanceAPI.id
-  authorization = "NONE"
   http_method   = each.value.method
 
   request_parameters = {
     "method.request.path.proxy" = true
   }
+  # authorization = "COGNITO_USER_POOLS"
+  # authorizer_id = aws_api_gateway_authorizer.student_authorizer.id 
 }
 
 # Creating the integration for non-OPTIONS methods.

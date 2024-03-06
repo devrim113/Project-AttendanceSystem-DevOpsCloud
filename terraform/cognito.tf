@@ -1,30 +1,84 @@
-# resource "aws_cognito_user_pool" "pool" {
-#     name = "mypool"
-# }
+# Cognito User Pool
+resource "aws_cognito_user_pool" "student_pool" {
+    name = "student-login"
+    username_attributes  = ["email"] 
+    auto_verified_attributes = ["email"]
 
-# resource "aws_cognito_user_pool_client" "client" {
-#     name = "client"
-#     allowed_oauth_flows_user_pool_client = true
-#     generate_secret = false
-#     allowed_oauth_scopes = ["aws.cognito.signin.user.admin","email", "openid", "profile"]
-#     allowed_oauth_flows = ["implicit", "code"]
-#     explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
-#     supported_identity_providers = ["COGNITO"]
+    schema = [
+        {
+            name                    = "email"
+            attribute_data_type     = "String"
+            mutable                 = true
+            required                = true
+            string_attribute_constraints {
+                min_length = 2
+                max_length = 254
+            }
+        },
+        {
+            name                    = "name"
+            attribute_data_type     = "String"
+            mutable                 = true
+            required                = true
+            string_attribute_constraints {
+                min_length = 0
+                max_length = 256
+            }
+        }
+    ]
 
-#     user_pool_id = aws_cognito_user_pool.pool.id
-#     callback_urls = ["https://example.com"]
-#     logout_urls = ["https://sumeet.life"]
-# }
+    # admin_create_user_config {
+    #     allow_admin_create_user_only = true
+    # }
 
-# resource "aws_cognito_user" "example" {
-#     user_pool_id = aws_cognito_user_pool.pool.id
-#     username = "sumeet.n"
-#     password = "Test@123"
-# }
+    password_policy {
+        minimum_length = 8
+        require_lowercase = true
+        require_numbers = true
+        require_symbols = true
+        require_uppercase = true
+        temporary_password_validity_days = 3
+    }
 
-# resource "aws_api_gateway_authorizer" "demo" {
-#     name = "my_apig_authorizer2"
-#     rest_api_id = aws_api_gateway_rest_api.my_api.id
-#     type = "COGNITO_USER_POOLS"
-#     provider_arns = [aws_cognito_user_pool.pool.arn]
+    mfa_configuration = "OPTIONAL"
+}
+
+# Cognito User Pool Client
+resource "aws_cognito_user_pool_client" "student_pool_client" {
+  name                = "website-static"
+  user_pool_id        = aws_cognito_user_pool.student_pool.id
+  generate_secret     = false  
+  allowed_oauth_flows = ["code", "implicit"]  # Modify based on needs
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_scopes = ["email"] # Modify as needed
+}
+
+# Generate user group
+resource "aws_cognito_user_group" "students" {
+  name          = "Students"
+  user_pool_id  = aws_cognito_user_pool.student_pool.id
+  description   = "A group for student users"
+}
+
+# Generate admin group
+resource "aws_cognito_user_group" "admins" {
+  name          = "Admins"
+  user_pool_id  = aws_cognito_user_pool.student_pool.id
+  description   = "A group for admin users"
+}
+
+# Generate teacher group
+resource "aws_cognito_user_group" "teacher" {
+  name          = "Teachers"
+  user_pool_id  = aws_cognito_user_pool.student_pool.id
+  description   = "A group for teachers users"
+}
+
+# # Cognito User Pool Authorizer
+# resource "aws_api_gateway_authorizer" "student_authorizer" {
+#   name                            = "CognitoStudentAuthorizer"
+#   rest_api_id                     = aws_api_gateway_rest_api.AttendanceAPI.id
+#   type                            = "COGNITO_USER_POOLS"
+#   identity_source                 = "method.request.header.Authorization"
+#   provider_arns                   = [aws_cognito_user_group.students.arn]
 # }
