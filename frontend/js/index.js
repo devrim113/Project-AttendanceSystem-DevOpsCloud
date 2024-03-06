@@ -16,3 +16,13 @@ function setCookie(name, value, options = {}) {
 
     document.cookie = updatedCookie;
 }
+
+function getCookie(name) {
+    for(let keyvalue of document.cookie.split(';')) {
+        let [cookieName, cookieValue] = keyvalue.split('=');
+        if (cookieName.trim() === name) {
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    return undefined
+}
