@@ -48,7 +48,8 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
   generate_secret                      = false
   allowed_oauth_flows                  = ["code", "implicit"] # Modify based on needs
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes                 = ["email"] # Modify as needed
+  allowed_oauth_scopes                 = ["email", "name", ]
+  callback_urls                        = ["https://d5j4m0w9schy1.cloudfront.net/"]
 }
 
 # Generate user group
