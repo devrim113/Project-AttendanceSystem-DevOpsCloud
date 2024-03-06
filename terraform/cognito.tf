@@ -79,6 +79,8 @@ resource "aws_cognito_user_group" "teacher" {
   description  = "A group for teachers users"
 }
 
+
+
 # # Cognito User Pool Authorizer
 # resource "aws_api_gateway_authorizer" "student_authorizer" {
 #   name                            = "CognitoStudentAuthorizer"
