@@ -4,28 +4,26 @@ resource "aws_cognito_user_pool" "student_pool" {
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
 
-  schema = [
-    {
-      name                = "email"
-      attribute_data_type = "String"
-      mutable             = true
-      required            = true
-      string_attribute_constraints = {
-        min_length = 2
-        max_length = 254
-      }
-    },
-    {
-      name                = "name"
-      attribute_data_type = "String"
-      mutable             = true
-      required            = true
-      string_attribute_constraints = {
-        min_length = 0
-        max_length = 256
-      }
+  schema {
+    name                = "email"
+    attribute_data_type = "String"
+    mutable             = true
+    required            = true
+    string_attribute_constraints = {
+      min_length = 2
+      max_length = 254
     }
-  ]
+  }
+  schema {
+    name                = "name"
+    attribute_data_type = "String"
+    mutable             = true
+    required            = true
+    string_attribute_constraints = {
+      min_length = 0
+      max_length = 256
+    }
+  }
 
   # admin_create_user_config {
   #     allow_admin_create_user_only = true
