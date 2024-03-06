@@ -55,6 +55,7 @@ resource "aws_api_gateway_method" "methods" {
   request_parameters = {
     "method.request.path.proxy" = true
   }
+  authorization = "NONE"
   # authorization = "COGNITO_USER_POOLS"
   # authorizer_id = aws_api_gateway_authorizer.student_authorizer.id 
 }
