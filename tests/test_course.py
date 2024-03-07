@@ -28,8 +28,15 @@ def test_admin_lambda_handler(create_dynamodb_table, course_lambda):
     }
 
     create_event = {
-        'operation': 'put',
-        **course_object
+        'path': '/course',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_course'},
+        'body': {
+            **course_object
+        },
+        'isBase64Encoded': False
     }
 
     response = course_lambda(create_event, {})
@@ -37,9 +44,13 @@ def test_admin_lambda_handler(create_dynamodb_table, course_lambda):
 
     # Get created record
     get_event = {
-        'operation': 'get',
-        'ItemId': '1',
-        'ItemType': 'Course'
+        'path': '/course',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_course', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
     response = course_lambda(get_event, {})
     assert response['statusCode'] == 200
@@ -62,8 +73,15 @@ def test_admin_lambda_handler(create_dynamodb_table, course_lambda):
     }
 
     update_event = {
-        'operation': 'update',
-        **updated_course_object
+        'path': '/course',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'update_course'},
+        'body': {
+            **updated_course_object
+        },
+        'isBase64Encoded': False
     }
 
     response = course_lambda(update_event, {})
