@@ -5,7 +5,9 @@ import { Outlet } from "react-router";
 import { getInformation } from "../../Helper/static";
 
 function HeaderSideBar() {
-    let name = getInformation()["name"];
+    let information = getInformation();
+    const name = information["name"];
+    const role: [String]= information["cognito:groups"];
     return (
         <div className="wrapper">
             <nav id="sidebar" className="sidebar">
@@ -14,24 +16,30 @@ function HeaderSideBar() {
                     <span className="align-middle me-3">Attendance System</span>
                 </a>
                 <ul className="sidebar-nav">
-                    <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages/student/student.html">
-                        <i className="align-middle" data-feather="user" />{" "}
-                        <span className="align-middle">Student</span>
-                    </a>
-                    </li>
-                    <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages/teacher/teacher.html">
-                        <i className="align-middle" data-feather="user" />{" "}
-                        <span className="align-middle">Teacher</span>
-                    </a>
-                    </li>
-                    <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages/admin/admin.html">
-                        <i className="align-middle" data-feather="layers" />{" "}
-                        <span className="align-middle">Admin</span>
-                    </a>
-                    </li>
+                    {role.includes("Student") && (
+                        <li className="sidebar-item">
+                        <a className="sidebar-link" href="pages/student/student.html">
+                            <i className="align-middle" data-feather="user" />{" "}
+                            <span className="align-middle">Student</span>
+                        </a>
+                        </li>
+                    )}
+                    {role.includes("Teacher") && (
+                        <li className="sidebar-item">
+                        <a className="sidebar-link" href="pages/teacher/teacher.html">
+                            <i className="align-middle" data-feather="user" />{" "}
+                            <span className="align-middle">Teacher</span>
+                        </a>
+                        </li>
+                    )}
+                    {role.includes("Admins") && (
+                        <li className="sidebar-item">
+                        <a className="sidebar-link" href="pages/admin/admin.html">
+                            <i className="align-middle" data-feather="layers" />{" "}
+                            <span className="align-middle">Admin</span>
+                        </a>
+                        </li>
+                    )}
                 </ul>
                 </div>
             </nav>
