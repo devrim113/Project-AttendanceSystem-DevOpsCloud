@@ -16,7 +16,7 @@ function HeaderSideBar() {
                     <span className="align-middle me-3">Attendance System</span>
                 </a>
                 <ul className="sidebar-nav">
-                    {role.includes("Student") && (
+                    {role.includes("Students") && (
                         <li className="sidebar-item">
                         <a className="sidebar-link" href="pages/student/student.html">
                             <i className="align-middle" data-feather="user" />{" "}
@@ -24,7 +24,7 @@ function HeaderSideBar() {
                         </a>
                         </li>
                     )}
-                    {role.includes("Teacher") && (
+                    {role.includes("Teachers") && (
                         <li className="sidebar-item">
                         <a className="sidebar-link" href="pages/teacher/teacher.html">
                             <i className="align-middle" data-feather="user" />{" "}
