@@ -1,30 +1,12 @@
-function setCookie(name, value, options = {}) {
-    options = {
-        path: '/',
-        ...options 
-    };
-
-    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-    for (let optionKey in options) {
-        updatedCookie += "; " + optionKey;
-        let optionValue = options[optionKey];
-        if (optionValue !== true) {
-            updatedCookie += "=" + optionValue;
-        }
-    }
-
-    document.cookie = updatedCookie;
+import Cookies from 'js-cookie';
+function setCookie(name, value, options = { expires: 1, path: '/' }) {
+    console.log(document.cookie)
+    Cookies.set(name, value, options);
+    console.log(document.cookie)
 }
 
 function getCookie(name) {
-    for(let keyvalue of document.cookie.split(';')) {
-        let [cookieName, cookieValue] = keyvalue.split('=');
-        if (cookieName.trim() === name) {
-            return decodeURIComponent(cookieValue);
-        }
-    }
-    return undefined
+    return Cookies.get(name);
 }
 
 export { setCookie, getCookie }
