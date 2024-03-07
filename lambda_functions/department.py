@@ -11,6 +11,29 @@ dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
 
+def make_response(status_code, body):
+    """
+    Create a response object for the API Gateway.
+
+    Args:
+        status_code (int): The status code for the response.
+        body (str): The body of the response.
+
+    Returns:
+        dict: The response object.
+    """
+    return {
+        'statusCode': status_code,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, Access-Control-Allow-Origin',
+        },
+        'body': json.dumps(body)
+    }
+
+
 def create_department(dep_id, dep_name):
     """
     Create object for a department.
@@ -33,10 +56,12 @@ def create_department(dep_id, dep_name):
                 'ItemType': 'Department'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record created successfully')
+        return make_response(400, 'Record creation failed')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_department(dep_id):
@@ -59,10 +84,12 @@ def get_department(dep_id):
                 'ItemType': 'Department'
             }
         )
-        return response.get('Item')
+        if 'Item' in response:
+            return make_response(200, response['Item'])
+        return make_response(404, 'Department not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_department_courses(dep_id):
@@ -84,10 +111,12 @@ def get_department_courses(dep_id):
             KeyConditionExpression=Key('DepartmentId').eq(
                 dep_id) & Key('ItemType').eq('Course')
         )
-        return response['Items']
+        if 'Items' in response:
+            return make_response(200, response['Items'])
+        return make_response(404, 'Courses not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def update_department(dep_id, dep_name):
@@ -115,10 +144,12 @@ def update_department(dep_id, dep_name):
                 ':val1': dep_name
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record updated successfully')
+        return make_response(400, 'Record update failed')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def delete_department(dep_id):
@@ -141,10 +172,12 @@ def delete_department(dep_id):
                 'ItemType': 'Department'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record deleted successfully')
+        return make_response(404, 'Department not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def lambda_handler(event, context):
@@ -184,94 +217,30 @@ def lambda_handler(event, context):
         except:
             pass
 
-    operation = event.get('operation')
-    match operation:
-        case 'put':
-            response = create_department(
-                event['ItemId'], event['DepartmentName'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Department created successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Department creation failed'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+    try:
+        query_params = event['queryStringParameters']
+        function = query_params['func']
+    except:
+        return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
+    if type(event['body']) == str:
+        body = json.loads(event['body'])
+    else:
+        body = event['body']
+    match function:
+        case 'create_department':
+            return create_department(body['ItemId'], body['DepartmentName'])
 
-        case 'get':
-            if 'ItemType' in event and event['ItemType'] == 'Course':
-                response = get_department_courses(event['DepartmentId'])
-            else:
-                response = get_department(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(response),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 404,
-                    'body': json.dumps('Department not found'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'get_department':
+            return get_department(query_params['ItemId'])
 
-        case 'update':
-            response = update_department(
-                event['ItemId'], event['DepartmentName'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Department updated successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Department update failed'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'get_department_courses':
+            return get_department_courses(query_params['ItemId'])
 
-        case 'delete':
-            response = delete_department(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Department deleted successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 404,
-                    'body': json.dumps('Department not found, nothing deleted.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'update_department':
+            return update_department(body['ItemId'], body['DepartmentName'])
+
+        case 'delete_department':
+            return delete_department(query_params['ItemId'])
 
         case _:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('Invalid operation'),
-                'headers': {
-                    'Content-Type': 'application/json'
-                }
-            }
+            return make_response(400, 'Invalid operation')

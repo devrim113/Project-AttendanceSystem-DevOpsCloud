@@ -14,6 +14,29 @@ dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
 
+def make_response(status_code, body):
+    """
+    Create a response object for the API Gateway.
+
+    Args:
+        status_code (int): The status code for the response.
+        body (str): The body of the response.
+
+    Returns:
+        dict: The response object.
+    """
+    return {
+        'statusCode': status_code,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, Access-Control-Allow-Origin',
+        },
+        'body': json.dumps(body)
+    }
+
+
 def create_admin_record(item_id, user_name):
     """
     Create object for an admin record.
@@ -36,10 +59,12 @@ def create_admin_record(item_id, user_name):
                 'ItemType': 'Admin'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Admin record created successfully')
+        return make_response(400, 'Error creating admin record')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def update_admin_record(item_id, user_name):
@@ -68,10 +93,12 @@ def update_admin_record(item_id, user_name):
             },
             ReturnValues="UPDATED_NEW"
         )
-        return response
+        if response:
+            return make_response(200, 'Admin record updated successfully')
+        return make_response(400, 'Error updating admin record')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 # This is not possible as the ItemType is part of the primary key and cannot be updated.
 # To do this, we would need to delete the record and create a new one.
@@ -126,10 +153,12 @@ def delete_admin_record(item_id):
                 'ItemType': 'Admin'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Admin record deleted successfully')
+        return make_response(404, 'Admin not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_admin_record(item_id):
@@ -152,10 +181,12 @@ def get_admin_record(item_id):
                 'ItemType': 'Admin'
             }
         )
-        return response.get('Item')
+        if 'Item' in response:
+            return make_response(200, response['Item'])
+        return make_response(404, 'Admin not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 # Lambda handler example
@@ -197,95 +228,27 @@ def lambda_handler(event, context):
     except:
         pass
 
-    operation = event.get('operation')
+    try:
+        query_params = event['queryStringParameters']
+        function = query_params['func']
+    except:
+        return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
+    if type(event['body']) == str:
+        body = json.loads(event['body'])
+    else:
+        body = event['body']
+    match function:
+        case 'create_admin':
+            return create_admin_record(body['ItemId'], body['UserName'])
 
-    match operation:
-        case 'put':
-            response = create_admin_record(
-                event['ItemId'], event['UserName'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Admin record created successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error creating admin record'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
-        case 'update':
-            # if 'UserName' in event:
-            response = update_admin_record(
-                event['ItemId'], event['UserName'])
-            # else:
-            #     response = update_user_type(
-            #         event['ItemId'], event['ItemType'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Admin record updated successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error updating admin record'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
+        case 'update_admin':
+            return update_admin_record(body['ItemId'], body['UserName'])
 
-        case 'delete':
-            response = delete_admin_record(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Admin record deleted successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error deleting admin record'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
+        case 'get_admin':
+            return get_admin_record(query_params['ItemId'])
 
-        case 'get':
-            response = get_admin_record(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(response),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error getting admin records'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
+        case 'delete_admin':
+            return delete_admin_record(query_params['ItemId'])
 
         case _:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('Invalid operation'),
-                'headers': {
-                    'Content-Type': 'application/json',
-                }
-            }
+            return make_response(400, 'Invalid operation')
