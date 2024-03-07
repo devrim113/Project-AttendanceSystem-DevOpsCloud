@@ -213,7 +213,7 @@ def lambda_handler(event, context):
             return update_course(body['ItemId'], body['CourseName'], body['DepartmentId'], body['Classes'])
 
         case 'delete_course':
-            return delete_course(body['ItemId'])
+            return delete_course(query_params['ItemId'])
 
         case _:
             return make_response(400, 'Invalid operation')

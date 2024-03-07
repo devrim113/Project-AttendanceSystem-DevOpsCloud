@@ -215,10 +215,8 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
         'httpMethod': 'DELETE',
         'headers': {},
         'pathParameters': {},
-        'queryStringParameters': {'func': 'delete_teacher'},
-        'body': {
-            **teacher_object
-        },
+        'queryStringParameters': {'func': 'delete_teacher', 'ItemId': '1'},
+        'body': None,
         'isBase64Encoded': False
     }
 
