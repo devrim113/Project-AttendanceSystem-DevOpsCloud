@@ -16,17 +16,29 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'ItemType': 'Student'
     }
     create_event = {
-        'operation': 'put',
-        **object
+        'path': '/student',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_student'},
+        'body': {
+            **object
+        },
+        'isBase64Encoded': False
     }
+
     response = student_lambda(create_event, {})
     assert response['statusCode'] == 200
 
     # Get created record
     get_event = {
-        'operation': 'get',
-        'ItemId': '1',
-        'ItemType': 'Student'
+        'path': '/student',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_student', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
     response = student_lambda(get_event, {})
     assert response['statusCode'] == 200
@@ -49,17 +61,45 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     }
 
     enlist_event = {
-        'operation': 'put',
-        **attendance_object
+        'path': '/student',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'enlist_student'},
+        'body': {
+            **attendance_object
+        },
+        'isBase64Encoded': False
     }
 
     response = student_lambda(enlist_event, {})
     assert response['statusCode'] == 200
 
     # Update student attendence to get correct attendance
+    updated_attendance_object = {
+        'ItemId': '2',
+        'CourseId': '101',
+        'UserId': '1',
+        'ItemType': 'Attendance',
+        'Attendance': {
+            '2022-01-01': {
+                'from': '09:00',
+                'to': '12:00',
+                'status': 'absent'
+            }
+        }
+    }
+
     update_event = {
-        'operation': 'update',
-        **attendance_object
+        'path': '/student',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'update_attendance'},
+        'body': {
+            **updated_attendance_object
+        },
+        'isBase64Encoded': False
     }
 
     response = student_lambda(update_event, {})
@@ -67,17 +107,21 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
 
     # Get updated record
     get_attendance_event = {
-        'operation': 'get',
-        'UserId': '1',
-        'CourseId': '101'
+        'path': '/student/',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '101'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = student_lambda(get_attendance_event, {})
     assert response['statusCode'] == 200
     retrieved_object = json.loads(response['body'])
 
-    for key in attendance_object:
-        assert attendance_object[key] == retrieved_object[
+    for key in updated_attendance_object:
+        assert updated_attendance_object[key] == retrieved_object[
             key], f"Value mismatch for {key}: expected {attendance_object[key]}, got {retrieved_object[key]}"
 
     # Add another record
@@ -89,18 +133,30 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
         'Attendance': {}
     }
 
-    create_event = {
-        'operation': 'put',
-        **attendance_object
+    enlist_event2 = {
+        'path': '/student',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'enlist_student'},
+        'body': {
+            **attendance_object
+        },
+        'isBase64Encoded': False
     }
 
-    response = student_lambda(create_event, {})
+    response = student_lambda(enlist_event2, {})
     assert response['statusCode'] == 200
 
     # Get all student records
     get_courses = {
-        'operation': 'get',
-        'UserId': '1'
+        'path': '/student',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_student_courses', 'UserId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = student_lambda(get_courses, {})
@@ -108,20 +164,36 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     retrieved_courses = json.loads(response['body'])
     assert len(retrieved_courses) == 2
 
-    # Delete created records
+    # Delete created records, either student or attendance
     delete_event = {
-        'operation': 'delete',
-        'ItemId': '2',
-        'ItemType': 'Attendance'
+        'path': '/student',
+        'httpMethod': 'DELETE',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'delete_student'},
+        'body': {
+            'ItemId': '2',
+            'ItemType': 'Attendance'
+        },
+        'isBase64Encoded': False
     }
+
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
 
     delete_event = {
-        'operation': 'delete',
-        'ItemId': '3',
-        'ItemType': 'Attendance'
+        'path': '/student',
+        'httpMethod': 'DELETE',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'delete_student'},
+        'body': {
+            'ItemId': '3',
+            'ItemType': 'Attendance'
+        },
+        'isBase64Encoded': False
     }
+
     response = student_lambda(delete_event, {})
     assert response['statusCode'] == 200
 
@@ -131,9 +203,16 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
 
     # delete student record
     delete_event = {
-        'operation': 'delete',
-        'ItemId': '1',
-        'ItemType': 'Student'
+        'path': '/student',
+        'httpMethod': 'DELETE',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'delete_student'},
+        'body': {
+            'ItemId': '1',
+            'ItemType': 'Student'
+        },
+        'isBase64Encoded': False
     }
 
     response = student_lambda(delete_event, {})

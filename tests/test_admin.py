@@ -23,8 +23,15 @@ def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambd
     }
 
     create_event = {
-        'operation': 'put',
-        **admin_object
+        'path': '/admin',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_admin'},
+        'body': {
+            **admin_object
+        },
+        'isBase64Encoded': False
     }
 
     response = admin_lambda(create_event, {})
@@ -32,9 +39,13 @@ def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambd
 
     # Get created record
     get_event = {
-        'operation': 'get',
-        'ItemId': '1',
-        'ItemType': 'Admin'
+        'path': '/admin',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_admin', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
     response = admin_lambda(get_event, {})
     assert response['statusCode'] == 200
@@ -48,9 +59,15 @@ def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambd
     }
 
     update_event = {
-        'operation': 'update',
-        'ItemId': '1',
-        'UserName': 'Jane Doe'
+        'path': '/admin',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'update_admin'},
+        'body': {
+            **updated_admin_object
+        },
+        'isBase64Encoded': False
     }
 
     response = admin_lambda(update_event, {})
@@ -68,8 +85,15 @@ def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambd
         'ItemType': 'Student'
     }
     create_event = {
-        'operation': 'put',
-        **student_object
+        'path': '/student',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_student'},
+        'body': {
+            **student_object
+        },
+        'isBase64Encoded': False
     }
     response = student_lambda(create_event, {})
     assert response['statusCode'] == 200
@@ -108,9 +132,13 @@ def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambd
 
     # Delete admin record
     delete_event = {
-        'operation': 'delete',
-        'ItemId': '1',
-        'ItemType': 'Admin'
+        'path': '/admin',
+        'httpMethod': 'DELETE',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'delete_admin', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = admin_lambda(delete_event, {})
@@ -118,4 +146,4 @@ def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambd
 
     # Verify admin record is deleted
     response = admin_lambda(get_event, {})
-    assert response['statusCode'] == 400
+    assert response['statusCode'] == 404

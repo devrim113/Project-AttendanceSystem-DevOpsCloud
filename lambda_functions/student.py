@@ -27,6 +27,29 @@ dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
 
+def make_response(status_code, body):
+    """
+    Create a response object for the API Gateway.
+
+    Args:
+        status_code (int): The status code for the response.
+        body (str): The body of the response.
+
+    Returns:
+        dict: The response object.
+    """
+    return {
+        'statusCode': status_code,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, Access-Control-Allow-Origin',
+        },
+        'body': json.dumps(body)
+    }
+
+
 def create_student_record(user_id, user_name):
     """
     Create a student record in the database.
@@ -46,13 +69,15 @@ def create_student_record(user_id, user_name):
             Item={
                 'ItemId': user_id,
                 'UserName': user_name,
-                'ItemType': "Student"
+                'ItemType': 'Student'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record created successfully.')
+        return make_response(400, 'Record not created.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def delete_record(item_id, item_type):
@@ -72,10 +97,12 @@ def delete_record(item_id, item_type):
                 'ItemType': item_type
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record deleted successfully.')
+        return make_response(400, 'Record not deleted.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def remove_student_course_attendance(user_id, course_id):
@@ -98,10 +125,12 @@ def remove_student_course_attendance(user_id, course_id):
                 'CourseId': course_id
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record deleted successfully.')
+        return make_response(400, 'Record not deleted.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def update_student_record(user_id, user_name):
@@ -127,10 +156,12 @@ def update_student_record(user_id, user_name):
             },
             ReturnValues="UPDATED_NEW"
         )
-        return response
+        if response:
+            return make_response(200, 'Record updated successfully.')
+        return make_response(400, 'Record not updated.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def update_attendance_record(item_id, attendance):
@@ -163,10 +194,12 @@ def update_attendance_record(item_id, attendance):
             },
             ReturnValues="UPDATED_NEW"
         )
-        return response
+        if response:
+            return make_response(200, 'Record updated successfully.')
+        return make_response(400, 'Record not updated.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_student(user_id):
@@ -189,10 +222,12 @@ def get_student(user_id):
                 'ItemType': 'Student'
             }
         )
-        return response.get('Item')
+        if response.get('Item') is not None:
+            return make_response(200, response.get('Item'))
+        return make_response(404, 'Record not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_student_courses(user_id):
@@ -213,10 +248,12 @@ def get_student_courses(user_id):
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
-        return response.get('Items')
+        if len(response.get('Items')) > 0:
+            return make_response(200, response.get('Items'))
+        return make_response(404, 'Record not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_student_course_attendance(user_id, course_id):
@@ -236,10 +273,12 @@ def get_student_course_attendance(user_id, course_id):
             KeyConditionExpression=Key('UserId').eq(
                 user_id) & Key('CourseId').eq(course_id)
         )
-        return response.get('Items')[0]
+        if len(response.get('Items')) > 0:
+            return make_response(200, response.get('Items')[0])
+        return make_response(404, 'Attendance not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def enlist_student_course(item_id, user_id, course_id, attendance):
@@ -263,16 +302,18 @@ def enlist_student_course(item_id, user_id, course_id, attendance):
                 'Attendance': attendance
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record created successfully.')
+        return make_response(400, 'Record not created.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def lambda_handler(event, context):
     """
     Lambda handler function to interact with the DynamoDB table.
-    The 'operation' field in the event data determines the action to be performed.
+    The 'operation' field in the body data determines the action to be performed.
     The following operations are supported:
     - 'put': Creates a new record for a student.
     - 'update': Updates a student record or attendance record.
@@ -286,7 +327,7 @@ def lambda_handler(event, context):
     - 'delete': delete_student_record() or remove_student_course_attendance()
 
     Args:
-        event (dict): The event data passed to the Lambda function.
+        body (dict): The body data passed to the Lambda function.
         context (object): The context object provided by AWS Lambda.
 
     Returns:
@@ -304,107 +345,44 @@ def lambda_handler(event, context):
         except:
             pass
 
-    operation = event.get('operation')
-    match operation:
-        case 'put':
-            if 'ItemType' in event and event['ItemType'] == 'Attendance':
-                response = enlist_student_course(
-                    event['ItemId'], event['UserId'], event['CourseId'], event['Attendance'])
-            else:
-                response = create_student_record(
-                    event['ItemId'], event['UserName']
-                )
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record created or updated successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Record not created or updated.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+    try:
+        query_params = event['queryStringParameters']
+        function = query_params['func']
+    except:
+        return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
+    if type(event['body']) == str:
+        body = json.loads(event['body'])
+    else:
+        body = event['body']
+    match function:
+        case 'create_student':
+            return create_student_record(body['ItemId'], body['UserName'])
 
-        case 'update':
-            if 'Attendance' in event:
-                response = update_attendance_record(
-                    event['ItemId'], event['Attendance'])
-            else:
-                response = update_student_record(
-                    event['UserId'], event['UserName'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record updated successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Record not updated.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'enlist_student':
+            return enlist_student_course(
+                body['ItemId'], body['UserId'], body['CourseId'], body['Attendance'])
 
-        case 'get':
-            if 'ItemType' in event and event['ItemType'] == 'Student':
-                item = get_student(event['ItemId'])
-            elif 'CourseId' in event:
-                item = get_student_course_attendance(
-                    event['UserId'], event['CourseId'])
-            else:
-                item = get_student_courses(event['UserId'])
-            if item:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(item),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 404,
-                    'body': json.dumps('Record not found.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'update_attendance':
+            return update_attendance_record(
+                body['ItemId'], body['Attendance'])
 
-        case 'delete':
-            response = delete_record(
-                event['ItemId'], event['ItemType'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record deleted successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Record not deleted.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'update_student':
+            return update_student_record(
+                body['UserId'], body['UserName'])
+
+        case 'get_student':
+            return get_student(query_params['ItemId'])
+
+        case 'get_student_courses':
+            return get_student_courses(query_params['UserId'])
+
+        case 'get_student_course_attendance':
+            return get_student_course_attendance(
+                query_params['UserId'], query_params['CourseId'])
+
+        case 'delete_student':
+            return delete_record(
+                body['ItemId'], body['ItemType'])
 
         case _:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('Invalid operation.'),
-                'headers': {
-                    'Content-Type': 'application/json'
-                }
-            }
+            return make_response(400, 'Invalid operation.')

@@ -23,8 +23,15 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
     }
 
     create_event = {
-        'operation': 'put',
-        **department_object
+        'path': '/department',
+        'httpMethod': 'POST',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_department'},
+        'body': {
+            **department_object
+        },
+        'isBase64Encoded': False
     }
 
     response = department_lambda(create_event, {})
@@ -32,10 +39,15 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
 
     # Get created record
     get_event = {
-        'operation': 'get',
-        'ItemId': '1',
-        'ItemType': 'Department'
+        'path': '/department',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_department', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
+
     response = department_lambda(get_event, {})
     assert response['statusCode'] == 200
 
@@ -50,9 +62,15 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
     }
 
     update_event = {
-        'operation': 'update',
-        'ItemId': '1',
-        'DepartmentName': 'Math'
+        'path': '/department',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'update_department'},
+        'body': {
+            **updated_department_object
+        },
+        'isBase64Encoded': False
     }
 
     response = department_lambda(update_event, {})
@@ -100,8 +118,15 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
 
     for course_object in [course_object1, course_object2]:
         create_event = {
-            'operation': 'put',
-            **course_object
+            'path': '/course',
+            'httpMethod': 'POST',
+            'headers': {},
+            'pathParameters': {},
+            'queryStringParameters': {'func': 'create_course'},
+            'body': {
+                **course_object
+            },
+            'isBase64Encoded': False
         }
 
         response = course_lambda(create_event, {})
@@ -109,9 +134,13 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
 
     # Get all courses for the department
     get_courses_event = {
-        'operation': 'get',
-        'DepartmentId': '1',
-        'ItemType': 'Course'
+        'path': '/department',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_department_courses', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = department_lambda(get_courses_event, {})
@@ -123,9 +152,13 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
 
     # Delete department
     delete_event = {
-        'operation': 'delete',
-        'ItemId': '1',
-        'ItemType': 'Department'
+        'path': '/department',
+        'httpMethod': 'DELETE',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'delete_department', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = department_lambda(delete_event, {})

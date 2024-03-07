@@ -23,8 +23,15 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     }
 
     create_event = {
-        'operation': 'put',
-        **teacher_object
+        'path': '/teacher',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_teacher'},
+        'body': {
+            **teacher_object
+        },
+        'isBase64Encoded': False
     }
 
     response = teacher_lambda(create_event, {})
@@ -32,9 +39,13 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
 
     # Get created record
     get_event = {
-        'operation': 'get',
-        'ItemId': '1',
-        'ItemType': 'Teacher'
+        'path': '/teacher',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_teacher', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
     response = teacher_lambda(get_event, {})
     assert response['statusCode'] == 200
@@ -50,9 +61,15 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     }
 
     update_event = {
-        'operation': 'update',
-        'ItemId': '1',
-        'UserName': 'Jane Doe'
+        'path': '/teacher',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'update_teacher'},
+        'body': {
+            **updated_teacher_object
+        },
+        'isBase64Encoded': False
     }
 
     response = teacher_lambda(update_event, {})
@@ -72,8 +89,15 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     }
 
     enlist_event_teacher = {
-        'operation': 'put',
-        **teaches_object
+        'path': '/teacher',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'assign_course'},
+        'body': {
+            **teaches_object
+        },
+        'isBase64Encoded': False
     }
 
     response = teacher_lambda(enlist_event_teacher, {})
@@ -81,8 +105,13 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
 
     # Get all courses for the teacher
     get_courses_event = {
-        'operation': 'get',
-        'UserId': '1'
+        'path': '/teacher',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_teacher_courses', 'UserId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = teacher_lambda(get_courses_event, {})
@@ -103,8 +132,15 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
 
     for student in [student_object1, student_object2]:
         create_event = {
-            'operation': 'put',
-            **student
+            'path': '/student',
+            'httpMethod': 'PUT',
+            'headers': {},
+            'pathParameters': {},
+            'queryStringParameters': {'func': 'create_student'},
+            'body': {
+                **student
+            },
+            'isBase64Encoded': False
         }
         response = student_lambda(create_event, {})
         assert response['statusCode'] == 200
@@ -140,16 +176,28 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
 
     for attendance in [attendance_object_student1, attendance_object_student2]:
         enlist_event_student = {
-            'operation': 'put',
-            **attendance
+            'path': '/student',
+            'httpMethod': 'PUT',
+            'headers': {},
+            'pathParameters': {},
+            'queryStringParameters': {'func': 'enlist_student'},
+            'body': {
+                **attendance
+            },
+            'isBase64Encoded': False
         }
         response = student_lambda(enlist_event_student, {})
         assert response['statusCode'] == 200
 
     # Get attendance for the students in the course
     get_attendance_event = {
-        'operation': 'get',
-        'CourseId': '101'
+        'path': '/teacher',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_course_attendance', 'CourseId': '101'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = teacher_lambda(get_attendance_event, {})
@@ -163,8 +211,13 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
 
     # Delete the teacher record
     delete_event = {
-        'operation': 'delete',
-        'ItemId': '1'
+        'path': '/teacher',
+        'httpMethod': 'DELETE',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'delete_teacher', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
     }
 
     response = teacher_lambda(delete_event, {})
@@ -172,4 +225,4 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
 
     # Verify that the teacher record is deleted
     response = teacher_lambda(get_event, {})
-    assert response['statusCode'] == 400
+    assert response['statusCode'] == 404
