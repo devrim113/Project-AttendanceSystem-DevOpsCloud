@@ -22,6 +22,29 @@ dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
 
+def make_response(status_code, body):
+    """
+    Create a response object for the API Gateway.
+
+    Args:
+        status_code (int): The status code for the response.
+        body (str): The body of the response.
+
+    Returns:
+        dict: The response object.
+    """
+    return {
+        'statusCode': status_code,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, Access-Control-Allow-Origin',
+        },
+        'body': json.dumps(body)
+    }
+
+
 def create_teacher_record(item_id, user_name):
     """
     Create object for a teacher.
@@ -44,10 +67,12 @@ def create_teacher_record(item_id, user_name):
                 'ItemType': 'Teacher'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record created successfully.')
+        return make_response(400, 'Record not created.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Record not created.' + e.response['Error']['Message'])
 
 
 def update_teacher_record(item_id, user_name):
@@ -76,10 +101,12 @@ def update_teacher_record(item_id, user_name):
             },
             ReturnValues="UPDATED_NEW"
         )
-        return response
+        if response:
+            return make_response(200, 'Record updated successfully.')
+        return make_response(400, 'Record not updated.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def assign_course_to_teacher(item_id, course_id, user_id):
@@ -105,10 +132,12 @@ def assign_course_to_teacher(item_id, course_id, user_id):
                 'ItemType': 'TeachesCourse'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record created successfully.')
+        return make_response(400, 'Record not created.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_teacher(user_id):
@@ -131,12 +160,12 @@ def get_teacher(user_id):
                 'ItemType': 'Teacher'
             }
         )
-        if 'Item' not in response:
-            return None
-        return response['Item']
+        if 'Item' in response:
+            return make_response(200, response['Item'])
+        return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_teacher_courses(user_id):
@@ -157,10 +186,12 @@ def get_teacher_courses(user_id):
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
-        return response.get('Items')
+        if 'Items' in response:
+            return make_response(200, response['Items'])
+        return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_all_course_attendance(course_id):
@@ -183,10 +214,12 @@ def get_all_course_attendance(course_id):
             KeyConditionExpression=Key('CourseId').eq(
                 course_id) & Key('ItemType').eq('Attendance')
         )
-        return response['Items']
+        if 'Items' in response:
+            return make_response(200, response['Items'])
+        return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def delete_teacher(user_id):
@@ -209,10 +242,12 @@ def delete_teacher(user_id):
                 'ItemType': 'Teacher'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record deleted successfully.')
+        return make_response(404, 'Record not deleted.')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def lambda_handler(event, context):
@@ -247,100 +282,37 @@ def lambda_handler(event, context):
     except:
         pass
 
-    operation = event.get('operation')
-    match operation:
-        case 'put':
-            if 'ItemType' in event and event['ItemType'] == 'TeachesCourse':
-                response = assign_course_to_teacher(
-                    event['ItemId'], event['CourseId'], event['UserId'])
-            else:
-                response = create_teacher_record(
-                    event['ItemId'], event['UserName'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record created or updated successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Record not created or updated.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+    try:
+        query_params = event['queryStringParameters']
+        function = query_params['func']
+    except:
+        return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
+    if type(event['body']) == str:
+        body = json.loads(event['body'])
+    else:
+        body = event['body']
+    match function:
+        case 'create_teacher':
+            return create_teacher_record(body['ItemId'], body['UserName'])
 
-        case 'get':
-            if 'ItemType' in event and event['ItemType'] == 'Teacher':
-                response = get_teacher(event['ItemId'])
-            elif 'CourseId' in event:
-                response = get_all_course_attendance(event['CourseId'])
-            else:
-                response = get_teacher_courses(event['UserId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(response),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('No records found.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'assign_course':
+            return assign_course_to_teacher(
+                body['ItemId'], body['CourseId'], body['UserId'])
 
-        case 'update':
-            response = update_teacher_record(
-                event['ItemId'], event['UserName'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record updated successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Record not updated.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'get_teacher':
+            return get_teacher(query_params['ItemId'])
 
-        case 'delete':
-            response = delete_teacher(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record deleted successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Record not deleted.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+        case 'get_teacher_courses':
+            return get_teacher_courses(query_params['UserId'])
+
+        case 'get_course_attendance':
+            return get_all_course_attendance(query_params['CourseId'])
+
+        case 'update_teacher':
+            return update_teacher_record(body['ItemId'], body['UserName'])
+
+        case 'delete_teacher':
+            return delete_teacher(body['ItemId'])
 
         case _:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('Invalid operation.'),
-                'headers': {
-                    'Content-Type': 'application/json'
-                }
-            }
+            return make_response(400, 'Invalid operation')
