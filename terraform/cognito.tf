@@ -80,6 +80,83 @@ resource "aws_cognito_user_group" "teacher" {
   description  = "A group for teachers users"
 }
 
+# ----------------- Creating the Cognito Identity Pool -----------------
+
+resource "aws_cognito_identity_pool" "main" {
+  identity_pool_name               = "Attendance users identity pool"
+  allow_unauthenticated_identities = false
+  allow_classic_flow               = false
+}
+
+# ----------------- Creating the IAM roles -----------------
+
+# resource "aws_iam_role" "student_role" {
+#   name = "studentRole"
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole",
+#         Effect = "Allow",
+#         Principal = {
+#           Service = "lambda.amazonaws.com"
+#         }
+#       }
+#     ]
+#   })
+# }
+
+# resource "aws_iam_role" "teacher_role" {
+#   name = "teacherRole"
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole",
+#         Effect = "Allow",
+#         Principal = {
+#           Service = "lambda.amazonaws.com"
+#         }
+#       }
+#     ]
+#   })
+# }
+
+# resource "aws_iam_role" "admin_role" {
+#   name = "adminRole"
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole",
+#         Effect = "Allow",
+#         Principal = {
+#           Service = "lambda.amazonaws.com"
+#         }
+#       }
+#     ]
+#   })
+# }
+
+
+# # Attaching the AWSLambdaBasicExecutionRole policy to the lambda role.
+# resource "aws_iam_role_policy_attachment" "lambda_basic" {
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+#   role       = aws_iam_role.lambda_role.name
+# }
+
+# # Creating the lambda permissions so that the API Gateway can invoke the lambda functions.
+# resource "aws_lambda_permission" "api_gateway_invoke" {
+#   for_each = local.lambda_functions
+
+#   statement_id  = "AllowExecutionFromAPIGateway"
+#   action        = "lambda:InvokeFunction"
+#   function_name = aws_lambda_function.lambda[each.key].function_name
+#   principal     = "apigateway.amazonaws.com"
+#   source_arn    = "${aws_api_gateway_rest_api.AttendanceAPI.execution_arn}/*/*/*"
+# }
+
+
 
 
 # # Cognito User Pool Authorizer
