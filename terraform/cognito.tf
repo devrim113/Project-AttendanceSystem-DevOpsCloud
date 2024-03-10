@@ -80,6 +80,147 @@ resource "aws_cognito_user_group" "teacher" {
   description  = "A group for teachers users"
 }
 
+# ----------------- Creating the Cognito Identity Pool -----------------
+
+resource "aws_cognito_identity_pool" "main" {
+  identity_pool_name               = "Attendance users identity pool"
+  allow_unauthenticated_identities = false
+  allow_classic_flow               = false
+}
+
+# ----------------- Creating the IAM roles -----------------
+
+resource "aws_iam_role" "student_role" {
+  name = "studentRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "cognito-idp.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "teacher_role" {
+  name = "teacherRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "cognito-idp.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "admin_role" {
+  name = "adminRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "cognito-idp.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# ----------------- Creating the IAM policies -----------------
+
+resource "aws_iam_policy" "student_policy" {
+  name        = "studentPolicy"
+  description = "Policy for student IAM role"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action   = "execute-api:Invoke",
+        Effect   = "Allow",
+        Resource = "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/student"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "teacher_policy" {
+  name        = "teacherPolicy"
+  description = "Policy for teacher IAM role"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action   = "execute-api:Invoke",
+        Effect   = "Allow",
+        Resource = "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/teacher"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "admin_policy" {
+  name        = "adminPolicy"
+  description = "Policy for admin IAM role"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "execute-api:Invoke",
+        Effect = "Allow",
+        Resource = [
+          "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/admin",
+          "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/course",
+          "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/department"
+        ]
+      }
+    ]
+  })
+}
+
+# ----------------- Attaching the IAM policies to the appropriate roles -----------------
+
+# resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
+#   role       = aws_iam_role.student_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
+#   role       = aws_iam_role.teacher_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
+#   role       = aws_iam_role.admin_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# # Creating the lambda permissions so that the API Gateway can invoke the lambda functions.
+# resource "aws_lambda_permission" "api_gateway_invoke" {
+#   for_each = local.lambda_functions
+
+#   statement_id  = "AllowExecutionFromAPIGateway"
+#   action        = "lambda:InvokeFunction"
+#   function_name = aws_lambda_function.lambda[each.key].function_name
+#   principal     = "apigateway.amazonaws.com"
+#   source_arn    = "${aws_api_gateway_rest_api.AttendanceAPI.execution_arn}/*/*/*"
+# }
+
+
 
 
 # # Cognito User Pool Authorizer
