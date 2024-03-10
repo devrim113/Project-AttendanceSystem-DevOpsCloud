@@ -293,3 +293,19 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     # Verify deletion
     response = student_lambda(get_event, {})
     assert response['statusCode'] == 404
+
+    # Get all courses
+    get_courses_event = {
+        'path': '/student',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_all_courses'},
+        'body': None,
+        'isBase64Encoded': False
+    }
+
+    response = student_lambda(get_courses_event, {})
+    assert response['statusCode'] == 200
+    retrieved_courses = json.loads(response['body'])
+    assert len(retrieved_courses) == 2
