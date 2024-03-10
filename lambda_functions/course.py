@@ -11,6 +11,29 @@ dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
 
+def make_response(status_code, body):
+    """
+    Create a response object for the API Gateway.
+
+    Args:
+        status_code (int): The status code for the response.
+        body (str): The body of the response.
+
+    Returns:
+        dict: The response object.
+    """
+    return {
+        'statusCode': status_code,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, Access-Control-Allow-Origin',
+        },
+        'body': json.dumps(body)
+    }
+
+
 def create_course(item_id, course_name, department_id, classes):
     """
     Create object for a course.
@@ -37,10 +60,12 @@ def create_course(item_id, course_name, department_id, classes):
                 'Classes': classes
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record created or updated successfully.')
+        return make_response(400, 'Error creating course')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def get_course(item_id):
@@ -63,10 +88,12 @@ def get_course(item_id):
                 'ItemType': 'Course'
             }
         )
-        return response['Item']
+        if response.get('Item') is not None:
+            return make_response(200, response['Item'])
+        return make_response(404, 'Course not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def update_course(item_id, course_name, department_id, classes):
@@ -99,10 +126,12 @@ def update_course(item_id, course_name, department_id, classes):
             },
             ReturnValues="UPDATED_NEW"
         )
-        return response
+        if response:
+            return make_response(200, 'Record created or updated successfully.')
+        return make_response(400, 'Error updating course, not updated')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def delete_course(item_id):
@@ -125,15 +154,30 @@ def delete_course(item_id):
                 'ItemType': 'Course'
             }
         )
-        return response
+        if response:
+            return make_response(200, 'Record deleted successfully')
+        return make_response(404, 'Course not found')
     except ClientError as e:
         print(e.response['Error']['Message'])
-        return None
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
 def lambda_handler(event, context):
     """
-    Lambda handler.
+    Lambda handler function to interact with the DynamoDB table.
+    The function will perform the operation specified in the 'func' query parameter.
+    The following operations are supported:
+    - create_course: Create a course.
+    - get_course: Get a course.
+    - update_course: Update a course.
+    - delete_course: Delete a course.
+
+    Args:
+        event (dict): The event object from the Lambda function.
+        context (object): The context object from the Lambda function.
+
+    Returns:
+        dict: The response object for the API Gateway.
 
     """
 
@@ -148,84 +192,28 @@ def lambda_handler(event, context):
         except:
             pass
 
-    operation = event.get('operation')
-    match operation:
-        case 'put':
-            response = create_course(
-                event['ItemId'], event['CourseName'], event['DepartmentId'], event['Classes'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record created or updated successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error creating course'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-        case 'get':
-            response = get_course(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(response),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 404,
-                    'body': json.dumps('Course not found'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-        case 'update':
-            response = update_course(
-                event['ItemId'], event['CourseName'], event['DepartmentId'], event['Classes'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record created or updated successfully.'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error updating course'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-        case 'delete':
-            response = delete_course(event['ItemId'])
-            if response:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps('Record deleted successfully'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            else:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps('Error deleting course'),
-                    'headers': {
-                        'Content-Type': 'application/json'
-                    }
-                }
+    try:
+        query_params = event['queryStringParameters']
+        function = query_params['func']
+    except:
+        return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
+    if type(event['body']) == str:
+        body = json.loads(event['body'])
+    else:
+        body = event['body']
+
+    match function:
+        case 'create_course':
+            return create_course(body['ItemId'], body['CourseName'], body['DepartmentId'], body['Classes'])
+
+        case 'get_course':
+            return get_course(query_params['ItemId'])
+
+        case 'update_course':
+            return update_course(body['ItemId'], body['CourseName'], body['DepartmentId'], body['Classes'])
+
+        case 'delete_course':
+            return delete_course(query_params['ItemId'])
+
         case _:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('Invalid operation')
-            }
+            return make_response(400, 'Invalid operation')
