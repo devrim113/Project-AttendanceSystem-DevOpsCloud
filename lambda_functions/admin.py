@@ -189,11 +189,6 @@ def get_admin_record(item_id):
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
-# Lambda handler example
-# Context argument passes in information about the invocation, function, and execution environment.
-# This is not necessary for our use case.
-
-
 def lambda_handler(event, context):
     """
     Lambda handler for the admin.
