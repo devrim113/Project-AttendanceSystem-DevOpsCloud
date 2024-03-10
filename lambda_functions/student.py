@@ -256,6 +256,45 @@ def get_student_courses(user_id):
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
+def get_student_course_names(user_id):
+    """
+    Retrieves the names of all the courses of a student.
+
+    Args:
+        user_id (str): The user ID of the student.
+
+    Returns:
+        dict: A dictionary containing the course names of the student.
+            {course_id: course_name}
+
+    Raises:
+        ClientError: If an error occurs while querying the table.
+    """
+    try:
+        response = table.query(
+            IndexName='UserIdCourseIdIndex',
+            KeyConditionExpression=Key('UserId').eq(user_id)
+        )
+
+        course_names = {item.get('CourseId'): 'Name'
+                        for item in response.get('Items')}
+        for course_id in course_names.keys():
+            response = table.get_item(
+                Key={
+                    'ItemId': course_id,
+                    'ItemType': 'Course'
+                }
+            )
+            course_names[course_id] = response.get('Item').get('CourseName')
+
+        if len(course_names.keys()) > 0:
+            return make_response(200, course_names)
+        return make_response(404, 'Record not found.')
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
+
+
 def get_student_course_attendance(user_id, course_id):
     """
     Retrieves the attendance record of a student for a specific course.
@@ -375,6 +414,9 @@ def lambda_handler(event, context):
 
         case 'get_student_courses':
             return get_student_courses(query_params['UserId'])
+
+        case 'get_student_course_names':
+            return get_student_course_names(query_params['UserId'])
 
         case 'get_student_course_attendance':
             return get_student_course_attendance(
