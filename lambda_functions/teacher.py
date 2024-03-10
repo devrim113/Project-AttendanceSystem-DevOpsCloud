@@ -214,7 +214,8 @@ def get_teacher_course_names(user_id):
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
-        course_names = {item.get('CourseId'): 'Name'
+
+        course_names = {item.get('CourseId'): '404-noNameFound'
                         for item in response.get('Items')}
         for course_id in course_names.keys():
             response = table.get_item(
@@ -223,9 +224,13 @@ def get_teacher_course_names(user_id):
                     'ItemType': 'Course'
                 }
             )
-            course_names[course_id] = response.get('Item').get('CourseName')
+            try:
+                course_names[course_id] = response.get(
+                    'Item').get('CourseName')
+            except:
+                pass
         if len(course_names) > 0:
-            return make_response(200, response['Items'])
+            return make_response(200, course_names)
         return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
