@@ -194,20 +194,20 @@ resource "aws_iam_policy" "admin_policy" {
 
 # ----------------- Attaching the IAM policies to the appropriate roles -----------------
 
-# resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
-#   role       = aws_iam_role.student_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
+resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
+  role       = aws_iam_role.student_role.name
+  policy_arn = "arn:aws:iam::${account_id}:policy/studentPolicy"
+}
 
-# resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
-#   role       = aws_iam_role.teacher_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
+resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
+  role       = aws_iam_role.teacher_role.name
+  policy_arn = "arn:aws:iam::${account_id}:policy/teacherPolicy"
+}
 
-# resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
-#   role       = aws_iam_role.admin_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
+resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${account_id}:policy/adminPolicy"
+}
 
 # # Creating the lambda permissions so that the API Gateway can invoke the lambda functions.
 # resource "aws_lambda_permission" "api_gateway_invoke" {
