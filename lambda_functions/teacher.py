@@ -196,6 +196,42 @@ def get_teacher_courses(user_id):
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
+def get_teacher_course_names(user_id):
+    """
+    Get all course names for a teacher.
+
+    Args:
+        user_id (str): The ID of the user.
+
+    Returns:
+        list: The list of course names for the teacher.
+
+    Raises:
+        ClientError: If an error occurs while getting the items.
+    """
+    try:
+        response = table.query(
+            IndexName='UserIdCourseIdIndex',
+            KeyConditionExpression=Key('UserId').eq(user_id)
+        )
+        course_names = {item.get('CourseId'): 'Name'
+                        for item in response.get('Items')}
+        for course_id in course_names.keys():
+            response = table.get_item(
+                Key={
+                    'ItemId': course_id,
+                    'ItemType': 'Course'
+                }
+            )
+            course_names[course_id] = response.get('Item').get('CourseName')
+        if len(course_names) > 0:
+            return make_response(200, response['Items'])
+        return make_response(404, 'No records found.')
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
+
+
 def get_all_course_attendance(course_id):
     """
     Get all attendance records of students for a teacher's course.
@@ -306,6 +342,9 @@ def lambda_handler(event, context):
 
         case 'get_teacher_courses':
             return get_teacher_courses(query_params['UserId'])
+
+        case 'get_teacher_course_names':
+            return get_teacher_course_names(query_params['UserId'])
 
         case 'get_course_attendance':
             return get_all_course_attendance(query_params['CourseId'])
