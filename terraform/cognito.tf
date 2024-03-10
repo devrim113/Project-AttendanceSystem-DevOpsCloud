@@ -204,24 +204,25 @@ resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
   policy_arn = "arn:aws:iam::${account_id}:policy/teacherPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "student_to_teacher_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${account_id}:policy/studentPolicy"
+}
+
 resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
   policy_arn = "arn:aws:iam::${account_id}:policy/adminPolicy"
 }
 
-# # Creating the lambda permissions so that the API Gateway can invoke the lambda functions.
-# resource "aws_lambda_permission" "api_gateway_invoke" {
-#   for_each = local.lambda_functions
+resource "aws_iam_role_policy_attachment" "student_to_admin_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${account_id}:policy/studentPolicy"
+}
 
-#   statement_id  = "AllowExecutionFromAPIGateway"
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_function.lambda[each.key].function_name
-#   principal     = "apigateway.amazonaws.com"
-#   source_arn    = "${aws_api_gateway_rest_api.AttendanceAPI.execution_arn}/*/*/*"
-# }
-
-
-
+resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${account_id}:policy/teacherPolicy"
+}
 
 # # Cognito User Pool Authorizer
 # resource "aws_api_gateway_authorizer" "student_authorizer" {
