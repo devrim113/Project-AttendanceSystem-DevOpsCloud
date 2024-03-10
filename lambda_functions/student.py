@@ -50,6 +50,26 @@ def make_response(status_code, body):
     }
 
 
+def get_all_courses():
+    """
+    Retrieves all the courses from the database.
+    Placed in student.py because of the large frequency in which this function is called.
+
+    Returns:
+        list: A list of items containing all the courses.
+    """
+    try:
+        response = table.scan(
+            FilterExpression=Attr('ItemType').eq('Course')
+        )
+        if len(response.get('Items')) > 0:
+            return make_response(200, response.get('Items'))
+        return make_response(404, 'No courses found.')
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
+
+
 def create_student_record(user_id, user_name):
     """
     Create a student record in the database.
@@ -408,6 +428,9 @@ def lambda_handler(event, context):
         case 'update_student':
             return update_student_record(
                 body['UserId'], body['UserName'])
+
+        case 'get_all_courses':
+            return get_all_courses()
 
         case 'get_student':
             return get_student(query_params['ItemId'])
