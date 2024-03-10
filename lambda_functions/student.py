@@ -90,7 +90,8 @@ def create_student_record(user_id, user_name):
                 'ItemId': user_id,
                 'UserName': user_name,
                 'ItemType': 'Student'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')
@@ -359,7 +360,8 @@ def enlist_student_course(item_id, user_id, course_id, attendance):
                 'CourseId': course_id,
                 'ItemType': 'Attendance',
                 'Attendance': attendance
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')

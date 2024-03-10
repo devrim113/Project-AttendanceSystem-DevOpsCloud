@@ -65,7 +65,8 @@ def create_teacher_record(item_id, user_name):
                 'ItemId': item_id,
                 'UserName': user_name,
                 'ItemType': 'Teacher'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')
@@ -130,7 +131,8 @@ def assign_course_to_teacher(item_id, course_id, user_id):
                 'UserId': user_id,
                 'CourseId': course_id,
                 'ItemType': 'TeachesCourse'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')
