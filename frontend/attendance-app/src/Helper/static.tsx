@@ -37,5 +37,7 @@ export const API_SCHEMA = "/prod"
 export const API_PATH_STUDENT = "/student"
 export const API_PATH_COURSE = "/course"
 export const API_PATH_DEPARTMENT = "/department"
+export const API_PATH_TEACHER = "/teacher"
+export const API_PATH_ADMIN = "/admin"
 
 export const FULL_API_URL = (scheme: string, path: string) => API_URL + scheme + path
