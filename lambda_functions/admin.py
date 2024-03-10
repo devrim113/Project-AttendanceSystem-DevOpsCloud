@@ -57,7 +57,8 @@ def create_admin_record(item_id, user_name):
                 'ItemId': item_id,
                 'UserName': user_name,
                 'ItemType': 'Admin'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Admin record created successfully')

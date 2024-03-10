@@ -58,7 +58,8 @@ def create_course(item_id, course_name, department_id, classes):
                 'DepartmentId': department_id,
                 'ItemType': 'Course',
                 'Classes': classes
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created or updated successfully.')

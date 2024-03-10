@@ -54,7 +54,8 @@ def create_department(dep_id, dep_name):
                 'ItemId': dep_id,
                 'DepartmentName': dep_name,
                 'ItemType': 'Department'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully')
