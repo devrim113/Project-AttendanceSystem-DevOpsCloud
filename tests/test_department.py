@@ -150,6 +150,24 @@ def test_admin_lambda_handler(create_dynamodb_table, department_lambda, course_l
     assert course_object1 in retrieved_courses
     assert course_object2 in retrieved_courses
 
+    # Get all course names for the department
+    get_course_names_event = {
+        'path': '/department',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_department_course_names', 'ItemId': '1'},
+        'body': None,
+        'isBase64Encoded': False
+    }
+
+    response = department_lambda(get_course_names_event, {})
+    assert response['statusCode'] == 200
+    retrieved_course_names = json.loads(response['body'])
+    assert len(retrieved_course_names) == 2
+    assert {'CourseName': 'LinAlg', 'ItemId': '2'} in retrieved_course_names
+    assert {'CourseName': 'Calc', 'ItemId': '3'} in retrieved_course_names
+
     # Delete department
     delete_event = {
         'path': '/department',

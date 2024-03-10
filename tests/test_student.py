@@ -1,6 +1,7 @@
 import pytest
 import json
 import student
+import course
 
 
 @pytest.fixture(scope='function')
@@ -8,7 +9,12 @@ def student_lambda(dynamodb):
     return student.lambda_handler
 
 
-def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
+@pytest.fixture(scope='function')
+def course_lambda(dynamodb):
+    return course.lambda_handler
+
+
+def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_lambda):
     # Create student record
     object = {
         'ItemId': '1',
@@ -44,6 +50,57 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     assert response['statusCode'] == 200
     retrieved_object = json.loads(response['body'])
     assert object == retrieved_object
+
+    # Create course records
+    course_object1 = {
+        'ItemId': '101',
+        'CourseName': 'Math',
+        'ItemType': 'Course',
+        'DepartmentId': '1',
+        'Classes': {
+            '2022-01-01': {
+                'from': '09:00',
+                'to': '12:00'
+            },
+            '2022-01-02': {
+                'from': '09:00',
+                'to': '12:00'
+            }
+        }
+    }
+
+    course_object2 = {
+        'ItemId': '102',
+        'CourseName': 'Calc',
+        'ItemType': 'Course',
+        'DepartmentId': '1',
+        'Classes': {
+            '2022-01-01': {
+                'from': '09:00',
+                'to': '12:00'
+            },
+            '2022-01-02': {
+                'from': '09:00',
+                'to': '12:00'
+            }
+        }
+    }
+
+    for course_object in [course_object1, course_object2]:
+        create_event = {
+            'path': '/course',
+            'httpMethod': 'PUT',
+            'headers': {},
+            'pathParameters': {},
+            'queryStringParameters': {'func': 'create_course'},
+            'body': {
+                **course_object
+            },
+            'isBase64Encoded': False
+        }
+
+        response = course_lambda(create_event, {})
+        assert response['statusCode'] == 200
 
     # Create student attendance record
     attendance_object = {
@@ -164,6 +221,21 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     retrieved_courses = json.loads(response['body'])
     assert len(retrieved_courses) == 2
 
+    # Get all student course names
+    get_course_names = {
+        'path': '/student',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_student_course_names', 'UserId': '1'},
+        'body': None,
+        'isBase64Encoded': False
+    }
+
+    response = student_lambda(get_course_names, {})
+    retrieved_courses = json.loads(response['body'])
+    assert response['statusCode'] == 200
+
     # Delete created records, either student or attendance
     delete_event = {
         'path': '/student',
@@ -221,3 +293,19 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda):
     # Verify deletion
     response = student_lambda(get_event, {})
     assert response['statusCode'] == 404
+
+    # Get all courses
+    get_courses_event = {
+        'path': '/student',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_all_courses'},
+        'body': None,
+        'isBase64Encoded': False
+    }
+
+    response = student_lambda(get_courses_event, {})
+    assert response['statusCode'] == 200
+    retrieved_courses = json.loads(response['body'])
+    assert len(retrieved_courses) == 2

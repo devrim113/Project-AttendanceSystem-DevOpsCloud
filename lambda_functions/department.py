@@ -119,6 +119,35 @@ def get_department_courses(dep_id):
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
+def get_department_course_names(dep_id):
+    """
+    Get the course names for a department.
+
+    Args:
+        dep_id (str): The ID of the department.
+
+    Returns:
+        list: The list of course names for the department.
+            [{'CourseName': 'Mathematics', 'ItemId': 101}, {'CourseName': 'Physics', 'ItemId': 102}]
+
+    Raises:
+        ClientError: If an error occurs while querying the items.
+    """
+    try:
+        response = table.query(
+            IndexName='DepartmentIdItemTypeIndex',
+            KeyConditionExpression=Key('DepartmentId').eq(
+                dep_id) & Key('ItemType').eq('Course'),
+            ProjectionExpression='CourseName, ItemId'
+        )
+        if 'Items' in response:
+            return make_response(200, response['Items'])
+        return make_response(404, 'Courses not found')
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
+
+
 def update_department(dep_id, dep_name):
     """
     Update object for a department.
@@ -235,6 +264,9 @@ def lambda_handler(event, context):
 
         case 'get_department_courses':
             return get_department_courses(query_params['ItemId'])
+
+        case 'get_department_course_names':
+            return get_department_course_names(query_params['ItemId'])
 
         case 'update_department':
             return update_department(body['ItemId'], body['DepartmentName'])
