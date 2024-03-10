@@ -7,7 +7,7 @@ function get_URL(parameters: { [key: string]: string }, method: string, body?: {
         throw new Error('func not in parameters');
     }
 
-    let url =  new URL(
+    let url = new URL(
         FULL_API_URL(API_SCHEMA, API_PATH_STUDENT),
     )
     url.search = new URLSearchParams(parameters).toString();
@@ -25,7 +25,7 @@ export function create_student(ItemId: string, UserName: string, ItemType: strin
     return get_URL(
         {
             "func": 'create_student'
-        }, 
+        },
         'PUT',
         {
             "ItemId": ItemId,
@@ -40,7 +40,7 @@ export function get_student_list(ItemId: string) {
         {
             "func": 'get_student',
             "ItemId": ItemId
-        }, 
+        },
         'GET',
         undefined
     )
@@ -51,7 +51,7 @@ export function get_student_courses(ItemId: string) {
         {
             "func": 'get_student_courses',
             "UserId": ItemId
-        }, 
+        },
         'GET',
         undefined
     )
@@ -62,7 +62,44 @@ export function get_student_course_names(ItemId: string) {
         {
             "func": 'get_student_course_names',
             "UserId": ItemId
-        }, 
+        },
+        'GET',
+        undefined
+    )
+}
+
+export function get_all_courses() {
+    return get_URL(
+        {
+            "func": 'get_all_courses'
+        },
+        'GET',
+        undefined
+    )
+}
+
+export function enlist_student_course(ItemId: string, UserId: string, CourseId: string) {
+    return get_URL(
+        {
+            "func": 'enlist_student'
+        },
+        'PUT',
+        {
+            "ItemId": ItemId,
+            "UserId": UserId,
+            "CourseId": CourseId,
+            "Attendance": ""
+        }
+    )
+}
+
+export function get_student_course_attendance(UserId: string, CourseId: string) {
+    return get_URL(
+        {
+            "func": 'get_student_course_attendance',
+            "UserId": UserId,
+            "CourseId": CourseId
+        },
         'GET',
         undefined
     )
