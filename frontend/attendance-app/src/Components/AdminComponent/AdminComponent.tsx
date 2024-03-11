@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { get_all_courses } from "../../API/student";
 
 function AdminComponent() {
+    const [courses, setCourses] = useState<null | any>(null);
+
+
+    useEffect(() => {
+        get_all_courses()().then((response) => {
+            response.json().then(data => {
+                    console.log(data);
+                    if (response.status === 200 && data.length > 0) {
+                        setCourses(data);
+                    } else {
+                        setCourses([]);
+                    }
+                });
+            });
+        }, []);
+    const renderCourses = (course: any) => {
+        return (
+            <tr>
+                <td>{course["CourseName"]}</td>
+                <td>
+                    <a className="btn btn-primary">
+                        View
+                    </a>
+                </td>
+            </tr>
+        )
+    }
+
     return (
         <div className="container-fluid p-0">
             <h1 className="h3 mb-3">Admin Dashboard</h1>
@@ -30,6 +59,11 @@ function AdminComponent() {
                                         <th>View</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    {
+                                        courses ? courses.map((course: any) => renderCourses(course)) : <tr><td>Loading...</td><td></td></tr>
+                                    }
+                                </tbody>
                                 <tbody id="data-student-courses"></tbody>
                             </table>
                         </div>
