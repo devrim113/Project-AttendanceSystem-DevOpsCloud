@@ -16,6 +16,9 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    - name: Change Directory and Build React App
+      run: cd frontend/attendance-app && npm install && npm run build
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -24,4 +27,4 @@ jobs:
         aws-region: eu-central-1
 
     - name: Deploy to S3
-      run: aws s3 sync frontend/ s3://attendance-frontend-bucket --delete
+      run: aws s3 sync frontend/attendance-app/build s3://attendance-frontend-bucket --delete
