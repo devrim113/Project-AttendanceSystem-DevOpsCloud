@@ -2,8 +2,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Outlet } from "react-router";
-import { getInformation } from "../../Helper/static";
+import { bearerCookie, getInformation } from "../../Helper/static";
 import { useNavigate } from "react-router-dom";
+import { removeCookie } from "../../Helper";
 
 function HeaderSideBar() {
     let navigator = useNavigate();
@@ -12,7 +13,10 @@ function HeaderSideBar() {
     const name = information["name"];
     const role: [String]= information["cognito:groups"];
 
-
+    const logout = () => {
+        removeCookie(bearerCookie)
+        navigator("/");
+    }
     return (
         <div className="wrapper">
             <nav id="sidebar" className="sidebar">
@@ -70,7 +74,7 @@ function HeaderSideBar() {
                         id="header-name"
                         ><span className="text-dark">{name}</span></a>
                         <div className="dropdown-menu dropdown-menu-end">
-                        <a className="dropdown-item" href="#">
+                        <a className="dropdown-item" onClick={() => logout()}>
                             Sign out
                         </a>
                         </div>

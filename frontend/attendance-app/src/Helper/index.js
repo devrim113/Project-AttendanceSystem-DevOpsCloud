@@ -6,5 +6,8 @@ function setCookie(name, value, options = { expires: 1, path: '/' }) {
 function getCookie(name) {
     return Cookies.get(name);
 }
+function removeCookie(name) {
+    Cookies.remove(name);
+}
 
-export { setCookie, getCookie }
+export { setCookie, getCookie, removeCookie }
