@@ -13,4 +13,12 @@ function checkValidity(token) {
     return decryptedToken["exp"] > (Date.now()/1000)
 }
 
-export {parseJwt, checkValidity}
+function generateSimpleUUID() {
+    const timestamp = Date.now().toString(36); // Time component
+    const randomPart = Math.random().toString(36).substring(2); // Some randomness
+  
+    return `${timestamp}-${randomPart}`; 
+  }
+
+
+export {parseJwt, checkValidity, generateSimpleUUID}

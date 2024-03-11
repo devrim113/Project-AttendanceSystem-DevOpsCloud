@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { get_all_courses } from "../../API/student";
+import { generateSimpleUUID } from "../../Helper/decrypter";
+import { create_course } from "../../API/course";
+
 
 function AdminComponent() {
     const [courses, setCourses] = useState<null | any>(null);
 
+    const [courseInput, setCourseInput] = useState("");
 
     useEffect(() => {
         get_all_courses()().then((response) => {
@@ -28,6 +32,26 @@ function AdminComponent() {
                 </td>
             </tr>
         )
+    }
+    
+    const newCourse = async (event: any): Promise<void> => {
+        event.preventDefault();
+
+        const ItemId: string = generateSimpleUUID() + '#' + courseInput;
+        const DepartmentId: string = '1';
+
+        try {
+            const response: Response = await create_course(ItemId, courseInput, DepartmentId)();
+            if (response.ok && await response.json() === "Record created or updated successfully.") {
+                alert('Course created successfully');
+                window.location.reload();
+            } else {
+                alert('Failed to create course, maybe the name is already taken?');
+            }
+        } catch (error: any) {
+            console.error('Error creating course:', error);
+            alert('Error creating course');
+        }
     }
 
     return (
@@ -85,12 +109,14 @@ function AdminComponent() {
                                     </label>
                                     <input
                                         type="text"
+                                        value={courseInput}
+                                        onChange={(e) => setCourseInput(e.target.value)}
                                         className="form-control"
                                         id="courseName"
                                         placeholder="Course Name"
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary">
+                                <button onClick={newCourse} className="btn btn-primary">
                                     Create
                                 </button>
                             </form>
