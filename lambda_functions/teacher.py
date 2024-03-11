@@ -21,6 +21,7 @@ logger.setLevel(logging.INFO)
 dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
+UserPoolId = "eu-central-1_jiDMNCeuM"
 
 def make_response(status_code, body):
     """
@@ -45,7 +46,7 @@ def make_response(status_code, body):
     }
 
 
-def create_teacher_record(item_id, user_name):
+def create_teacher_record(email, user_name):
     """
     Create object for a teacher.
 
@@ -59,10 +60,35 @@ def create_teacher_record(item_id, user_name):
     Raises:
         ClientError: If an error occurs while putting the item.
     """
+    client = boto3.client('cognito-idp')
     try:
+        response = client.admin_create_user(
+            UserPoolId=UserPoolId,
+            Username=email,
+            UserAttributes=[
+                {
+                    'Name': 'email',
+                    'Value': email
+                },
+                {
+                    'Name': 'email_verified',
+                    'Value': 'false'
+                },
+                {
+                    'Name': 'name',
+                    'Value': user_name
+                }
+            ],
+            clientMetadata={
+                'isAdmin': 'false',
+                'isTeacher': 'true'
+            }
+        )
+        user_id = response['User']['Username']
+
         response = table.put_item(
             Item={
-                'ItemId': item_id,
+                'ItemId': user_id,
                 'UserName': user_name,
                 'ItemType': 'Teacher'
             },
@@ -273,7 +299,13 @@ def delete_teacher(user_id):
     Raises:
         ClientError: If an error occurs while deleting the item.
     """
+    client = boto3.client('cognito-idp')
+
     try:
+        client.admin_delete_user(
+            UserPoolId=UserPoolId,
+            Username=user_id
+        )
         response = table.delete_item(
             Key={
                 'ItemId': user_id,

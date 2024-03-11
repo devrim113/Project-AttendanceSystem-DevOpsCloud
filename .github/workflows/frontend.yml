@@ -16,6 +16,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    # - name: Setup Node.js
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: '14' # Specify the Node.js version you need
+
     - name: Change Directory and Build React App
       run: cd frontend/attendance-app && npm install && npm run build
 
