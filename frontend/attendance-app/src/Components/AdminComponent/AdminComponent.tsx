@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { get_all_courses } from "../../API/student";
 import { generateSimpleUUID } from "../../Helper/decrypter";
 import { create_course } from "../../API/course";
+import { create_teacher } from "../../API/teacher";
 
 
 function AdminComponent() {
     const [courses, setCourses] = useState<null | any>(null);
 
     const [courseInput, setCourseInput] = useState("");
+
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
 
     useEffect(() => {
         get_all_courses()().then((response) => {
@@ -51,6 +55,22 @@ function AdminComponent() {
         } catch (error: any) {
             console.error('Error creating course:', error);
             alert('Error creating course');
+        }
+    }
+
+    const createTeacher = async (event: any): Promise<void> => {
+        event.preventDefault();
+        try {
+            const response = create_teacher(email, name)().then((response) => {
+                if (response.ok) {
+                    alert("Teacher created successfully");
+                } else {
+                    alert("Error creating teacher");
+                }
+            });
+        }
+        catch {
+            console.log("Error creating teacher");
         }
     }
 
@@ -142,17 +162,22 @@ function AdminComponent() {
                                         className="form-control"
                                         id="teacherName"
                                         placeholder="Teacher Name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="teacherUsername" className="form-label">
-                                        Teacher Username
+                                        Teacher Email
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="teacherUsername"
-                                        placeholder="Teacher Username"
+                                        placeholder="Teacher Email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -166,7 +191,7 @@ function AdminComponent() {
                                         placeholder="Teacher Password"
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary">
+                                <button onClick={(e) => createTeacher(e)} className="btn btn-primary">
                                     Create
                                 </button>
                             </form>

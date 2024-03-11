@@ -54,3 +54,17 @@ export function get_all_course_attendance(CourseId: string) {
         undefined
     )
 }
+
+export function create_teacher(email: string, UserName: string) {
+    return get_URL(
+        {
+            "func": 'create_teacher',
+        },
+        'PUT',
+        {
+            "ItemId": email,
+            "UserName": UserName,
+            "ItemType": "Teacher",
+        }
+    )
+}
