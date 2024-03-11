@@ -3,11 +3,16 @@
 import React from "react";
 import { Outlet } from "react-router";
 import { getInformation } from "../../Helper/static";
+import { useNavigate } from "react-router-dom";
 
 function HeaderSideBar() {
+    let navigator = useNavigate();
+
     let information = getInformation();
     const name = information["name"];
     const role: [String]= information["cognito:groups"];
+
+
     return (
         <div className="wrapper">
             <nav id="sidebar" className="sidebar">
@@ -18,7 +23,7 @@ function HeaderSideBar() {
                 <ul className="sidebar-nav">
                     {role.includes("Students") && (
                         <li className="sidebar-item">
-                        <a className="sidebar-link" href="pages/student/student.html">
+                        <a className="sidebar-link" onClick={() => navigator("/")}>
                             <i className="align-middle" data-feather="user" />{" "}
                             <span className="align-middle">Student</span>
                         </a>
@@ -26,7 +31,7 @@ function HeaderSideBar() {
                     )}
                     {role.includes("Teachers") && (
                         <li className="sidebar-item">
-                        <a className="sidebar-link" href="pages/teacher/teacher.html">
+                        <a className="sidebar-link" onClick={() => navigator("/teacher")}>
                             <i className="align-middle" data-feather="user" />{" "}
                             <span className="align-middle">Teacher</span>
                         </a>
@@ -34,7 +39,7 @@ function HeaderSideBar() {
                     )}
                     {role.includes("Admins") && (
                         <li className="sidebar-item">
-                        <a className="sidebar-link" href="pages/admin/admin.html">
+                        <a className="sidebar-link" onClick={() => navigator("/admin")}>
                             <i className="align-middle" data-feather="layers" />{" "}
                             <span className="align-middle">Admin</span>
                         </a>
