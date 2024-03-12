@@ -86,6 +86,12 @@ resource "aws_cognito_identity_pool" "main" {
   identity_pool_name               = "Attendance users identity pool"
   allow_unauthenticated_identities = false
   allow_classic_flow               = false
+
+  cognito_identity_providers {
+    client_id               = aws_cognito_user_pool.student_pool.client_id
+    provider_name           = aws_cognito_user_pool.student_user_pool.provider_name
+    server_side_token_check = false
+  }
 }
 
 # ----------------- Creating the IAM roles -----------------
@@ -223,6 +229,31 @@ resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
   policy_arn = "arn:aws:iam::${account_id}:policy/teacherPolicy"
 }
+
+# ----------------- Attaching the IAM policies to the appropriate roles -----------------
+
+# resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" {
+#   identity_pool_id = aws_cognito_identity_pool.main.id
+
+#   role_mapping {
+#     identity_provider         = "graph.facebook.com"
+#     ambiguous_role_resolution = "AuthenticatedRole"
+#     type                      = "Rules"
+
+#     mapping_rule {
+#       claim      = "isAdmin"
+#       match_type = "Equals"
+#       role_arn   = aws_iam_role.authenticated.arn
+#       value      = "paid"
+#     }
+#   }
+
+#   roles = {
+#     "authenticated" = aws_iam_role.authenticated.arn
+#   }
+# }
+
+
 
 # # Cognito User Pool Authorizer
 # resource "aws_api_gateway_authorizer" "student_authorizer" {
