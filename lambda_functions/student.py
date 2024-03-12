@@ -90,7 +90,8 @@ def create_student_record(user_id, user_name):
                 'ItemId': user_id,
                 'UserName': user_name,
                 'ItemType': 'Student'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')
@@ -296,7 +297,7 @@ def get_student_course_names(user_id):
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
 
-        course_names = {item.get('CourseId'): 'Name'
+        course_names = {item.get('CourseId'): '404-noNameFound'
                         for item in response.get('Items')}
         for course_id in course_names.keys():
             response = table.get_item(
@@ -305,8 +306,11 @@ def get_student_course_names(user_id):
                     'ItemType': 'Course'
                 }
             )
-            course_names[course_id] = response.get('Item').get('CourseName')
-
+            try:
+                course_names[course_id] = response.get(
+                    'Item').get('CourseName')
+            except:
+                pass
         if len(course_names.keys()) > 0:
             return make_response(200, course_names)
         return make_response(404, 'Record not found.')
@@ -359,7 +363,8 @@ def enlist_student_course(item_id, user_id, course_id, attendance):
                 'CourseId': course_id,
                 'ItemType': 'Attendance',
                 'Attendance': attendance
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')

@@ -65,7 +65,8 @@ def create_teacher_record(item_id, user_name):
                 'ItemId': item_id,
                 'UserName': user_name,
                 'ItemType': 'Teacher'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')
@@ -130,7 +131,8 @@ def assign_course_to_teacher(item_id, course_id, user_id):
                 'UserId': user_id,
                 'CourseId': course_id,
                 'ItemType': 'TeachesCourse'
-            }
+            },
+            ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         if response:
             return make_response(200, 'Record created successfully.')
@@ -188,6 +190,47 @@ def get_teacher_courses(user_id):
         )
         if 'Items' in response:
             return make_response(200, response['Items'])
+        return make_response(404, 'No records found.')
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
+
+
+def get_teacher_course_names(user_id):
+    """
+    Get all course names for a teacher.
+
+    Args:
+        user_id (str): The ID of the user.
+
+    Returns:
+        list: The list of course names for the teacher.
+
+    Raises:
+        ClientError: If an error occurs while getting the items.
+    """
+    try:
+        response = table.query(
+            IndexName='UserIdCourseIdIndex',
+            KeyConditionExpression=Key('UserId').eq(user_id)
+        )
+
+        course_names = {item.get('CourseId'): '404-noNameFound'
+                        for item in response.get('Items')}
+        for course_id in course_names.keys():
+            response = table.get_item(
+                Key={
+                    'ItemId': course_id,
+                    'ItemType': 'Course'
+                }
+            )
+            try:
+                course_names[course_id] = response.get(
+                    'Item').get('CourseName')
+            except:
+                pass
+        if len(course_names) > 0:
+            return make_response(200, course_names)
         return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
@@ -304,6 +347,9 @@ def lambda_handler(event, context):
 
         case 'get_teacher_courses':
             return get_teacher_courses(query_params['UserId'])
+
+        case 'get_teacher_course_names':
+            return get_teacher_course_names(query_params['UserId'])
 
         case 'get_course_attendance':
             return get_all_course_attendance(query_params['CourseId'])

@@ -209,6 +209,20 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     assert attendance_object_student1 in attendance
     assert attendance_object_student2 in attendance
 
+    # Get teacher course names
+    get_course_names_event = {
+        'path': '/teacher',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_teacher_course_names', 'UserId': '1'},
+        'body': None,
+        'isBase64Encoded': False
+    }
+
+    response = teacher_lambda(get_course_names_event, {})
+    assert response['statusCode'] == 200
+
     # Delete the teacher record
     delete_event = {
         'path': '/teacher',
