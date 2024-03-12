@@ -202,32 +202,32 @@ resource "aws_iam_policy" "admin_policy" {
 
 resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
   role       = aws_iam_role.student_role.name
-  policy_arn = "arn:aws:iam::${account_id}:policy/studentPolicy"
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
   role       = aws_iam_role.teacher_role.name
-  policy_arn = "arn:aws:iam::${account_id}:policy/teacherPolicy"
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/teacherPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "student_to_teacher_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${account_id}:policy/studentPolicy"
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${account_id}:policy/adminPolicy"
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/adminPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "student_to_admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${account_id}:policy/studentPolicy"
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${account_id}:policy/teacherPolicy"
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/teacherPolicy"
 }
 
 # ----------------- Attaching the IAM policies to the appropriate roles -----------------
