@@ -88,8 +88,8 @@ resource "aws_cognito_identity_pool" "main" {
   allow_classic_flow               = false
 
   cognito_identity_providers {
-    client_id               = aws_cognito_user_pool.student_pool.client_id
-    provider_name           = aws_cognito_user_pool.student_user_pool.provider_name
+    client_id               = "6pnhs85ctml9b9f353b14ui6b4"
+    provider_name           = "cognito-idp.${var.region}.amazonaws.com/eu-central-1_jiDMNCeuM"
     server_side_token_check = false
   }
 }
