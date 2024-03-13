@@ -10,8 +10,8 @@ variable "account_id" {
   default     = "590183910477"
 }
 
-variable "api_id" {
-  description = "API Gateway API ID"
+variable "cognito_identity_client_provider" {
+  description = "Cognito identity provider client"
   type        = string
-  default     = "r49e847uie"
+  default     = "cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.student_pool.id}"
 }
