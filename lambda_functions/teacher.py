@@ -287,7 +287,7 @@ def get_all_course_attendance(course_id):
             )
             try:
                 id_attendance[i] = (id_attendance[i][0], response.get(
-                    'Item').get('UserName'), (id_attendance[i][1]))
+                    'Item').get('UserName'), id_attendance[i][1])
             except:
                 pass
 
