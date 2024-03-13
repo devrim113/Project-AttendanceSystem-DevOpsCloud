@@ -206,8 +206,10 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     # Check attendance for the students
     attendance = json.loads(response['body'])
     assert len(attendance) == 2
-    assert attendance_object_student1 in attendance
-    assert attendance_object_student2 in attendance
+    for e in attendance:
+        for student in [student_object1, student_object2]:
+            if e[0] == student['UserName']:
+                assert e[1] == student['Attendance']
 
     # Get teacher course names
     get_course_names_event = {
