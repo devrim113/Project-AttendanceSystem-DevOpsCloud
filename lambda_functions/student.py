@@ -349,8 +349,10 @@ def get_student_course_attendance(user_id, course_id):
                 'ItemType': 'Course'
             }
         )
-        classes = response.get('Item')['Classes']
-
+        try:
+            classes = response.get('Item')['Classes']
+        except:
+            return make_response(400, response)
         response = table.query(
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(
@@ -360,7 +362,7 @@ def get_student_course_attendance(user_id, course_id):
         id_attendance = []
         try:
             id_attendance = [(item.get('UserId'), classes | item.get('Attendance'))
-                             if type(item.get('Attendance')) == dict else (item.get('UserId'), classes)
+                             if item.get('Attendance') != None and type(item.get('Attendance')) == dict else (item.get('UserId'), classes)
                              for item in response.get('Items')]
         except:
             pass
