@@ -86,6 +86,12 @@ resource "aws_cognito_identity_pool" "main" {
   identity_pool_name               = "Attendance users identity pool"
   allow_unauthenticated_identities = false
   allow_classic_flow               = false
+
+  cognito_identity_providers {
+    client_id               = "6pnhs85ctml9b9f353b14ui6b4"
+    provider_name           = "cognito-idp.${var.region}.amazonaws.com/eu-central-1_jiDMNCeuM"
+    server_side_token_check = false
+  }
 }
 
 # ----------------- Creating the IAM roles -----------------
@@ -194,32 +200,58 @@ resource "aws_iam_policy" "admin_policy" {
 
 # ----------------- Attaching the IAM policies to the appropriate roles -----------------
 
-# resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
-#   role       = aws_iam_role.student_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
+  role       = aws_iam_role.student_role.name
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
+  role       = aws_iam_role.teacher_role.name
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/teacherPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "student_to_teacher_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/adminPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "student_to_admin_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
+  role       = aws_iam_role.admin_role.name
+  policy_arn = "arn:aws:iam::${var.account_id}:policy/teacherPolicy"
+}
+
+# ----------------- Attaching the IAM policies to the appropriate roles -----------------
+
+# resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" {
+#   identity_pool_id = aws_cognito_identity_pool.main.id
+
+#   role_mapping {
+#     identity_provider         = "graph.facebook.com"
+#     ambiguous_role_resolution = "AuthenticatedRole"
+#     type                      = "Rules"
+
+#     mapping_rule {
+#       claim      = "isAdmin"
+#       match_type = "Equals"
+#       role_arn   = aws_iam_role.authenticated.arn
+#       value      = "paid"
+#     }
+#   }
+
+#   roles = {
+#     "authenticated" = aws_iam_role.authenticated.arn
+#   }
 # }
-
-# resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
-#   role       = aws_iam_role.teacher_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
-
-# resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
-#   role       = aws_iam_role.admin_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
-
-# # Creating the lambda permissions so that the API Gateway can invoke the lambda functions.
-# resource "aws_lambda_permission" "api_gateway_invoke" {
-#   for_each = local.lambda_functions
-
-#   statement_id  = "AllowExecutionFromAPIGateway"
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_function.lambda[each.key].function_name
-#   principal     = "apigateway.amazonaws.com"
-#   source_arn    = "${aws_api_gateway_rest_api.AttendanceAPI.execution_arn}/*/*/*"
-# }
-
 
 
 

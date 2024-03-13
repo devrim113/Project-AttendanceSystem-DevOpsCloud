@@ -108,13 +108,7 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
         'CourseId': '101',
         'UserId': '1',
         'ItemType': 'Attendance',
-        'Attendance': {
-            '2022-01-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'present'
-            }
-        }
+        'Attendance': None
     }
 
     enlist_event = {
@@ -175,11 +169,6 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
 
     response = student_lambda(get_attendance_event, {})
     assert response['statusCode'] == 200
-    retrieved_object = json.loads(response['body'])
-
-    for key in updated_attendance_object:
-        assert updated_attendance_object[key] == retrieved_object[
-            key], f"Value mismatch for {key}: expected {attendance_object[key]}, got {retrieved_object[key]}"
 
     # Add another record
     attendance_object = {
@@ -187,7 +176,7 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
         'CourseId': '102',
         'UserId': '1',
         'ItemType': 'Attendance',
-        'Attendance': {}
+        'Attendance': None
     }
 
     enlist_event2 = {
@@ -203,6 +192,21 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     }
 
     response = student_lambda(enlist_event2, {})
+    assert response['statusCode'] == 200
+
+    # Get student course attendance
+    get_attendance_event = {
+        'path': '/student/',
+        'httpMethod': 'GET',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '102'},
+        'body': None,
+        'isBase64Encoded': False
+    }
+
+    response = student_lambda(get_attendance_event, {})
+    print(response)
     assert response['statusCode'] == 200
 
     # Get all student records

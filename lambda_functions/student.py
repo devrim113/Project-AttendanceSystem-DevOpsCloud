@@ -212,9 +212,10 @@ def update_student_record(user_id, user_name):
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
-def update_attendance_record(item_id, attendance):
+def update_attendance_record(item_id, course_id, attendance):
     """
     Update the attendance record for a student in a specific course.
+    Updates one attendance instance (date) at a time
 
     Args:
         item_id (str): The ID of the item. In this case the item is the student's attendance record for the course.
@@ -231,6 +232,17 @@ def update_attendance_record(item_id, attendance):
         dict or None: The response from the update operation if successful, None otherwise.
     """
     try:
+        attendance_record = table.get_item(
+            Key={
+                'ItemId': item_id,
+                'ItemType': 'Attendance'
+            }
+        )
+        if attendance_record.get('Item') and type(attendance_record.get('Item')['Attendance']) == dict:
+            attendance = attendance_record.get('Item')[
+                'Attendance'] | attendance
+
+        print(attendance)
         response = table.update_item(
             Key={
                 'ItemId': item_id,
@@ -324,7 +336,7 @@ def get_student_course_names(user_id):
             KeyConditionExpression=Key('UserId').eq(user_id)
         )
 
-        course_names = {item.get('CourseId'): 'Name'
+        course_names = {item.get('CourseId'): '404-noNameFound'
                         for item in response.get('Items')}
         for course_id in course_names.keys():
             response = table.get_item(
@@ -333,8 +345,11 @@ def get_student_course_names(user_id):
                     'ItemType': 'Course'
                 }
             )
-            course_names[course_id] = response.get('Item').get('CourseName')
-
+            try:
+                course_names[course_id] = response.get(
+                    'Item').get('CourseName')
+            except:
+                pass
         if len(course_names.keys()) > 0:
             return make_response(200, course_names)
         return make_response(404, 'Record not found.')
@@ -355,13 +370,45 @@ def get_student_course_attendance(user_id, course_id):
         dict: The attendance record of the student for the course, or None if an error occurs.
     """
     try:
+        response = table.get_item(
+            Key={
+                'ItemId': course_id,
+                'ItemType': 'Course'
+            }
+        )
+        try:
+            classes = response.get('Item')['Classes']
+        except:
+            return make_response(400, response)
         response = table.query(
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(
-                user_id) & Key('CourseId').eq(course_id)
+                user_id) & Key('CourseId').eq(course_id) & Key('ItemType').eq('Attendance')
         )
-        if len(response.get('Items')) > 0:
-            return make_response(200, response.get('Items')[0])
+
+        id_attendance = []
+        try:
+            id_attendance = [(item.get('UserId'), classes | item.get('Attendance'))
+                             if item.get('Attendance') != None and type(item.get('Attendance')) == dict else (item.get('UserId'), classes)
+                             for item in response.get('Items')]
+        except:
+            pass
+
+        for i, (user_id, _) in enumerate(id_attendance):
+            response = table.get_item(
+                Key={
+                    'ItemId': user_id,
+                    'ItemType': 'Student'
+                }
+            )
+            try:
+                id_attendance[i] = (id_attendance[i][0], response.get(
+                    'Item').get('UserName'), (id_attendance[i][1]))
+            except:
+                pass
+
+        if len(id_attendance) > 0:
+            return make_response(200, id_attendance)
         return make_response(404, 'Attendance not found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
@@ -452,7 +499,7 @@ def lambda_handler(event, context):
 
         case 'update_attendance':
             return update_attendance_record(
-                body['ItemId'], body['Attendance'])
+                body['ItemId'], body['CourseId'], body['Attendance'])
 
         case 'update_student':
             return update_student_record(
