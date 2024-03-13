@@ -45,7 +45,7 @@ function TeacherAttendanceComponent() {
     const renderAttendance = (item: AttendanceObject) => {
         const [userId, username, dates] = item;
         if (!dates) return null;
-        const itemId = getInformation()["cognito:username"] + "#" + course_id;
+        const itemId = userId + course_id;
         return Object.entries(dates).map(([date, record], index) => {
             return (
                 <tr key={`${userId}-${date}-${index}`}>
@@ -77,7 +77,7 @@ function TeacherAttendanceComponent() {
                         // Update the course with the new lesson
                         const response: Response = await update_course(course_id, course_name, "1", classes)();
                         if (response.ok && await response.json()) {
-                            alert("Lesson created successfully");
+                            alert("Lesson created successfully, it will not show up until a student enrolls in the course");
                             window.location.reload();
                         } else {
                             alert("Error creating lesson");

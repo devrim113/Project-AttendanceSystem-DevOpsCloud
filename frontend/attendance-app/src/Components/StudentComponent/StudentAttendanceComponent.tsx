@@ -53,7 +53,7 @@ function StudentAttendanceComponent() {
     const renderAttendance = (item: AttendanceObject) => {
         const [userId, username, dates] = item;
         if (!dates) return null;
-        const itemId = getInformation()["cognito:username"] + "#" + course_id;
+        const itemId = getInformation()["cognito:username"] + course_id;
         return Object.entries(dates).map(([date, record], index) => {
             return (
                 <tr key={`${userId}-${date}-${index}`}>
