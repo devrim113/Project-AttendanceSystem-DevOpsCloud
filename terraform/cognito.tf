@@ -253,7 +253,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" 
   }
 
   roles = {
-    "student" = aws_iam_role.student_role.arn
+    "authenticated" = aws_iam_role.student_role.arn
   }
 }
 
@@ -273,7 +273,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" 
   }
 
   roles = {
-    "student" = aws_iam_role.teacher_role.arn
+    "authenticated" = aws_iam_role.teacher_role.arn
   }
 }
 
@@ -293,7 +293,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "admin_role_attachment" {
   }
 
   roles = {
-    "student" = aws_iam_role.admin_role.arn
+    "authenticated" = aws_iam_role.admin_role.arn
   }
 }
 
