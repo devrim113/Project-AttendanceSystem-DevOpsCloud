@@ -354,7 +354,7 @@ def get_student_course_attendance(user_id, course_id):
         response = table.query(
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(
-                user_id) & Key('CourseId').eq(course_id)
+                user_id) & Key('CourseId').eq(course_id) & Key('ItemType').eq('Attendance')
         )
 
         id_attendance = []
