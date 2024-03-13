@@ -260,12 +260,12 @@ def get_all_course_attendance(course_id):
 
         id_attendance = []
         try:
-            id_attendance = [(item.get('UserId'), 'Name', item.get(
+            id_attendance = [(item.get('UserId'), item.get(
                 'Attendance')) for item in response.get('Items')]
         except:
             pass
 
-        for i, (user_id, _, _) in enumerate(id_attendance):
+        for i, (user_id, _) in enumerate(id_attendance):
             response = table.get_item(
                 Key={
                     'ItemId': user_id,
@@ -274,7 +274,7 @@ def get_all_course_attendance(course_id):
             )
             try:
                 id_attendance[i] = (id_attendance[i][0], response.get(
-                    'Item').get('UserName'), (id_attendance[i][2]))
+                    'Item').get('UserName'), (id_attendance[i][1]))
             except:
                 pass
 
