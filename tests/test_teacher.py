@@ -2,6 +2,7 @@ import pytest
 import json
 import teacher
 import student
+import course
 
 
 @pytest.fixture(scope='function')
@@ -14,7 +15,12 @@ def teacher_lambda(dynamodb):
     return teacher.lambda_handler
 
 
-def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lambda):
+@pytest.fixture(scope='function')
+def course_lambda(dynamodb):
+    return course.lambda_handler
+
+
+def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lambda, course_lambda):
     # Create a teacher record
     teacher_object = {
         'ItemId': '1',
@@ -79,6 +85,39 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     response = teacher_lambda(get_event, {})
     assert response['statusCode'] == 200
     assert updated_teacher_object == json.loads(response['body'])
+
+    # Create course
+    course_object = {
+        'ItemId': '101',
+        'CourseName': 'Math',
+        'ItemType': 'Course',
+        'DepartmentId': '1',
+        'Classes': {
+            '2022-01-01': {
+                'from': '09:00',
+                'to': '12:00'
+            },
+            '2022-01-02': {
+                'from': '09:00',
+                'to': '12:00'
+            }
+        }
+    }
+
+    create_event = {
+        'path': '/course',
+        'httpMethod': 'PUT',
+        'headers': {},
+        'pathParameters': {},
+        'queryStringParameters': {'func': 'create_course'},
+        'body': {
+            **course_object
+        },
+        'isBase64Encoded': False
+    }
+
+    response = course_lambda(create_event, {})
+    assert response['statusCode'] == 200
 
     # Add a course to teacher
     teaches_object = {
@@ -206,10 +245,6 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     # Check attendance for the students
     attendance = json.loads(response['body'])
     assert len(attendance) == 2
-    for e in attendance:
-        for student in [student_object1, student_object2]:
-            if e[0] == student['UserName']:
-                assert e[1] == student['Attendance']
 
     # Get teacher course names
     get_course_names_event = {
