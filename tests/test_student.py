@@ -108,7 +108,7 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
         'CourseId': '101',
         'UserId': '1',
         'ItemType': 'Attendance',
-        'Attendance': {}
+        'Attendance': None
     }
 
     enlist_event = {
