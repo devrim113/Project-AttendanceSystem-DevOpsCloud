@@ -349,14 +349,13 @@ def get_student_course_attendance(user_id, course_id):
                 'ItemType': 'Course'
             }
         )
-        try:
-            classes = response.get('Item')['Classes']
-        except:
-            return make_response(400, response)
+        classes = response.get('Item')['Classes']
+
         response = table.query(
             IndexName='UserIdCourseIdIndex',
             KeyConditionExpression=Key('UserId').eq(
-                user_id) & Key('CourseId').eq(course_id) & Key('ItemType').eq('Attendance')
+                user_id) & Key('CourseId').eq(course_id),
+            FilterExpression=Attr('ItemType').eq('Attendance')
         )
 
         id_attendance = []
