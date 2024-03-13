@@ -1,3 +1,7 @@
+locals {
+  cognito_identity_client_provider = "cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.student_pool.id}"
+}
+
 # Cognito User Pool
 resource "aws_cognito_user_pool" "student_pool" {
   name                     = "student-login"
@@ -56,6 +60,7 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
 resource "aws_cognito_user_pool_domain" "main" {
   domain       = "student-attendance-system"
   user_pool_id = aws_cognito_user_pool.student_pool.id
+  # user_pool_id = aws_cognito_user_pool.student_pool.name
 }
 
 
@@ -89,7 +94,7 @@ resource "aws_cognito_identity_pool" "main" {
 
   cognito_identity_providers {
     client_id               = aws_cognito_user_pool_client.student_pool_client.id
-    provider_name           = var.cognito_identity_client_provider
+    provider_name           = local.cognito_identity_client_provider
     server_side_token_check = false
   }
 }
@@ -236,7 +241,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" 
   identity_pool_id = aws_cognito_identity_pool.main.id
 
   role_mapping {
-    identity_provider = "${var.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+    identity_provider = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
     type              = "Rules"
 
     mapping_rule {
@@ -256,7 +261,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" 
   identity_pool_id = aws_cognito_identity_pool.main.id
 
   role_mapping {
-    identity_provider = "${var.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+    identity_provider = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
     type              = "Rules"
 
     mapping_rule {
@@ -276,7 +281,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "admin_role_attachment" {
   identity_pool_id = aws_cognito_identity_pool.main.id
 
   role_mapping {
-    identity_provider = "${var.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+    identity_provider = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
     type              = "Rules"
 
     mapping_rule {
