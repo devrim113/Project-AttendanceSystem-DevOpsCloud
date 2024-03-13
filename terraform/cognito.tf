@@ -1,3 +1,7 @@
+locals {
+  cognito_identity_client_provider = "cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.student_pool.id}"
+}
+
 # Cognito User Pool
 resource "aws_cognito_user_pool" "student_pool" {
   name                     = "student-login"
@@ -56,6 +60,7 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
 resource "aws_cognito_user_pool_domain" "main" {
   domain       = "student-attendance-system"
   user_pool_id = aws_cognito_user_pool.student_pool.id
+  # user_pool_id = aws_cognito_user_pool.student_pool.name
 }
 
 
@@ -77,7 +82,7 @@ resource "aws_cognito_user_group" "admins" {
 resource "aws_cognito_user_group" "teacher" {
   name         = "Teachers"
   user_pool_id = aws_cognito_user_pool.student_pool.id
-  description  = "A group for teachers users"
+  description  = "A group for teacher users"
 }
 
 # ----------------- Creating the Cognito Identity Pool -----------------
@@ -88,8 +93,8 @@ resource "aws_cognito_identity_pool" "main" {
   allow_classic_flow               = false
 
   cognito_identity_providers {
-    client_id               = "6pnhs85ctml9b9f353b14ui6b4"
-    provider_name           = "cognito-idp.${var.region}.amazonaws.com/eu-central-1_jiDMNCeuM"
+    client_id               = aws_cognito_user_pool_client.student_pool_client.id
+    provider_name           = local.cognito_identity_client_provider
     server_side_token_check = false
   }
 }
@@ -156,7 +161,7 @@ resource "aws_iam_policy" "student_policy" {
       {
         Action   = "execute-api:Invoke",
         Effect   = "Allow",
-        Resource = "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/student"
+        Resource = "arn:aws:execute-api:${var.region}:${var.account_id}:${aws_api_gateway_rest_api.AttendanceAPI.id}/*/*/student"
       }
     ]
   })
@@ -172,7 +177,7 @@ resource "aws_iam_policy" "teacher_policy" {
       {
         Action   = "execute-api:Invoke",
         Effect   = "Allow",
-        Resource = "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/teacher"
+        Resource = "arn:aws:execute-api:${var.region}:${var.account_id}:${aws_api_gateway_rest_api.AttendanceAPI.id}/*/*/teacher"
       }
     ]
   })
@@ -189,9 +194,9 @@ resource "aws_iam_policy" "admin_policy" {
         Action = "execute-api:Invoke",
         Effect = "Allow",
         Resource = [
-          "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/admin",
-          "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/course",
-          "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/*/department"
+          "arn:aws:execute-api:${var.region}:${var.account_id}:${aws_api_gateway_rest_api.AttendanceAPI.id}/*/*/admin",
+          "arn:aws:execute-api:${var.region}:${var.account_id}:${aws_api_gateway_rest_api.AttendanceAPI.id}/*/*/course",
+          "arn:aws:execute-api:${var.region}:${var.account_id}:${aws_api_gateway_rest_api.AttendanceAPI.id}/*/*/department"
         ]
       }
     ]
@@ -202,58 +207,95 @@ resource "aws_iam_policy" "admin_policy" {
 
 resource "aws_iam_role_policy_attachment" "student_policy_attachment" {
   role       = aws_iam_role.student_role.name
-  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
+  policy_arn = aws_iam_policy.student_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "teacher_policy_attachment" {
   role       = aws_iam_role.teacher_role.name
-  policy_arn = "arn:aws:iam::${var.account_id}:policy/teacherPolicy"
+  policy_arn = aws_iam_policy.teacher_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "student_to_teacher_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
+  policy_arn = aws_iam_policy.student_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${var.account_id}:policy/adminPolicy"
+  policy_arn = aws_iam_policy.admin_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "student_to_admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${var.account_id}:policy/studentPolicy"
+  policy_arn = aws_iam_policy.student_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
   role       = aws_iam_role.admin_role.name
-  policy_arn = "arn:aws:iam::${var.account_id}:policy/teacherPolicy"
+  policy_arn = aws_iam_policy.teacher_policy.arn
 }
 
 # ----------------- Attaching the IAM policies to the appropriate roles -----------------
 
-# resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" {
-#   identity_pool_id = aws_cognito_identity_pool.main.id
+resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" {
+  identity_pool_id = aws_cognito_identity_pool.main.id
 
-#   role_mapping {
-#     identity_provider         = "graph.facebook.com"
-#     ambiguous_role_resolution = "AuthenticatedRole"
-#     type                      = "Rules"
+  role_mapping {
+    identity_provider = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+    type              = "Rules"
 
-#     mapping_rule {
-#       claim      = "isAdmin"
-#       match_type = "Equals"
-#       role_arn   = aws_iam_role.authenticated.arn
-#       value      = "paid"
-#     }
-#   }
+    mapping_rule {
+      claim      = "cognito:groups"
+      match_type = "Contains"
+      role_arn   = aws_iam_role.student_role.arn
+      value      = "Students"
+    }
+  }
 
-#   roles = {
-#     "authenticated" = aws_iam_role.authenticated.arn
-#   }
-# }
+  roles = {
+    "student" = aws_iam_role.student_role.arn
+  }
+}
 
+resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" {
+  identity_pool_id = aws_cognito_identity_pool.main.id
 
+  role_mapping {
+    identity_provider = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+    type              = "Rules"
+
+    mapping_rule {
+      claim      = "cognito:groups"
+      match_type = "Contains"
+      role_arn   = aws_iam_role.teacher_role.arn
+      value      = "Students"
+    }
+  }
+
+  roles = {
+    "student" = aws_iam_role.teacher_role.arn
+  }
+}
+
+resource "aws_cognito_identity_pool_roles_attachment" "admin_role_attachment" {
+  identity_pool_id = aws_cognito_identity_pool.main.id
+
+  role_mapping {
+    identity_provider = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+    type              = "Rules"
+
+    mapping_rule {
+      claim      = "cognito:groups"
+      match_type = "Contains"
+      role_arn   = aws_iam_role.admin_role.arn
+      value      = "Students"
+    }
+  }
+
+  roles = {
+    "student" = aws_iam_role.admin_role.arn
+  }
+}
 
 # # Cognito User Pool Authorizer
 # resource "aws_api_gateway_authorizer" "student_authorizer" {
