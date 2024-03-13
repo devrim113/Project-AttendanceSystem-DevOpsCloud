@@ -211,7 +211,7 @@ def update_attendance_record(item_id, course_id, attendance):
                 'ItemType': 'Attendance'
             }
         )
-        if type(attendance_record.get('Item')) == dict:
+        if attendance_record.get('Item') and type(attendance_record.get('Item')['Attendance']) == dict:
             attendance = attendance_record.get('Item')[
                 'Attendance'] | attendance
 
