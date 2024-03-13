@@ -273,6 +273,7 @@ def get_all_course_attendance(course_id):
         id_attendance = []
         try:
             id_attendance = [(item.get('UserId'), classes | item.get('Attendance'))
+                             if type(item.get('Attendance')) == dict else (item.get('UserId'), classes)
                              for item in response.get('Items')]
         except:
             pass
