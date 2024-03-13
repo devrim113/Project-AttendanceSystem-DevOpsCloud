@@ -7,9 +7,7 @@ import { create_teacher } from "../../API/teacher";
 
 function AdminComponent() {
     const [courses, setCourses] = useState<null | any>(null);
-
     const [courseInput, setCourseInput] = useState("");
-
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
 
@@ -30,9 +28,9 @@ function AdminComponent() {
             <tr>
                 <td>{course["CourseName"]}</td>
                 <td>
-                    <a className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={() => window.location.href = `/adminattendance?course_id=${encodeURIComponent(String(course["ItemId"]))}&course_name=${encodeURIComponent(course["CourseName"].toString())}`}>
                         View
-                    </a>
+                    </button>
                 </td>
             </tr>
         )
