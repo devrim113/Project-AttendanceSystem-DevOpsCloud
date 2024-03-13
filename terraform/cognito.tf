@@ -107,10 +107,16 @@ resource "aws_iam_role" "student_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRole",
+        Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "cognito-idp.amazonaws.com"
+          Service = "cognito-identity.amazonaws.com"
+        }
+        Condition = {
+          StringEquals = {
+            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
+            "cognito-identity.amazonaws.com:amr" : "authenticated"
+          }
         }
       }
     ]
@@ -123,10 +129,16 @@ resource "aws_iam_role" "teacher_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRole",
+        Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "cognito-idp.amazonaws.com"
+          Service = "cognito-identity.amazonaws.com"
+        }
+        Condition = {
+          StringEquals = {
+            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
+            "cognito-identity.amazonaws.com:amr" : "teacher"
+          }
         }
       }
     ]
@@ -139,10 +151,16 @@ resource "aws_iam_role" "admin_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRole",
+        Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "cognito-idp.amazonaws.com"
+          Service = "cognito-identity.amazonaws.com"
+        }
+        Condition = {
+          StringEquals = {
+            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
+            "cognito-identity.amazonaws.com:amr" : "admin"
+          }
         }
       }
     ]
@@ -269,8 +287,8 @@ resource "aws_cognito_identity_pool_roles_attachment" "identity_role_attachment"
 
   roles = {
     "authenticated" = aws_iam_role.student_role.arn
-    "authenticated" = aws_iam_role.teacher_role.arn
-    "authenticated" = aws_iam_role.admin_role.arn
+    "teacher"       = aws_iam_role.teacher_role.arn
+    "admin"         = aws_iam_role.admin_role.arn
   }
 }
 
