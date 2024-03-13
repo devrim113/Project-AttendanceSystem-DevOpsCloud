@@ -110,7 +110,7 @@ resource "aws_iam_role" "student_role" {
         Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "cognito-identity.amazonaws.com"
+          Service = "cognito-idp.amazonaws.com"
         }
         Condition = {
           StringEquals = {
@@ -132,7 +132,7 @@ resource "aws_iam_role" "teacher_role" {
         Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "cognito-identity.amazonaws.com"
+          Service = "cognito-idp.amazonaws.com"
         }
         Condition = {
           StringEquals = {
@@ -154,7 +154,7 @@ resource "aws_iam_role" "admin_role" {
         Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "cognito-identity.amazonaws.com"
+          Service = "cognito-idp.amazonaws.com"
         }
         Condition = {
           StringEquals = {
