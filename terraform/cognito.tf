@@ -60,7 +60,6 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
 resource "aws_cognito_user_pool_domain" "main" {
   domain       = "student-attendance-system"
   user_pool_id = aws_cognito_user_pool.student_pool.id
-  # user_pool_id = aws_cognito_user_pool.student_pool.name
 }
 
 
@@ -69,6 +68,7 @@ resource "aws_cognito_user_group" "students" {
   name         = "Students"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for student users"
+  role_arn     = aws_iam_role.student_role.arn
 }
 
 # Generate admin group
@@ -76,6 +76,7 @@ resource "aws_cognito_user_group" "admins" {
   name         = "Admins"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for admin users"
+  role_arn     = aws_iam_role.admin_role.arn
 }
 
 # Generate teacher group
@@ -83,21 +84,22 @@ resource "aws_cognito_user_group" "teacher" {
   name         = "Teachers"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for teacher users"
+  role_arn     = aws_iam_role.teacher_role.arn
 }
 
 # ----------------- Creating the Cognito Identity Pool -----------------
 
-resource "aws_cognito_identity_pool" "main" {
-  identity_pool_name               = "Attendance users identity pool"
-  allow_unauthenticated_identities = false
-  allow_classic_flow               = false
+# resource "aws_cognito_identity_pool" "main" {
+#   identity_pool_name               = "Attendance users identity pool"
+#   allow_unauthenticated_identities = false
+#   allow_classic_flow               = false
 
-  cognito_identity_providers {
-    client_id               = aws_cognito_user_pool_client.student_pool_client.id
-    provider_name           = local.cognito_identity_client_provider
-    server_side_token_check = false
-  }
-}
+#   cognito_identity_providers {
+#     client_id               = aws_cognito_user_pool_client.student_pool_client.id
+#     provider_name           = local.cognito_identity_client_provider
+#     server_side_token_check = false
+#   }
+# }
 
 # ----------------- Creating the IAM roles -----------------
 
@@ -107,16 +109,10 @@ resource "aws_iam_role" "student_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRoleWithWebIdentity",
+        Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
           Service = "cognito-idp.amazonaws.com"
-        }
-        Condition = {
-          StringEquals = {
-            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
-            "cognito-identity.amazonaws.com:amr" : "authenticated"
-          }
         }
       }
     ]
@@ -129,16 +125,10 @@ resource "aws_iam_role" "teacher_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRoleWithWebIdentity",
+        Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
           Service = "cognito-idp.amazonaws.com"
-        }
-        Condition = {
-          StringEquals = {
-            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
-            "cognito-identity.amazonaws.com:amr" : "teacher"
-          }
         }
       }
     ]
@@ -155,12 +145,6 @@ resource "aws_iam_role" "admin_role" {
         Effect = "Allow",
         Principal = {
           Service = "cognito-idp.amazonaws.com"
-        }
-        Condition = {
-          StringEquals = {
-            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
-            "cognito-identity.amazonaws.com:amr" : "admin"
-          }
         }
       }
     ]
@@ -255,42 +239,42 @@ resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
 
 # ----------------- Attaching the IAM policies to the appropriate roles -----------------
 
-resource "aws_cognito_identity_pool_roles_attachment" "identity_role_attachment" {
-  identity_pool_id = aws_cognito_identity_pool.main.id
+# resource "aws_cognito_identity_pool_roles_attachment" "identity_role_attachment" {
+#   identity_pool_id = aws_cognito_identity_pool.main.id
 
-  role_mapping {
-    identity_provider         = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
-    type                      = "Rules"
-    ambiguous_role_resolution = "Deny"
+#   role_mapping {
+#     identity_provider         = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
+#     type                      = "Rules"
+#     ambiguous_role_resolution = "Deny"
 
-    mapping_rule {
-      claim      = "cognito:groups"
-      match_type = "Contains"
-      role_arn   = aws_iam_role.student_role.arn
-      value      = "Students"
-    }
+#     mapping_rule {
+#       claim      = "cognito:groups"
+#       match_type = "Contains"
+#       role_arn   = aws_iam_role.student_role.arn
+#       value      = "Students"
+#     }
 
-    mapping_rule {
-      claim      = "cognito:groups"
-      match_type = "Contains"
-      role_arn   = aws_iam_role.teacher_role.arn
-      value      = "Teachers"
-    }
+#     mapping_rule {
+#       claim      = "cognito:groups"
+#       match_type = "Contains"
+#       role_arn   = aws_iam_role.teacher_role.arn
+#       value      = "Teachers"
+#     }
 
-    mapping_rule {
-      claim      = "cognito:groups"
-      match_type = "Contains"
-      role_arn   = aws_iam_role.admin_role.arn
-      value      = "Admins"
-    }
-  }
+#     mapping_rule {
+#       claim      = "cognito:groups"
+#       match_type = "Contains"
+#       role_arn   = aws_iam_role.admin_role.arn
+#       value      = "Admins"
+#     }
+#   }
 
-  roles = {
-    "authenticated" = aws_iam_role.student_role.arn
-    "teacher"       = aws_iam_role.teacher_role.arn
-    "admin"         = aws_iam_role.admin_role.arn
-  }
-}
+#   roles = {
+#     "authenticated" = aws_iam_role.student_role.arn
+#     "teacher"       = aws_iam_role.teacher_role.arn
+#     "admin"         = aws_iam_role.admin_role.arn
+#   }
+# }
 
 # resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" {
 #   identity_pool_id = aws_cognito_identity_pool.main.id
