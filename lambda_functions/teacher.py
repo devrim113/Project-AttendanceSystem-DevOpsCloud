@@ -240,6 +240,8 @@ def get_teacher_course_names(user_id):
 def get_all_course_attendance(course_id):
     """
     Get all attendance records of students for a teacher's course.
+    If the attendance record for a class in the course is not found for a student,
+    the class is added to the list with no status value and key.
     Uses the Global Secondary Index CourseIDUserTypeIndex to query the table.
 
     Args:
@@ -252,6 +254,16 @@ def get_all_course_attendance(course_id):
         ClientError: If an error occurs while getting the items.
     """
     try:
+        # Get all classes for the course
+        response = table.get_item(
+            Key={
+                'ItemId': course_id,
+                'ItemType': 'Course'
+            }
+        )
+        classes = response.get('Item')['Classes']
+
+        # Get all attendance records for the course
         response = table.query(
             IndexName='CourseIdItemTypeIndex',
             KeyConditionExpression=Key('CourseId').eq(
@@ -260,8 +272,8 @@ def get_all_course_attendance(course_id):
 
         id_attendance = []
         try:
-            id_attendance = [(item.get('UserId'), item.get(
-                'Attendance')) for item in response.get('Items')]
+            id_attendance = [(item.get('UserId'), classes | item.get('Attendance'))
+                             for item in response.get('Items')]
         except:
             pass
 
