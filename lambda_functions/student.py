@@ -218,8 +218,11 @@ def update_attendance_record(item_id, course_id, attendance):
                 'ItemType': 'Attendance'
             }
         )
-        attendance = course.get('Item')['Classes'] | attendance_record.get('Item')[
-            'Attendance'] | attendance
+        if attendance_record.get('Item'):
+            attendance = course.get('Item')['Classes'] | attendance_record.get('Item')[
+                'Attendance'] | attendance
+        else:
+            attendance = course.get('Item')['Classes'] | attendance
 
         print(attendance)
         response = table.update_item(
