@@ -16,15 +16,15 @@ function AdminComponent() {
     useEffect(() => {
         get_all_courses()().then((response) => {
             response.json().then(data => {
-                    console.log(data);
-                    if (response.status === 200 && data.length > 0) {
-                        setCourses(data);
-                    } else {
-                        setCourses([]);
-                    }
-                });
+                console.log(data);
+                if (response.status === 200 && data.length > 0) {
+                    setCourses(data);
+                } else {
+                    setCourses([]);
+                }
             });
-        }, []);
+        });
+    }, []);
     const renderCourses = (course: any) => {
         return (
             <tr>
@@ -37,11 +37,11 @@ function AdminComponent() {
             </tr>
         )
     }
-    
+
     const newCourse = async (event: any): Promise<void> => {
         event.preventDefault();
 
-        const ItemId: string = generateSimpleUUID() + '#' + courseInput;
+        const ItemId: string = generateSimpleUUID() + courseInput;
         const DepartmentId: string = '1';
 
         try {

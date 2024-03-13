@@ -1,7 +1,7 @@
 import { API_PATH_STUDENT, API_SCHEMA, FULL_API_URL } from "../Helper/static";
 
 // This is a default function to make the call, so that we don't have to repeat the same code for each function
-function get_URL(parameters: { [key: string]: string }, method: string, body?: { [key: string]: string }) {
+function get_URL(parameters: { [key: string]: string }, method: string, body?: { [key: string]: string | AttendanceDateRecord }) {
     // Check if 'func' is in parameters
     if (!('func' in parameters)) {
         throw new Error('func not in parameters');
@@ -11,6 +11,8 @@ function get_URL(parameters: { [key: string]: string }, method: string, body?: {
         FULL_API_URL(API_SCHEMA, API_PATH_STUDENT),
     )
     url.search = new URLSearchParams(parameters).toString();
+    console.log(url.toString());
+    console.log(body);
     return (() => fetch(url.toString(), {
         method: method,
         headers: {
@@ -102,5 +104,29 @@ export function get_student_course_attendance(UserId: string, CourseId: string) 
         },
         'GET',
         undefined
+    )
+}
+
+interface AttendanceDateRecord {
+    [date: string]: AttendanceRecord;
+}
+
+interface AttendanceRecord {
+    from: string;
+    to: string;
+    status: 'present' | 'absent' | null;
+}
+
+export function update_attendance(ItemId: string, Attendance: AttendanceDateRecord, courseId: string) {
+    return get_URL(
+        {
+            "func": 'update_attendance'
+        },
+        'PUT',
+        {
+            "ItemId": ItemId,
+            "Attendance": Attendance,
+            "CourseId": courseId
+        }
     )
 }

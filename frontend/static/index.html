@@ -60,7 +60,7 @@
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown" id="header-name">
-                                
+
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#">Sign out</a>
@@ -76,7 +76,9 @@
                     <div class="row mb-2 mb-xl-3">
                         <div class="col-auto d-none d-sm-block">
                             <h3>Welcome to the home page of your attendance!</h3>
-                            <a href="https://student-attendance-system.auth.eu-central-1.amazoncognito.com/login?response_type=token&client_id=6pnhs85ctml9b9f353b14ui6b4&redirect_uri=https://d5j4m0w9schy1.cloudfront.net/login">Log Attendance</a>
+                            <a
+                                href="https://student-attendance-system.auth.eu-central-1.amazoncognito.com/login?response_type=token&client_id=6pnhs85ctml9b9f353b14ui6b4&redirect_uri=https://d5j4m0w9schy1.cloudfront.net/login">Log
+                                Attendance</a>
                         </div>
 
                     </div>
@@ -129,7 +131,7 @@
         }
 
         const token = getCookie("bearer_token");
-        if(!token || !checkValidity(token)) {
+        if (!token || !checkValidity(token)) {
             // window.location.href = "https://student-attendance-system.auth.eu-central-1.amazoncognito.com/login?response_type=token&client_id=6pnhs85ctml9b9f353b14ui6b4&redirect_uri=https://d5j4m0w9schy1.cloudfront.net/login";
             console.log(token);
         }

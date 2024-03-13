@@ -9,6 +9,8 @@ function get_URL(parameters: { [key: string]: string }, method: string, body?: {
 
     let url = new URL(FULL_API_URL(API_SCHEMA, API_PATH_TEACHER))
     url.search = new URLSearchParams(parameters).toString();
+    console.log(url.toString());
+    console.log(body);
     return (() => fetch(url.toString(), {
         method: method,
         headers: {

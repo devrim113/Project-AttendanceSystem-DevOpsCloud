@@ -117,7 +117,7 @@ function StudentComponent() {
                                                     className="btn btn-primary"
                                                     onClick={async () => {
                                                         try {
-                                                            const courseId = username + '#' + course.ItemId;
+                                                            const courseId = username + course.ItemId;
 
                                                             const fetchFunction = enlist_student_course(courseId, username, course.ItemId);
                                                             const response = await fetchFunction();

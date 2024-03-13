@@ -3,6 +3,7 @@ import { getInformation } from "../../Helper/static";
 import { get_teacher_course_names, assign_course_to_teacher } from "../../API/teacher";
 import { create_course } from "../../API/course";
 import { get_all_courses } from "../../API/student";
+import { generateSimpleUUID } from "../../Helper/decrypter";
 
 interface Courses {
     [key: number]: string;
@@ -51,7 +52,7 @@ function TeacherComponent() {
     const handleCreateCourse = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
 
-        const ItemId: string = username + '#' + courseName;
+        const ItemId: string = generateSimpleUUID() + courseName;
         const DepartmentId: string = '1';
 
         try {
@@ -99,7 +100,7 @@ function TeacherComponent() {
                                 </thead>
                                 <tbody>
                                     {loadingCourses ? (
-                                        <tr><td>Loading...</td></tr>
+                                        <tr><td>Loading...</td><td></td></tr>
                                     ) : teacherCourses ? (
                                         Object.entries(teacherCourses).map(([course_id, course_name], index) => (
                                             <tr key={index}>
@@ -164,7 +165,7 @@ function TeacherComponent() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {loadingAllCourses ? <tr><td>Loading...</td></tr> : allcourses && allcourses.length > 0 ? allcourses.map((course, index) => (
+                                    {loadingAllCourses ? <tr><td>Loading...</td><td></td></tr> : allcourses && allcourses.length > 0 ? allcourses.map((course, index) => (
                                         <tr key={index}>
                                             <td>{course.CourseName}</td>
                                             <td>
@@ -172,7 +173,7 @@ function TeacherComponent() {
                                                     className="btn btn-primary"
                                                     onClick={async () => {
                                                         try {
-                                                            const courseId = username + '#' + course.ItemId;
+                                                            const courseId = username + course.ItemId;
 
                                                             const fetchFunction = assign_course_to_teacher(courseId, course.ItemId, username);
                                                             const response = await fetchFunction();
