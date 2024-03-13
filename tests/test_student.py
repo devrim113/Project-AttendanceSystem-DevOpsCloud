@@ -108,13 +108,7 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
         'CourseId': '101',
         'UserId': '1',
         'ItemType': 'Attendance',
-        'Attendance': {
-            '2022-01-01': {
-                'from': '09:00',
-                'to': '12:00',
-                'status': 'present'
-            }
-        }
+        'Attendance': {}
     }
 
     enlist_event = {
