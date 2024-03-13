@@ -257,15 +257,29 @@ def get_all_course_attendance(course_id):
             KeyConditionExpression=Key('CourseId').eq(
                 course_id) & Key('ItemType').eq('Attendance')
         )
-        names_attendance = []
+
+        id_attendance = []
         try:
-            names_attendance = [(item.get('UserId'), item.get(
+            id_attendance = [(item.get('UserId'), item.get(
                 'Attendance')) for item in response.get('Items')]
         except:
             pass
 
-        if len(names_attendance) > 0:
-            return make_response(200, names_attendance)
+        for i, (user_id, _) in enumerate(id_attendance):
+            response = table.get_item(
+                Key={
+                    'ItemId': user_id,
+                    'ItemType': 'Student'
+                }
+            )
+            try:
+                id_attendance[i] = (id_attendance[i][0], response.get(
+                    'Item').get('UserName'), (id_attendance[i][1]))
+            except:
+                pass
+
+        if len(id_attendance) > 0:
+            return make_response(200, id_attendance)
         return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
