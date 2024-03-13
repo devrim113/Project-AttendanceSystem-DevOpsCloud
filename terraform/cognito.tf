@@ -109,16 +109,10 @@ resource "aws_iam_role" "student_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRoleWithWebIdentity",
+        Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
-          Federated = "cognito-identity.amazonaws.com"
-        }
-        Condition = {
-          StringEquals = {
-            "cognito-identity.amazonaws.com:aud" : aws_cognito_user_pool.student_pool.id,
-          }
-          ForAllValues : StringEquals
+          Service = "cognito-idp.amazonaws.com"
         }
       }
     ]
@@ -131,16 +125,10 @@ resource "aws_iam_role" "teacher_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRoleWithWebIdentity",
+        Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
           Service = "cognito-idp.amazonaws.com"
-        }
-        Condition = {
-          StringEquals = {
-            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
-            "cognito-identity.amazonaws.com:amr" : "teacher"
-          }
         }
       }
     ]
@@ -157,12 +145,6 @@ resource "aws_iam_role" "admin_role" {
         Effect = "Allow",
         Principal = {
           Service = "cognito-idp.amazonaws.com"
-        }
-        Condition = {
-          StringEquals = {
-            "cognito-identity.amazonaws.com:aud" : aws_cognito_identity_pool.main.id,
-            "cognito-identity.amazonaws.com:amr" : "admin"
-          }
         }
       }
     ]
