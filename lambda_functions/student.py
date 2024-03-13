@@ -205,14 +205,23 @@ def update_attendance_record(item_id, course_id, attendance):
         dict or None: The response from the update operation if successful, None otherwise.
     """
     try:
-        response = table.get_item(
+        course = table.get_item(
             Key={
                 'ItemId': course_id,
                 'ItemType': 'Course'
             }
         )
-        attendance = response.get('Item')['Classes'] | attendance
 
+        attendance_record = table.get_item(
+            Key={
+                'ItemId': item_id,
+                'ItemType': 'Attendance'
+            }
+        )
+        attendance = course.get('Item')['Classes'] | attendance_record.get('Item')[
+            'Attendance'] | attendance
+
+        print(attendance)
         response = table.update_item(
             Key={
                 'ItemId': item_id,
