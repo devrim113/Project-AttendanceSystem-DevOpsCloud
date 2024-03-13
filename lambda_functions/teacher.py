@@ -257,8 +257,15 @@ def get_all_course_attendance(course_id):
             KeyConditionExpression=Key('CourseId').eq(
                 course_id) & Key('ItemType').eq('Attendance')
         )
-        if 'Items' in response:
-            return make_response(200, response['Items'])
+        names_attendance = []
+        try:
+            names_attendance = [(item.get('UserId'), item.get(
+                'Attendance')) for item in response.get('Items')]
+        except:
+            pass
+
+        if len(names_attendance) > 0:
+            return make_response(200, names_attendance)
         return make_response(404, 'No records found.')
     except ClientError as e:
         print(e.response['Error']['Message'])
