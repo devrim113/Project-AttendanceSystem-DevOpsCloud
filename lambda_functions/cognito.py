@@ -143,12 +143,12 @@ def lambda_handler(event, context):
     try:
         query_params = event['queryStringParameters']
         function = query_params['func']
-        if type(event['body']) == str:
-            body = json.loads(event['body'])
-        else:
-            body = event['body']
     except:
         return make_response(400, f"{event['queryStringParameters']['func']}Invalid operation. Make sure to include the 'func' parameter in the query string.")
+    if type(event['body']) == str:
+        body = json.loads(event['body'])
+    else:
+        body = event['body']
     match function:
         case 'create_teacher_record':
             return create_teacher_record(body['email'], body['user_name'])
