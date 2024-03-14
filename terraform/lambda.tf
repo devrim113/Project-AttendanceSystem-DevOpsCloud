@@ -59,7 +59,7 @@ resource "aws_iam_role" "lambda_role" {
           Service = "lambda.amazonaws.com"
         }
       },
-      {  
+      {
         Effect = "Allow",
         Action = [
           "cognito-idp:AdminCreateUser",
