@@ -13,6 +13,7 @@ import { getCookie, setCookie } from './Helper';
 import { checkValidity } from './Helper/decrypter';
 import { bearerCookie } from './Helper/static';
 import TeacherAttendanceComponent from './Components/TeacherComponent/TeacherAttendanceComponent';
+import AdminAttendanceComponent from './Components/AdminComponent/AdminAttendanceComponent';
 
 function App() {
   // useEffect(() => {
@@ -42,6 +43,7 @@ function App() {
             <Route path="/admin" element={<AdminComponent />} />
             <Route path="/studentattendance" element={<StudentAttendanceComponent />} />
             <Route path="/teacherattendance" element={<TeacherAttendanceComponent />} />
+            <Route path="/adminattendance" element={<AdminAttendanceComponent />} />
           </Route>
         </Routes>
       </Router>
