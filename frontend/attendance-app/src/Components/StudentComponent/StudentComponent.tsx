@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { getInformation } from "../../Helper/static";
 import { enlist_student_course, get_all_courses, get_student_course_names } from "../../API/student";
