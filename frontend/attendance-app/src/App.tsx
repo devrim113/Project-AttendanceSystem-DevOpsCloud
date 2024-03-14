@@ -11,9 +11,10 @@ import StudentAttendanceComponent from './Components/StudentComponent/StudentAtt
 import { parseCognitoTokensFromUrl } from './Helper/login';
 import { getCookie, setCookie } from './Helper';
 import { checkValidity } from './Helper/decrypter';
-import { bearerCookie } from './Helper/static';
+import { bearerCookie, cognitoURL } from './Helper/static';
 import TeacherAttendanceComponent from './Components/TeacherComponent/TeacherAttendanceComponent';
 import AdminAttendanceComponent from './Components/AdminComponent/AdminAttendanceComponent';
+import ProtectionComponent from './Components/ProtectionComponent/ProtectionComponent';
 
 function App() {
   // useEffect(() => {
@@ -26,7 +27,7 @@ function App() {
     // const utcString = new Date((epochTimeExpire * 1000)+3600).toUTCString()
     setCookie(bearerCookie, idToken)
   } else {
-    window.location.href = 'https://student-attendance-system.auth.eu-central-1.amazoncognito.com/login?response_type=token&client_id=6pnhs85ctml9b9f353b14ui6b4&redirect_uri=https://d5j4m0w9schy1.cloudfront.net/';
+    window.location.href = cognitoURL;
     return (<>
       Need to login.
     </>)
@@ -38,12 +39,21 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<HeaderSideBar />}>
-            <Route path="/" element={<StudentComponent />} />
-            <Route path="/teacher" element={<TeacherComponent />} />
-            <Route path="/admin" element={<AdminComponent />} />
-            <Route path="/studentattendance" element={<StudentAttendanceComponent />} />
-            <Route path="/teacherattendance" element={<TeacherAttendanceComponent />} />
-            <Route path="/adminattendance" element={<AdminAttendanceComponent />} />
+            <Route element={<ProtectionComponent role="Students" />}>
+              <Route path="/" element={<StudentComponent />} />
+              <Route path="/studentattendance" element={<StudentAttendanceComponent />} />
+            </Route>  
+
+            <Route element={<ProtectionComponent role="Teachers" />}>
+              <Route path="/teacher" element={<TeacherComponent />} />
+              <Route path="/teacherattendance" element={<TeacherAttendanceComponent />} />
+            </Route>
+
+            <Route element={<ProtectionComponent role="Admins" />}>
+              <Route path="/adminattendance" element={<AdminAttendanceComponent />} />
+              <Route path="/admin" element={<AdminComponent />} />
+            </Route>
+
           </Route>
         </Routes>
       </Router>
