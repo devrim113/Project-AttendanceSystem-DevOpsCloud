@@ -58,17 +58,17 @@ resource "aws_iam_role" "lambda_role" {
         Principal = {
           Service = "lambda.amazonaws.com"
         }
-      },
-      {
-        Effect = "Allow",
-        Action = [
-          "cognito-idp:AdminCreateUser",
-          "cognito-idp:AdminAddUserToGroup",
-          "cognito-idp:AdminDeleteUser",
-          # Add more permissions as needed 
-        ],
-        Resource = "*"
       }
+      # {
+      #   Effect = "Allow",
+      #   Action = [
+      #     "cognito-idp:AdminCreateUser",
+      #     "cognito-idp:AdminAddUserToGroup",
+      #     "cognito-idp:AdminDeleteUser",
+      #     # Add more permissions as needed 
+      #   ],
+      #   Resource = "*"
+      # }
     ]
   })
 }
