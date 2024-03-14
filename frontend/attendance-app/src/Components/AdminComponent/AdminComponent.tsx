@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { get_all_courses } from "../../API/student";
 import { generateSimpleUUID } from "../../Helper/decrypter";
 import { create_course } from "../../API/course";
-import { create_teacher } from "../../API/teacher";
+import { create_teacher } from "../../API/cognito";
 
 
 function AdminComponent() {
@@ -64,6 +64,7 @@ function AdminComponent() {
             const response = create_teacher(email, name)().then((response) => {
                 if (response.ok) {
                     alert("Teacher created successfully");
+                    window.location.reload();
                 } else {
                     alert("Error creating teacher");
                 }
@@ -155,13 +156,13 @@ function AdminComponent() {
                             <form id="create-teacher">
                                 <div className="mb-3">
                                     <label htmlFor="teacherName" className="form-label">
-                                        Teacher Name
+                                        Teacher Email
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="teacherName"
-                                        placeholder="Teacher Name"
+                                        placeholder="Teacher Email"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
 
@@ -169,18 +170,18 @@ function AdminComponent() {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="teacherUsername" className="form-label">
-                                        Teacher Email
+                                        Teacher Name
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="teacherUsername"
-                                        placeholder="Teacher Email"
+                                        placeholder="Teacher Name"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
-                                <div className="mb-3">
+                                {/* <div className="mb-3">
                                     <label htmlFor="teacherPassword" className="form-label">
                                         Teacher Password
                                     </label>
@@ -190,7 +191,7 @@ function AdminComponent() {
                                         id="teacherPassword"
                                         placeholder="Teacher Password"
                                     />
-                                </div>
+                                </div> */}
                                 <button onClick={(e) => createTeacher(e)} className="btn btn-primary">
                                     Create
                                 </button>

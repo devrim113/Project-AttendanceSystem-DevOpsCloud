@@ -86,7 +86,7 @@ def create_teacher_record(email, user_name):
     Raises:
         ClientError: If an error occurs while putting the item.
     """
-    result = create_user_record(email, user_name, 'Students')
+    result = create_user_record(email, user_name, 'Teachers')
     if result[0]:
         return make_response(200, 'Record created successfully.')
     return make_response(400, f'Record not created. {result[1]}')
@@ -124,7 +124,7 @@ def create_student_record(email, user_name):
     Raises:
         ClientError: If an error occurs while putting the item.
     """
-    result = create_user_record(email, user_name, '')
+    result = create_user_record(email, user_name, 'Students')
     if result[0]:
         return make_response(200, 'Record created successfully.')
     return make_response(400, f'Record not created. {result[1]}')
