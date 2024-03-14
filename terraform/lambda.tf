@@ -41,7 +41,7 @@ resource "aws_lambda_function" "lambda" {
   handler       = each.value
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_role.arn
-  depends_on    = [aws_cloudwatch_log_group.lambda_log_group]
+  # depends_on    = [aws_cloudwatch_log_group.lambda_log_group]
 }
 
 # ----------------- Creating the IAM role for execution of the lambda functions -----------------
@@ -93,7 +93,7 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
 # ----------------- CloudWatch logs -----------------
 
 # Creating log groups for each separate lambda function.
-resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  count = length(local.log_group_names)
-  name  = local.log_group_names[count.index]
-}
+# resource "aws_cloudwatch_log_group" "lambda_log_group" {
+#   count = length(local.log_group_names)
+#   name  = local.log_group_names[count.index]
+# }
