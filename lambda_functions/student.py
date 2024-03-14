@@ -26,7 +26,6 @@ logger.setLevel(logging.INFO)
 dynamodb = boto3.resource('dynamodb', region_name='eu-central-1')
 table = dynamodb.Table('AllData')
 
-UserPoolId = "eu-central-1_jiDMNCeuM"
 
 def make_response(status_code, body):
     """
@@ -71,7 +70,7 @@ def get_all_courses():
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
 
-def create_student_record(email, user_name):
+def create_student_record(user_id, user_name):
     """
     Create a student record in the database.
 
@@ -85,28 +84,7 @@ def create_student_record(email, user_name):
         dict: The response from the database after creating the student record.
             If an error occurs, None is returned.
     """
-    client = boto3.client('cognito-idp')
     try:
-        response = client.admin_create_user(
-            UserPoolId=UserPoolId,
-            Username=email,
-            UserAttributes=[
-                {
-                    'Name': 'email',
-                    'Value': email
-                },
-                {
-                    'Name': 'email_verified',
-                    'Value': 'false'
-                },
-                {
-                    'Name': 'name',
-                    'Value': user_name
-                }
-            ],
-        )
-        user_id = response['User']['Username']
-        
         response = table.put_item(
             Item={
                 'ItemId': user_id,
@@ -133,12 +111,7 @@ def delete_record(item_id, item_type):
     Returns:
         dict or None: The response from the delete operation, or None if an error occurred.
     """
-    client = boto3.client('cognito-idp')
     try:
-        client.admin_delete_user(
-            UserPoolId=UserPoolId,
-            Username=item_id
-        )
         response = table.delete_item(
             Key={
                 'ItemId': item_id,
