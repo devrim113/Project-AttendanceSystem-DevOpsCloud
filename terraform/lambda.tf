@@ -16,6 +16,7 @@ locals {
     "teacher"    = "teacher.lambda_handler",
     "course"     = "course.lambda_handler",
     "department" = "department.lambda_handler"
+    "cognito"    = "cognito.lambda_handler"
   }
 
   log_group_names = [for function_name, _ in local.lambda_functions : "/aws/lambda/${function_name}-logs"]
@@ -57,6 +58,16 @@ resource "aws_iam_role" "lambda_role" {
         Principal = {
           Service = "lambda.amazonaws.com"
         }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminAddUserToGroup",
+          "cognito-idp:AdminDeleteUser",
+          # Add more permissions as needed 
+        ],
+        Resource = "*"
       }
     ]
   })
