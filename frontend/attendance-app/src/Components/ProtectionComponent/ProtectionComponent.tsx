@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { getInformation } from "../../Helper/static";
 
 type ProtectionComponentProps = {
@@ -7,7 +7,6 @@ type ProtectionComponentProps = {
 
 export default function ProtectionComponent(props: ProtectionComponentProps) {
     let role = getInformation()["cognito:groups"] as string[];
-    let navigator = useNavigate();
     if (!(role.includes(props.role))) {
         if(role.includes("Students")) {
             window.location.href = "/"
