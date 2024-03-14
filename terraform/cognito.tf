@@ -89,17 +89,17 @@ resource "aws_cognito_user_group" "teacher" {
 
 # ----------------- Creating the Cognito Identity Pool -----------------
 
-# resource "aws_cognito_identity_pool" "main" {
-#   identity_pool_name               = "Attendance users identity pool"
-#   allow_unauthenticated_identities = false
-#   allow_classic_flow               = false
+resource "aws_cognito_identity_pool" "main" {
+  identity_pool_name               = "Attendance users identity pool"
+  allow_unauthenticated_identities = false
+  allow_classic_flow               = false
 
-#   cognito_identity_providers {
-#     client_id               = aws_cognito_user_pool_client.student_pool_client.id
-#     provider_name           = local.cognito_identity_client_provider
-#     server_side_token_check = false
-#   }
-# }
+  cognito_identity_providers {
+    client_id               = aws_cognito_user_pool_client.student_pool_client.id
+    provider_name           = local.cognito_identity_client_provider
+    server_side_token_check = false
+  }
+}
 
 # ----------------- Creating the IAM roles -----------------
 
