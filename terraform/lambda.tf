@@ -16,6 +16,7 @@ locals {
     "teacher"    = "teacher.lambda_handler",
     "course"     = "course.lambda_handler",
     "department" = "department.lambda_handler"
+    "cognito"    = "cognito.lambda_handler"
   }
 
   log_group_names = [for function_name, _ in local.lambda_functions : "/aws/lambda/${function_name}-logs"]
@@ -40,7 +41,7 @@ resource "aws_lambda_function" "lambda" {
   handler       = each.value
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_role.arn
-  depends_on    = [aws_cloudwatch_log_group.lambda_log_group]
+  # depends_on    = [aws_cloudwatch_log_group.lambda_log_group]
 }
 
 # ----------------- Creating the IAM role for execution of the lambda functions -----------------
@@ -60,6 +61,32 @@ resource "aws_iam_role" "lambda_role" {
       }
     ]
   })
+}
+
+resource "aws_iam_policy" "lambda_permissions" {
+  name        = "lambda_permissions"
+  description = "Permissions for Lambda to interact with Cognito and other services"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminAddUserToGroup",
+          "cognito-idp:AdminDeleteUser"
+          # Add more permissions as needed 
+        ],
+        "Resource" : "*" # Adjust the resource ARNs to be more specific if possible
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_permissions_attach" {
+  policy_arn = aws_iam_policy.lambda_permissions.arn
+  role       = aws_iam_role.lambda_role.name
 }
 
 # Attaching the AWSLambdaBasicExecutionRole policy to the lambda role.
@@ -82,7 +109,7 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
 # ----------------- CloudWatch logs -----------------
 
 # Creating log groups for each separate lambda function.
-resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  count = length(local.log_group_names)
-  name  = local.log_group_names[count.index]
-}
+# resource "aws_cloudwatch_log_group" "lambda_log_group" {
+#   count = length(local.log_group_names)
+#   name  = local.log_group_names[count.index]
+# }

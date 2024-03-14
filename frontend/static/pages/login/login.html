@@ -1,0 +1,25 @@
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <script src="../../js/login.js"></script>
+        <script src="../../js/decrypter.js"></script>
+        <script>
+            function main() {
+                const data = parseCognitoTokensFromUrl()
+                if(!data && checkValidity(data["idToken"])) {
+                    window.location.replace("https://d5j4m0w9schy1.cloudfront.net/");
+                    return;
+                }
+                if(!setBearerTokenInCookies(data["idToken"])) {
+                    window.location.replace("https://d5j4m0w9schy1.cloudfront.net/");
+                    return;
+                }
+                window.location.replace("https://d5j4m0w9schy1.cloudfront.net/pages/student/student.html");
+            }
+            main();
+        </script>
+        
+    </body>
+</html>

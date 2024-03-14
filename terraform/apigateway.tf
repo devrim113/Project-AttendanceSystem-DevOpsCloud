@@ -12,7 +12,7 @@
 # Combine the path and methods with flatten to create a list of objects that can be accessed by the for_each method.
 # Changing the to_define_paths or to_define_methods will automatically create the resources and methods for the API Gateway.
 locals {
-  to_define_paths   = ["admin", "teacher", "course", "department", "student"]
+  to_define_paths   = ["admin", "teacher", "course", "department", "student", "cognito"]
   to_define_methods = ["GET", "OPTIONS", "PUT", "POST", "DELETE", "HEAD"]
 
   paths_and_methods = flatten([
