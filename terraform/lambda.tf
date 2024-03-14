@@ -58,19 +58,35 @@ resource "aws_iam_role" "lambda_role" {
         Principal = {
           Service = "lambda.amazonaws.com"
         }
-      },
-      {
-        Effect = "Allow",
-        Action = [
-          "cognito-idp:AdminCreateUser",
-          "cognito-idp:AdminAddUserToGroup",
-          "cognito-idp:AdminDeleteUser",
-          # Add more permissions as needed 
-        ],
-        Resource = "*"
       }
     ]
   })
+}
+
+resource "aws_iam_policy" "lambda_permissions" {
+  name        = "lambda_permissions"
+  description = "Permissions for Lambda to interact with Cognito and other services"
+
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminAddUserToGroup",
+          "cognito-idp:AdminDeleteUser"
+          # Add more permissions as needed 
+        ],
+        "Resource": "*" # Adjust the resource ARNs to be more specific if possible
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_permissions_attach" {
+  policy_arn = aws_iam_policy.lambda_permissions.arn
+  role       = aws_iam_role.lambda_role.name
 }
 
 # Attaching the AWSLambdaBasicExecutionRole policy to the lambda role.
