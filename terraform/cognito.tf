@@ -335,7 +335,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" 
       claim      = "cognito:groups"
       match_type = "Contains"
       role_arn   = aws_iam_role.teacher_role.arn
-      value      = "Students"
+      value      = "Teachers"
     }
   }
 
@@ -356,7 +356,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "admin_role_attachment" {
       claim      = "cognito:groups"
       match_type = "Contains"
       role_arn   = aws_iam_role.admin_role.arn
-      value      = "Students"
+      value      = "Admins"
     }
   }
 
