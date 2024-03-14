@@ -312,13 +312,6 @@ resource "aws_cognito_identity_pool_roles_attachment" "student_role_attachment" 
     identity_provider         = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
     type                      = "Token"
     ambiguous_role_resolution = "Deny"
-
-    mapping_rule {
-      claim      = "cognito:roles"
-      match_type = "Contains"
-      role_arn   = aws_iam_role.student_role.arn
-      value      = "Students"
-    }
   }
 
   roles = {
@@ -333,13 +326,6 @@ resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" 
     identity_provider         = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
     type                      = "Token"
     ambiguous_role_resolution = "Deny"
-
-    mapping_rule {
-      claim      = "cognito:roles"
-      match_type = "Contains"
-      role_arn   = aws_iam_role.teacher_role.arn
-      value      = "Teachers"
-    }
   }
 
   roles = {
@@ -354,13 +340,6 @@ resource "aws_cognito_identity_pool_roles_attachment" "admin_role_attachment" {
     identity_provider         = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
     type                      = "Token"
     ambiguous_role_resolution = "Deny"
-
-    mapping_rule {
-      claim      = "cognito:roles"
-      match_type = "Contains"
-      role_arn   = aws_iam_role.admin_role.arn
-      value      = "Admins"
-    }
   }
 
   roles = {
