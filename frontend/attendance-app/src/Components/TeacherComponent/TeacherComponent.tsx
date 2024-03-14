@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { getInformation } from "../../Helper/static";
 import { get_teacher_course_names, assign_course_to_teacher } from "../../API/teacher";
