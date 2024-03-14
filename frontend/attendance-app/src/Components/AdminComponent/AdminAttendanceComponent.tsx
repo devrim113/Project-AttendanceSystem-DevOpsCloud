@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getInformation } from "../../Helper/static";
 import { get_all_course_attendance } from "../../API/teacher";
 import { get_course, update_course } from "../../API/course";
 import { update_attendance } from "../../API/student";
