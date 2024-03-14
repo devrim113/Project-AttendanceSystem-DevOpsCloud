@@ -109,10 +109,24 @@ resource "aws_iam_role" "student_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRole",
+        Action = [
+          "sts:AssumeRoleWithWebIdentity",
+          "sts:TagSession"
+        ],
         Effect = "Allow",
         Principal = {
-          Service = "cognito-idp.amazonaws.com"
+          Federated = [
+            "cognito-identity.amazonaws.com",
+            "cognito-idp.amazonaws.com"
+          ]
+        },
+        Condition = {
+          "StringEquals" : {
+            "cognito-identity.amazonaws.com:aud" : aws_cognito_user_pool_client.student_pool_client.id
+          },
+          "ForAnyValue:StringLike" : {
+            "cognito-identity.amazonaws.com:amr" : "authenticated"
+          }
         }
       }
     ]
@@ -125,10 +139,24 @@ resource "aws_iam_role" "teacher_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRole",
+        Action = [
+          "sts:AssumeRoleWithWebIdentity",
+          "sts:TagSession"
+        ],
         Effect = "Allow",
         Principal = {
-          Service = "cognito-idp.amazonaws.com"
+          Federated = [
+            "cognito-identity.amazonaws.com",
+            "cognito-idp.amazonaws.com"
+          ]
+        },
+        Condition = {
+          "StringEquals" : {
+            "cognito-identity.amazonaws.com:aud" : aws_cognito_user_pool_client.student_pool_client.id
+          },
+          "ForAnyValue:StringLike" : {
+            "cognito-identity.amazonaws.com:amr" : "authenticated"
+          }
         }
       }
     ]
@@ -141,10 +169,24 @@ resource "aws_iam_role" "admin_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = "sts:AssumeRoleWithWebIdentity",
+        Action = [
+          "sts:AssumeRoleWithWebIdentity",
+          "sts:TagSession"
+        ],
         Effect = "Allow",
         Principal = {
-          Service = "cognito-idp.amazonaws.com"
+          Federated = [
+            "cognito-identity.amazonaws.com",
+            "cognito-idp.amazonaws.com"
+          ]
+        },
+        Condition = {
+          "StringEquals" : {
+            "cognito-identity.amazonaws.com:aud" : aws_cognito_user_pool_client.student_pool_client.id
+          },
+          "ForAnyValue:StringLike" : {
+            "cognito-identity.amazonaws.com:amr" : "authenticated"
+          }
         }
       }
     ]
