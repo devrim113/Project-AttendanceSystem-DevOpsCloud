@@ -68,17 +68,17 @@ resource "aws_iam_policy" "lambda_permissions" {
   description = "Permissions for Lambda to interact with Cognito and other services"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "cognito-idp:AdminCreateUser",
           "cognito-idp:AdminAddUserToGroup",
           "cognito-idp:AdminDeleteUser"
           # Add more permissions as needed 
         ],
-        "Resource": "*" # Adjust the resource ARNs to be more specific if possible
+        "Resource" : "*" # Adjust the resource ARNs to be more specific if possible
       }
     ]
   })
