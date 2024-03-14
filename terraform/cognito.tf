@@ -357,7 +357,7 @@ resource "aws_iam_role_policy_attachment" "teacher_to_admin_policy_attachment" {
 # ----------------- Attaching the IAM policies to the appropriate roles -----------------
 
 resource "aws_cognito_identity_pool_roles_attachment" "authenticator_role_attachment" {
-  identity_pool_id = aws_cognito_identity_pool.student_identity_pool.id
+  identity_pool_id = aws_cognito_identity_pool.authenticator_identity_pool.id
 
   role_mapping {
     identity_provider         = "${local.cognito_identity_client_provider}:${aws_cognito_user_pool_client.student_pool_client.id}"
