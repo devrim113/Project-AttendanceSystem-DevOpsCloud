@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { getInformation } from "../../Helper/static";
 import { get_student_course_attendance, update_attendance } from "../../API/student";
