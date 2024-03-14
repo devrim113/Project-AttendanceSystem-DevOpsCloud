@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { get_all_courses } from "../../API/student";
 import { generateSimpleUUID } from "../../Helper/decrypter";

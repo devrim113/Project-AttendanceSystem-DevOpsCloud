@@ -4,7 +4,6 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import HeaderSideBar from './Components/HeaderSideBar/HeaderSideBar';
-import RedirectWithToken from './Components/LoginComponent/Login';
 import StudentComponent from './Components/StudentComponent/StudentComponent';
 import TeacherComponent from './Components/TeacherComponent/TeacherComponent';
 import AdminComponent from './Components/AdminComponent/AdminComponent';
@@ -12,7 +11,7 @@ import StudentAttendanceComponent from './Components/StudentComponent/StudentAtt
 import { parseCognitoTokensFromUrl } from './Helper/login';
 import { getCookie, setCookie } from './Helper';
 import { checkValidity } from './Helper/decrypter';
-import { bearerCookie, getInformation } from './Helper/static';
+import { bearerCookie } from './Helper/static';
 import TeacherAttendanceComponent from './Components/TeacherComponent/TeacherAttendanceComponent';
 import AdminAttendanceComponent from './Components/AdminComponent/AdminAttendanceComponent';
 
