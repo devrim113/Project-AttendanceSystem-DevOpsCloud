@@ -10,7 +10,17 @@ Welcome to Attendance System's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   lambda_functions/student
+   lambda_functions/teacher
+   lambda_functions/admin
+   lambda_functions/course
+   lambda_functions/department
+   lambda_functions/cognito
+   tests/test_student
+   tests/test_teacher
+   tests/test_admin
+   tests/test_course
+   tests/test_department
 
 Indices and tables
 ==================
