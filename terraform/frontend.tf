@@ -1,11 +1,10 @@
 /* Frontend
-  * This is the terraform file for the frontend, the workflow is as follows:
-  $ 1. Creating the S3 bucket where the frontend code will be stored.
-  * 2. Creating the S3 bucket where the logs will be stored.
-  * 3. Creating the CloudFront distribution for the frontend.
-  * 4. Creating alarms for too many 500 errors in the CloudFront distribution.
+ * This is the terraform file for the frontend, the workflow is as follows:
+ * 1. Creating the S3 bucket where the frontend code will be stored.
+ * 2. Creating the S3 bucket where the logs will be stored.
+ * 3. Creating the CloudFront distribution for the frontend.
+ * 4. Creating alarms for too many 500 errors in the CloudFront distribution.
 */
-
 
 # ----------------- Creating the S3 bucket where the frontend code will be stored -----------------
 

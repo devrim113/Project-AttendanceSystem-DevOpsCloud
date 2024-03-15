@@ -1,9 +1,9 @@
 /* API Gateway
-* This is the terraform file for the API Gateway, the workflow is as follows:
-* 1. Defining the locals to store the paths and methods for the API Gateway
-* 2. Creating the API Gateway, resources, methods, integrations, method responses, and integration responses
-* 3. Creating the stage and deployment for the API Gateway
-* 4. Creating the log group for API Gateway and an IAM role for API Gateway to write to CloudWatch logs
+ * This is the terraform file for the API Gateway, the workflow is as follows:
+ * 1. Defining the locals to store the paths and methods for the API Gateway
+ * 2. Creating the API Gateway, resources, methods, integrations, method responses, and integration responses
+ * 3. Creating the stage and deployment for the API Gateway
+ * 4. Creating the log group for API Gateway and an IAM role for API Gateway to write to CloudWatch logs
 */
 
 # ----------------- Defining the locals -----------------

@@ -1,3 +1,10 @@
+/* Cloudwatch
+ * This is the terraform file for the cloudwatch dashboard, the workflow is as follows:
+ * 1. Creating the cloudwatch dashboard
+*/
+
+# ----------------- Creating the cloudwatch dashboard -----------------
+
 resource "aws_cloudwatch_dashboard" "my_dashboard" {
   dashboard_name = "CloudWatch-Default"
 

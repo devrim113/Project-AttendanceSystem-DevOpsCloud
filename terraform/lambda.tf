@@ -1,7 +1,7 @@
 /* Lambda
-* This is the terraform file for the Lambda functions, the workflow is as follows:
-* 1. Archiving the python files and creating the lambda functions
-* 2. Creating the IAM role for execution of the lambda functions
+ * This is the terraform file for the Lambda functions, the workflow is as follows:
+ * 1. Archiving the python files and creating the lambda functions
+ * 2. Creating the IAM role for execution of the lambda functions
 */
 
 # ----------------- Preparing the python file and creating the lambda functions -----------------
