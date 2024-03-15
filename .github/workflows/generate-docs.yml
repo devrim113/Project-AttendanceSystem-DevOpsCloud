@@ -10,6 +10,7 @@ on:
       - 'lambda_functions/*.py'
       - 'tests/*.py'
       - '.github/workflows/generate-docs.yml'
+      - 'docs/*'
 
 permissions:
   contents: write
