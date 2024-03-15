@@ -51,9 +51,9 @@ jobs:
       - name: Combine Documentation into Single Markdown File
         run: |
           echo -e "# Project Documentation" > README.md
-          echo -e "\n## Terraform Documentation\n" >> README.md
+          echo -e "\n# Terraform Documentation\n" >> README.md
           cat TERRAFORM.md >> README.md
-          echo -e "\n## Python Documentation\n" >> README.md
+          echo -e "\n# Python Documentation\n" >> README.md
           cat PYTHON.md >> README.md
 
       - name: Display Documentation
