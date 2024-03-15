@@ -64,5 +64,6 @@ jobs:
           git add README.md
           git commit -m "Update documentation" -a || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+          git checkout auto_doc || git checkout -b auto_doc
           git push origin auto_doc
 
