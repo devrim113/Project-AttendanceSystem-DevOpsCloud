@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - auto_doc
     paths:
       - 'terraform/*.tf'
       - 'lambda_functions/*.py'
@@ -68,5 +67,5 @@ jobs:
           git add README.md
           git commit -m "Update documentation" -a || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git push origin auto_doc
+          git push origin main
 
