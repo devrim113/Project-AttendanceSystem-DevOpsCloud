@@ -9,7 +9,6 @@ on:
       - 'terraform/*.tf'
       - 'lambda_functions/*.py'
       - 'tests/*.py'
-      - 'frontend/js/*.js'
 
 jobs:
   documentation:
@@ -45,19 +44,6 @@ jobs:
           sphinx-build -b markdown docs/source docs/build/markdown
           find docs/build/markdown -name '*.md' -exec cat {} + > PYTHON.md
 
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install JSDoc and jsdoc-to-markdown
-        run: |
-          npm install -g jsdoc jsdoc-to-markdown
-
-      - name: Generate JavaScript Documentation
-        run: |
-          jsdoc2md ./frontend/js/*.js > JS.md
-
       - name: Combine Documentation into Single Markdown File
         run: |
           echo "# Project Documentation" > README.md
@@ -65,15 +51,17 @@ jobs:
           cat TERRAFORM.md >> README.md
           echo "\n## Python Documentation\n" >> README.md
           cat PYTHON.md >> README.md
-          echo "\n## JavaScript Documentation\n" >> README.md
-          cat JS.md >> README.md
 
-      - name: Commit and Push Documentation
+      - name: Display Documentation
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          git add README.md
-          git commit -m "Update documentation" -a || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
-          git push origin main
+          cat README.md
+
+      # - name: Commit and Push Documentation
+      #   run: |
+      #     git config --global user.email "action@github.com"
+      #     git config --global user.name "GitHub Action"
+      #     git add README.md
+      #     git commit -m "Update documentation" -a || echo "No changes to commit"
+      #     git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+      #     git push origin main
 
