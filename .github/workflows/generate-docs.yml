@@ -44,8 +44,8 @@ jobs:
 
       - name: Generate Python Documentation
         run: |
-          sphinx-apidoc -o docs/source ./lambda_functions
-          sphinx-apidoc -o docs/source ./tests --append-syspath
+          sphinx-apidoc -o docs/source ./lambda_functions --force
+          sphinx-apidoc -o docs/source ./tests --append-syspath --force
           sphinx-build -b markdown docs/source docs/build/markdown
           find docs/build/markdown -name '*.md' -exec cat {} + > PYTHON.md
 
