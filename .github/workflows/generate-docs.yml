@@ -83,13 +83,13 @@ jobs:
         run: |
           git add README.md
           git commit -m "Update documentation" -a || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
           git push origin update-documentation
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
           pr_title: "Update Documentation"
           pr_body: "Automatically generated documentation update"
           destination_branch: "main"
