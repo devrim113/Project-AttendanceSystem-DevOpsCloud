@@ -146,8 +146,8 @@ resource "aws_api_gateway_stage" "production_stage" {
 
 # Creating the method settings for the API Gateway.
 resource "aws_api_gateway_method_settings" "method_settings" {
-  rest_api_id = aws_api_gateway_rest_api.example.id
-  stage_name  = aws_api_gateway_stage.example.stage_name
+  rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
+  stage_name  = aws_api_gateway_stage.production_stage.stage_name
   method_path = "/*/*" # Specifies all methods for all resources
 
   settings {
