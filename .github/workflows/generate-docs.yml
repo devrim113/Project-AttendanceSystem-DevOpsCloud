@@ -9,7 +9,7 @@ on:
       - 'terraform/*.tf'
       - 'lambda_functions/*.py'
       - 'tests/*.py'
-      - '.github/workflows/generate_documentation.yml'
+      - '.github/workflows/generate-docs.yml'
 
 jobs:
   documentation:
