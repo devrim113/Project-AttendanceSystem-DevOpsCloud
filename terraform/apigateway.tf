@@ -241,7 +241,7 @@ resource "aws_iam_role_policy" "api_gateway_cloudwatch_policy" {
 
 # # Creating the API Gateway account
 resource "aws_api_gateway_account" "api_gateway_account" {
-  cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_logs_role.arn
+  cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_role.arn
 
   #   depends_on = [
   #     aws_iam_role_policy_attachment.api_gateway_cloudwatch_logs_attachment
