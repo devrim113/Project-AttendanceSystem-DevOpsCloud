@@ -148,7 +148,7 @@ resource "aws_api_gateway_stage" "production_stage" {
 resource "aws_api_gateway_method_settings" "method_settings" {
   rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
   stage_name  = aws_api_gateway_stage.production_stage.stage_name
-  method_path = "/*/*" # Specifies all methods for all resources
+  method_path = "*/*"
 
   settings {
     logging_level      = "INFO"
