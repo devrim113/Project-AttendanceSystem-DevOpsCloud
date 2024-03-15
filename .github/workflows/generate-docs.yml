@@ -61,12 +61,26 @@ jobs:
         run: |
           cat README.md
 
-      - name: Commit and Push Documentation
+      - name: Setup Git
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git checkout -b update-docs
-          git pull -f origin main
+
+      - name: Delete the update-documentation branch if it exists
+        run: |
+          git fetch origin
+          if git branch -r | grep -q "origin/update-documentation"; then
+            git push origin --delete update-documentation
+          fi
+
+      - name: Create and switch to the update-documentation branch
+        run: |
+          git checkout main
+          git pull origin main
+          git checkout -b update-documentation
+
+      - name: Commit and Push Documentation
+        run: |
           git add README.md
           git commit -m "Update documentation" -a || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
@@ -79,4 +93,4 @@ jobs:
           pr_title: "Update Documentation"
           pr_body: "Automatically generated documentation update"
           destination_branch: "main"
-          source_branch: "update-docs"
+          source_branch: "update-documentation"
