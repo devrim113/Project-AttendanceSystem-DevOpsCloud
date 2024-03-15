@@ -9,7 +9,7 @@ on:
       - 'lambda_functions/*.py'
       - 'tests/*.py'
       - '.github/workflows/generate-docs.yml'
-      - 'docs/*'
+      - 'docs/src/*'
 
 permissions:
   contents: write
