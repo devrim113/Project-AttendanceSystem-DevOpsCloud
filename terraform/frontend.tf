@@ -190,7 +190,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudfront_5xx_errors" {
   insufficient_data_actions = []
 
   dimensions = {
-    DistributionId = aws_cloudfront_distribution.your_distribution.id
+    DistributionId = aws_cloudfront_distribution.s3_distribution.id
     Region         = "Global"
   }
 }
@@ -211,7 +211,7 @@ resource "aws_cloudwatch_metric_alarm" "cloudfront_5xx_errors_15m" {
   insufficient_data_actions = []
 
   dimensions = {
-    DistributionId = aws_cloudfront_distribution.your_distribution.id
+    DistributionId = aws_cloudfront_distribution.s3_distribution.id
     Region         = "Global"
   }
 }
