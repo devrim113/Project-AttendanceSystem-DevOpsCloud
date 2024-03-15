@@ -129,12 +129,12 @@ contain the root `toctree` directive. -->
   * [tests package](tests.md)
 * [lambda_functions package](lambda_functions.md)
   * [Submodules](lambda_functions.md#submodules)
-  * [lambda_functions.admin module](lambda_functions.md#lambda-functions-admin-module)
-  * [lambda_functions.cognito module](lambda_functions.md#lambda-functions-cognito-module)
-  * [lambda_functions.course module](lambda_functions.md#lambda-functions-course-module)
-  * [lambda_functions.department module](lambda_functions.md#lambda-functions-department-module)
-  * [lambda_functions.student module](lambda_functions.md#lambda-functions-student-module)
-  * [lambda_functions.teacher module](lambda_functions.md#lambda-functions-teacher-module)
+  * [lambda_functions.admin module](lambda_functions.md#module-lambda_functions.admin)
+  * [lambda_functions.cognito module](lambda_functions.md#module-lambda_functions.cognito)
+  * [lambda_functions.course module](lambda_functions.md#module-lambda_functions.course)
+  * [lambda_functions.department module](lambda_functions.md#module-lambda_functions.department)
+  * [lambda_functions.student module](lambda_functions.md#module-lambda_functions.student)
+  * [lambda_functions.teacher module](lambda_functions.md#module-lambda_functions.teacher)
   * [Module contents](lambda_functions.md#module-lambda_functions)
 * [tests package](tests.md)
   * [Submodules](tests.md#submodules)
@@ -157,15 +157,721 @@ contain the root `toctree` directive. -->
 
 ## lambda_functions.admin module
 
+### lambda_functions.admin.create_admin_record(item_id, user_name)
+
+Create object for an admin record.
+
+* **Parameters:**
+  * **item_id** (*str*) – The ID of the admin record.
+  * **user_name** (*str*) – The name of the admin.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.admin.delete_admin_record(item_id)
+
+Delete an admin record.
+
+* **Parameters:**
+  **item_id** (*str*) – The ID of the admin record.
+* **Returns:**
+  The response from the table.delete_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while deleting the item.
+
+### lambda_functions.admin.get_admin_record(item_id)
+
+Get an admin record.
+
+* **Parameters:**
+  **item_id** (*str*) – The ID of the admin record.
+* **Returns:**
+  The response from the table.get_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while getting the item.
+
+### lambda_functions.admin.lambda_handler(event, context)
+
+Lambda handler for the admin.
+The ‘operation’ field in the event data determines the action to be performed.
+The following operations are supported:
+- ‘put’: Creates a new record for an admin.
+- ‘update’: Updates an admin record.
+- ‘delete’: Deletes an admin record.
+- ‘get’: Retrieves an admin record.
+
+The corresponding functions called for each operation are:
+- ‘put’: create_admin_record()
+- ‘update’: update_admin_record()
+- ‘delete’: delete_admin_record()
+- ‘get’: get_admin_record()
+
+* **Parameters:**
+  * **event** (*dict*) – The event object.
+  * **context** (*object*) – The context object.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
+### lambda_functions.admin.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
+### lambda_functions.admin.update_admin_record(item_id, user_name)
+
+Update an admin record.
+
+* **Parameters:**
+  * **item_id** (*str*) – The ID of the admin record.
+  * **user_name** (*str*) – The name of the admin.
+* **Returns:**
+  The response from the table.update_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while updating the item.
+
 ## lambda_functions.cognito module
+
+### lambda_functions.cognito.create_admin_record(email, user_name)
+
+Create object for a teacher.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the user.
+  * **user_name** (*str*) – The name of the user.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.cognito.create_student_record(email, user_name)
+
+Create object for a teacher.
+
+* **Parameters:**
+  * **email** (*str*) – The email of the user.
+  * **user_name** (*str*) – The name of the user.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.cognito.create_teacher_record(email, user_name)
+
+Create object for a teacher.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the user.
+  * **user_name** (*str*) – The name of the user.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.cognito.create_user_record(email, user_name, title)
+
+### lambda_functions.cognito.lambda_handler(event, context)
+
+### lambda_functions.cognito.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
 
 ## lambda_functions.course module
 
+### lambda_functions.course.create_course(item_id, course_name, department_id, classes)
+
+Create object for a course.
+
+* **Parameters:**
+  * **item_id** (*str*) – The ID of the course.
+  * **course_name** (*str*) – The name of the course.
+  * **department_id** (*str*) – The ID of the department.
+  * **classes** (*dict*) – The classes for the course.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.course.delete_course(item_id)
+
+Delete a course.
+
+* **Parameters:**
+  **item_id** (*str*) – The ID of the course.
+* **Returns:**
+  The response from the table.delete_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while deleting the item.
+
+### lambda_functions.course.get_course(item_id)
+
+Get a course.
+
+* **Parameters:**
+  **item_id** (*str*) – The ID of the course.
+* **Returns:**
+  The course object.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while getting the item.
+
+### lambda_functions.course.lambda_handler(event, context)
+
+Lambda handler function to interact with the DynamoDB table.
+The function will perform the operation specified in the ‘func’ query parameter.
+The following operations are supported:
+- create_course: Create a course.
+- get_course: Get a course.
+- update_course: Update a course.
+- delete_course: Delete a course.
+
+* **Parameters:**
+  * **event** (*dict*) – The event object from the Lambda function.
+  * **context** (*object*) – The context object from the Lambda function.
+* **Returns:**
+  The response object for the API Gateway.
+* **Return type:**
+  dict
+
+### lambda_functions.course.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
+### lambda_functions.course.update_course(item_id, course_name, department_id, classes)
+
+Update object for a course.
+
+* **Parameters:**
+  * **item_id** (*str*) – The ID of the course.
+  * **course_name** (*str*) – The name of the course.
+  * **department_id** (*str*) – The ID of the department.
+  * **classes** (*dict*) – The classes for the course.
+* **Returns:**
+  The response from the table.update_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while updating the item.
+
 ## lambda_functions.department module
+
+### lambda_functions.department.create_department(dep_id, dep_name)
+
+Create object for a department.
+
+* **Parameters:**
+  * **dep_id** (*str*) – The ID of the department.
+  * **dep_name** (*str*) – The name of the department.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.department.delete_department(dep_id)
+
+Delete a department.
+
+* **Parameters:**
+  **dep_id** (*str*) – The ID of the department.
+* **Returns:**
+  The response from the table.delete_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while deleting the item.
+
+### lambda_functions.department.get_department(dep_id)
+
+Get a department.
+
+* **Parameters:**
+  **dep_id** (*str*) – The ID of the department.
+* **Returns:**
+  The department object.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while getting the item.
+
+### lambda_functions.department.get_department_course_names(dep_id)
+
+Get the course names for a department.
+
+* **Parameters:**
+  **dep_id** (*str*) – The ID of the department.
+* **Returns:**
+  The list of course names for the department.
+  : [{‘CourseName’: ‘Mathematics’, ‘ItemId’: 101}, {‘CourseName’: ‘Physics’, ‘ItemId’: 102}]
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while querying the items.
+
+### lambda_functions.department.get_department_courses(dep_id)
+
+Get the courses for a department.
+
+* **Parameters:**
+  **dep_id** (*str*) – The ID of the department.
+* **Returns:**
+  The list of courses for the department.
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while querying the items.
+
+### lambda_functions.department.lambda_handler(event, context)
+
+Lambda handler for the department.
+The ‘operation’ field in the event data determines the action to be performed.
+The following operations are supported:
+- ‘put’: Creates a new record for a department.
+- ‘get’: Retrieves a department.
+- ‘update’: Updates a record for a department.
+- ‘delete’: Deletes a record for a department.
+
+The corresponding functions called for each operation are:
+- ‘put’: create_department()
+- ‘get’: get_department()
+- ‘update’: update_department()
+- ‘delete’: delete_department()
+
+* **Parameters:**
+  * **event** (*dict*) – The event object.
+  * **context** (*object*) – The context object.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+* **Raises:**
+  **ValueError** – If the operation is not supported.
+
+### lambda_functions.department.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
+### lambda_functions.department.update_department(dep_id, dep_name)
+
+Update object for a department.
+
+* **Parameters:**
+  * **dep_id** (*str*) – The ID of the department.
+  * **dep_name** (*str*) – The name of the department.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
 
 ## lambda_functions.student module
 
+This module contains functions for managing attendance records for students in a DynamoDB table.
+
+Functions:
+- create_student_record: Create a student record in the database.
+- remove_student_course_attendance: Removes the attendance record of a student for a specific course.
+- delete_student_record: Deletes a student record from the table.
+- update_student_record: Update the student record in the database.
+- update_attendance_record: Update the attendance record for a student.
+- get_student: Gets the student record.
+- get_student_courses: Retrieves all the courses of a student.
+- get_student_course_attendance: Retrieves the attendance record of a student for a specific course.
+- lambda_handler: Lambda handler function to interact with the DynamoDB table.
+
+### lambda_functions.student.create_student_record(user_id, user_name)
+
+Create a student record in the database.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the student.
+  * **course_id** ( *#*) – The ID of the course.
+  * **course_name** ( *#*) – The name of the course.
+  * **user_name** (*str*) – The name of the student.
+* **Returns:**
+  The response from the database after creating the student record.
+  : If an error occurs, None is returned.
+* **Return type:**
+  dict
+
+### lambda_functions.student.delete_record(item_id, item_type)
+
+Deletes a record from the table using its ItemId.
+
+* **Parameters:**
+  **ItemId** (*str*) – The ID of the item.
+* **Returns:**
+  The response from the delete operation, or None if an error occurred.
+* **Return type:**
+  dict or None
+
+### lambda_functions.student.enlist_student_course(item_id, user_id, course_id, attendance)
+
+Enlist a student to a course.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the student.
+  * **course_id** (*str*) – The ID of the course.
+* **Returns:**
+  The response from the put operation, or None if an error occurred.
+* **Return type:**
+  dict or None
+
+### lambda_functions.student.get_all_courses()
+
+Retrieves all the courses from the database.
+Placed in student.py because of the large frequency in which this function is called.
+
+* **Returns:**
+  A list of items containing all the courses.
+* **Return type:**
+  list
+
+### lambda_functions.student.get_student(user_id)
+
+Retrieves all the attendance records for all courses of a student.
+
+* **Parameters:**
+  **user_id** (*str*) – The user ID of the student.
+* **Returns:**
+  A list of items containing the student’s information.
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while querying the table.
+
+### lambda_functions.student.get_student_course_attendance(user_id, course_id)
+
+Retrieves the attendance record of a student for a specific course.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the student.
+  * **course_id** (*str*) – The ID of the course.
+* **Returns:**
+  The attendance record of the student for the course, or None if an error occurs.
+* **Return type:**
+  dict
+
+### lambda_functions.student.get_student_course_names(user_id)
+
+Retrieves the names of all the courses of a student.
+
+* **Parameters:**
+  **user_id** (*str*) – The user ID of the student.
+* **Returns:**
+  A dictionary containing the course names of the student.
+  : {course_id: course_name}
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while querying the table.
+
+### lambda_functions.student.get_student_courses(user_id)
+
+Retrieves all the courses of a student.
+
+* **Parameters:**
+  **user_id** (*str*) – The user ID of the student.
+* **Returns:**
+  A list of items containing the student’s information.
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while querying the table.
+
+### lambda_functions.student.lambda_handler(event, context)
+
+Lambda handler function to interact with the DynamoDB table.
+The ‘operation’ field in the body data determines the action to be performed.
+The following operations are supported:
+- ‘put’: Creates a new record for a student.
+- ‘update’: Updates a student record or attendance record.
+- ‘get’: Retrieves all courses for a student or all attendance records for a student’s course.
+- ‘delete’: Deletes a record for a student.
+
+The corresponding functions called for each operation are:
+- ‘put’: create_student_record() or enlist_student_course()
+- ‘update’: update_attendance_record() or update_student_record()
+- ‘get’: get_student_course_attendance() or get_student() or get_student_courses()
+- ‘delete’: delete_student_record() or remove_student_course_attendance()
+
+* **Parameters:**
+  * **body** (*dict*) – The body data passed to the Lambda function.
+  * **context** (*object*) – The context object provided by AWS Lambda.
+* **Returns:**
+  The response containing the statusCode, body, and headers.
+* **Return type:**
+  dict
+
+### lambda_functions.student.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
+### lambda_functions.student.remove_student_course_attendance(user_id, course_id)
+
+Removes the attendance record of a student for a specific course.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the student.
+  * **course_id** (*str*) – The ID of the course.
+* **Returns:**
+  The response from the delete operation, or None if an error occurred.
+* **Return type:**
+  dict or None
+
+### lambda_functions.student.update_attendance_record(item_id, course_id, attendance)
+
+Update the attendance record for a student in a specific course.
+Updates one attendance instance (date) at a time
+
+* **Parameters:**
+  * **item_id** (*str*) – The ID of the item. In this case the item is the student’s attendance record for the course.
+  * **attendance** (*dict*) – 
+
+    The updated attendance value.
+    This is a nested object with the following structure:
+    > attendance = {
+    > : ‘date’: {
+    >   : ‘from’: (str),
+    >     ‘to’: (str),
+    >     ‘status’: (str)
+    >   <br/>
+    >   }
+* **Returns:**
+  The response from the update operation if successful, None otherwise.
+* **Return type:**
+  dict or None
+
+### lambda_functions.student.update_student_record(user_id, user_name)
+
+Update the student record in the database.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the student.
+  * **user_name** (*str*) – The name of the student.
+* **Returns:**
+  The response from the update operation if successful, None otherwise.
+* **Return type:**
+  dict or None
+
 ## lambda_functions.teacher module
+
+This module contains functions for managing attendance records for teachers in a DynamoDB table.
+
+Functions:
+- put_attendance_record: Put attendance record for a teacher.
+- get_all_courses: Get all courses for a teacher.
+- get_all_course_attendance: Get all attendance records of students for a teacher’s course.
+- delete_attendance_record: Delete attendance record for a teacher.
+- lambda_handler: Lambda handler function to interact with the DynamoDB table.
+
+### lambda_functions.teacher.assign_course_to_teacher(item_id, course_id, user_id)
+
+Assign a course to a teacher.
+
+* **Parameters:**
+  * **course_id** (*str*) – The ID of the course.
+  * **user_id** (*str*) – The ID of the user.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.teacher.create_teacher_record(item_id, user_name)
+
+Create object for a teacher.
+
+* **Parameters:**
+  * **user_id** (*str*) – The ID of the user.
+  * **user_name** (*str*) – The name of the user.
+* **Returns:**
+  The response from the table.put_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.teacher.delete_teacher(user_id)
+
+Delete teacher’s record.
+
+* **Parameters:**
+  **user_id** (*str*) – The ID of the user.
+* **Returns:**
+  The response from the table.delete_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while deleting the item.
+
+### lambda_functions.teacher.get_all_course_attendance(course_id)
+
+Get all attendance records of students for a teacher’s course.
+If the attendance record for a class in the course is not found for a student,
+the class is added to the list with no status value and key.
+Uses the Global Secondary Index CourseIDUserTypeIndex to query the table.
+
+* **Parameters:**
+  **course_id** (*str*) – The ID of the course.
+* **Returns:**
+  The list of attendance records for the teacher’s course.
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while getting the items.
+
+### lambda_functions.teacher.get_teacher(user_id)
+
+Get a teacher.
+
+* **Parameters:**
+  **user_id** (*str*) – The ID of the user.
+* **Returns:**
+  The teacher object.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while getting the item.
+
+### lambda_functions.teacher.get_teacher_course_names(user_id)
+
+Get all course names for a teacher.
+
+* **Parameters:**
+  **user_id** (*str*) – The ID of the user.
+* **Returns:**
+  The list of course names for the teacher.
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while getting the items.
+
+### lambda_functions.teacher.get_teacher_courses(user_id)
+
+Get all courses for a teacher.
+
+* **Parameters:**
+  **user_id** (*str*) – The ID of the user.
+* **Returns:**
+  The list of courses for the teacher.
+* **Return type:**
+  list
+* **Raises:**
+  **ClientError** – If an error occurs while getting the items.
+
+### lambda_functions.teacher.lambda_handler(event, context)
+
+Lambda handler function to interact with the DynamoDB table.
+The ‘operation’ field in the event data determines the action to be performed.
+The following operations are supported:
+- ‘put’: Creates a new record for a teacher.
+- ‘get’: Retrieves all courses for a teacher or all attendance records for a teacher’s course.
+- ‘update’: Updates a teacher’s record.
+- ‘delete’: Deletes a teacher’s record.
+
+The corresponding functions called for each operation are:
+- ‘put’: create_teacher_record()
+- ‘get’: get_teacher_courses() or get_all_course_attendance()
+- ‘update’: update_teacher_record()
+- ‘delete’: delete_teacher()
+
+* **Parameters:**
+  * **event** (*dict*) – The event data passed to the Lambda function.
+  * **context** (*object*) – The context object provided by AWS Lambda.
+* **Returns:**
+  The response containing the statusCode, body, and headers.
+* **Return type:**
+  dict
+
+### lambda_functions.teacher.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
+### lambda_functions.teacher.update_teacher_record(item_id, user_name)
+
+Update object for a teacher.
+
+* **Parameters:**
+  * **item_id** (*str*) – The ID of the user.
+  * **user_name** (*str*) – The name of the user.
+* **Returns:**
+  The response from the table.update_item() operation.
+* **Return type:**
+  dict
+* **Raises:**
+  **ClientError** – If an error occurs while updating the item.
 
 ## Module contents
 # tests package
