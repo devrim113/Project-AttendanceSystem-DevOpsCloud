@@ -1,9 +1,9 @@
 /* DynamoDB Table
  * This is the terraform file for the DynamoDB table, the workflow is as follows:
-  * 1. Creating the DynamoDB table
+  * 1. Creating the DynamoDB table and the global secondary indexes
 */
 
-# ----------------- Creating the DynamoDB table -----------------
+# ----------------- Creating the DynamoDB table and the global secondary indexes -----------------
 
 resource "aws_dynamodb_table" "attendance_table" {
   name         = "AllData"
