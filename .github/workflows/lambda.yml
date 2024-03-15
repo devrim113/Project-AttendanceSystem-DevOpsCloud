@@ -31,8 +31,10 @@ jobs:
     - name: Deploy Lambda Functions
       run: |
         for file in lambda_functions/*.py; do
-          function_name=$(basename $file .py)
-          echo "Deploying $function_name..."
-          zip -j "$function_name.zip" "$file"
-          aws lambda update-function-code --function-name $function_name --zip-file fileb://"$function_name.zip"
+          if [ "$(basename $file)" != "__init__.py" ]; then
+            function_name=$(basename $file .py)
+            echo "Deploying $function_name..."
+            zip -j "$function_name.zip" "$file"
+            aws lambda update-function-code --function-name $function_name --zip-file fileb://"$function_name.zip"
+          fi
         done
