@@ -105,17 +105,17 @@ No outputs.
 
 # Python Documentation
 
-# lambda_functions
+# tests
 
-* [lambda_functions package](lambda_functions.md)
-  * [Submodules](lambda_functions.md#submodules)
-  * [lambda_functions.admin module](lambda_functions.md#lambda-functions-admin-module)
-  * [lambda_functions.cognito module](lambda_functions.md#lambda-functions-cognito-module)
-  * [lambda_functions.course module](lambda_functions.md#lambda-functions-course-module)
-  * [lambda_functions.department module](lambda_functions.md#lambda-functions-department-module)
-  * [lambda_functions.student module](lambda_functions.md#lambda-functions-student-module)
-  * [lambda_functions.teacher module](lambda_functions.md#lambda-functions-teacher-module)
-  * [Module contents](lambda_functions.md#module-lambda_functions)
+* [tests package](tests.md)
+  * [Submodules](tests.md#submodules)
+  * [tests.conftest module](tests.md#tests-conftest-module)
+  * [tests.test_admin module](tests.md#tests-test-admin-module)
+  * [tests.test_course module](tests.md#tests-test-course-module)
+  * [tests.test_department module](tests.md#tests-test-department-module)
+  * [tests.test_student module](tests.md#tests-test-student-module)
+  * [tests.test_teacher module](tests.md#tests-test-teacher-module)
+  * [Module contents](tests.md#module-tests)
 <!-- Attendance System documentation master file, created by
 sphinx-quickstart on Wed Feb 28 20:04:13 2024.
 You can adapt this file completely to your liking, but it should at least
@@ -125,8 +125,8 @@ contain the root `toctree` directive. -->
 
  Contents:
 
-* [lambda_functions](modules.md)
-  * [lambda_functions package](lambda_functions.md)
+* [tests](modules.md)
+  * [tests package](tests.md)
 * [lambda_functions package](lambda_functions.md)
   * [Submodules](lambda_functions.md#submodules)
   * [lambda_functions.admin module](lambda_functions.md#lambda-functions-admin-module)
