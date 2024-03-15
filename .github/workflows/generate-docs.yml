@@ -66,6 +66,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git checkout -b update-docs
+          git pull -f origin main
           git add README.md
           git commit -m "Update documentation" -a || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
