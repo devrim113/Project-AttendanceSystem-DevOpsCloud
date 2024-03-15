@@ -1,17 +1,11 @@
 /* Frontend
   * This is the terraform file for the frontend, the workflow is as follows:
-  * 1. Defining the locals to store the origin id's for the S3 buckets.
-  $ 2. Creating the S3 bucket where the frontend code will be stored.
-  * 3. Creating the S3 bucket where the logs will be stored.
-  * 4. Creating the CloudFront distribution for the frontend.
-  * 5. Creating alarms for too many 500 errors in the CloudFront distribution.
+  $ 1. Creating the S3 bucket where the frontend code will be stored.
+  * 2. Creating the S3 bucket where the logs will be stored.
+  * 3. Creating the CloudFront distribution for the frontend.
+  * 4. Creating alarms for too many 500 errors in the CloudFront distribution.
 */
 
-
-# ----------------- Defining the locals -----------------
-locals {
-  s3_origin_id = "s3CodeBucketOrigin"
-}
 
 # ----------------- Creating the S3 bucket where the frontend code will be stored -----------------
 
@@ -112,7 +106,7 @@ POLICY
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.S3_Bucket.bucket_regional_domain_name
-    origin_id   = local.s3_origin_id
+    origin_id   = var.s3_origin_id
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity_s3.cloudfront_access_identity_path
     }
@@ -133,7 +127,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = var.s3_origin_id
 
     forwarded_values {
       query_string = false

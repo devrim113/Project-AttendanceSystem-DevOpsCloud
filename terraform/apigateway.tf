@@ -12,12 +12,9 @@
 # Combine the path and methods with flatten to create a list of objects that can be accessed by the for_each method.
 # Changing the to_define_paths or to_define_methods will automatically create the resources and methods for the API Gateway.
 locals {
-  to_define_paths   = ["admin", "teacher", "course", "department", "student", "cognito"]
-  to_define_methods = ["GET", "OPTIONS", "PUT", "POST", "DELETE", "HEAD"]
-
   paths_and_methods = flatten([
-    for path in local.to_define_paths : [
-      for method in local.to_define_methods : {
+    for path in var.to_define_paths : [
+      for method in var.to_define_methods : {
         path   = path
         method = method
       }
@@ -39,7 +36,7 @@ resource "aws_api_gateway_rest_api" "AttendanceAPI" {
 
 # Creating the resources for the API Gateway, one for each path.
 resource "aws_api_gateway_resource" "paths" {
-  for_each    = toset(local.to_define_paths)
+  for_each    = toset(var.to_define_paths)
   rest_api_id = aws_api_gateway_rest_api.AttendanceAPI.id
   parent_id   = aws_api_gateway_rest_api.AttendanceAPI.root_resource_id
   path_part   = each.value
