@@ -1,6 +1,6 @@
 # Project Documentation
 
-## Terraform Documentation
+# Terraform Documentation
 
 ## Requirements
 
@@ -103,7 +103,7 @@ No modules.
 
 No outputs.
 
-## Python Documentation
+# Python Documentation
 
 # lambda_functions
 
