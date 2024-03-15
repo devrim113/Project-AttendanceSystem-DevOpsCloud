@@ -107,13 +107,15 @@ No outputs.
 
 # lambda_functions
 
-* [admin module](admin.md)
-* [cognito module](cognito.md)
-* [course module](course.md)
-* [department module](department.md)
-* [student module](student.md)
-* [teacher module](teacher.md)
-# test_department module
+* [lambda_functions package](lambda_functions.md)
+  * [Submodules](lambda_functions.md#submodules)
+  * [lambda_functions.admin module](lambda_functions.md#lambda-functions-admin-module)
+  * [lambda_functions.cognito module](lambda_functions.md#lambda-functions-cognito-module)
+  * [lambda_functions.course module](lambda_functions.md#lambda-functions-course-module)
+  * [lambda_functions.department module](lambda_functions.md#lambda-functions-department-module)
+  * [lambda_functions.student module](lambda_functions.md#lambda-functions-student-module)
+  * [lambda_functions.teacher module](lambda_functions.md#lambda-functions-teacher-module)
+  * [Module contents](lambda_functions.md#module-lambda_functions)
 <!-- Attendance System documentation master file, created by
 sphinx-quickstart on Wed Feb 28 20:04:13 2024.
 You can adapt this file completely to your liking, but it should at least
@@ -121,19 +123,65 @@ contain the root `toctree` directive. -->
 
 # Welcome to Attendance System’s documentation!
 
+# Contents:
+
+* [lambda_functions](modules.md)
+  * [lambda_functions package](lambda_functions.md)
+* [lambda_functions package](lambda_functions.md)
+  * [Submodules](lambda_functions.md#submodules)
+  * [lambda_functions.admin module](lambda_functions.md#lambda-functions-admin-module)
+  * [lambda_functions.cognito module](lambda_functions.md#lambda-functions-cognito-module)
+  * [lambda_functions.course module](lambda_functions.md#lambda-functions-course-module)
+  * [lambda_functions.department module](lambda_functions.md#lambda-functions-department-module)
+  * [lambda_functions.student module](lambda_functions.md#lambda-functions-student-module)
+  * [lambda_functions.teacher module](lambda_functions.md#lambda-functions-teacher-module)
+  * [Module contents](lambda_functions.md#module-lambda_functions)
+* [tests package](tests.md)
+  * [Submodules](tests.md#submodules)
+  * [tests.conftest module](tests.md#tests-conftest-module)
+  * [tests.test_admin module](tests.md#tests-test-admin-module)
+  * [tests.test_course module](tests.md#tests-test-course-module)
+  * [tests.test_department module](tests.md#tests-test-department-module)
+  * [tests.test_student module](tests.md#tests-test-student-module)
+  * [tests.test_teacher module](tests.md#tests-test-teacher-module)
+  * [Module contents](tests.md#module-tests)
+
 # Indices and tables
 
 * [Index](genindex.md)
 * [Module Index](py-modindex.md)
 * [Search Page](search.md)
-# teacher module
-# test_student module
-# course module
-# department module
-# test_course module
-# student module
-# admin module
-# cognito module
-# test_teacher module
-# test_admin module
-# conftest module
+# lambda_functions package
+
+## Submodules
+
+## lambda_functions.admin module
+
+## lambda_functions.cognito module
+
+## lambda_functions.course module
+
+## lambda_functions.department module
+
+## lambda_functions.student module
+
+## lambda_functions.teacher module
+
+## Module contents
+# tests package
+
+## Submodules
+
+## tests.conftest module
+
+## tests.test_admin module
+
+## tests.test_course module
+
+## tests.test_department module
+
+## tests.test_student module
+
+## tests.test_teacher module
+
+## Module contents
