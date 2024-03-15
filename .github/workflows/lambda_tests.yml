@@ -4,9 +4,9 @@
     push:
       branches:
         - main
-        - Lamda_functions
     pull_request:
-      types: [opened, synchronize, reopened, closed]
+      branches:
+        - main
 
   jobs:
     test-lambda-functions:
