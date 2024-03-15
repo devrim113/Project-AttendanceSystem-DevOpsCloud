@@ -1,5 +1,7 @@
 # Project Documentation
-\n## Terraform Documentation\n
+
+## Terraform Documentation
+
 ## Requirements
 
 | Name | Version |
@@ -100,7 +102,9 @@ No modules.
 ## Outputs
 
 No outputs.
-\n## Python Documentation\n
+
+## Python Documentation
+
 # lambda_functions
 
 * [admin module](admin.md)
