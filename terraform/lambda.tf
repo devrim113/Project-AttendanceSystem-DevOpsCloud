@@ -63,6 +63,7 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
+# Creating the IAM policy for the lambda functions to write to Cognito.
 resource "aws_iam_policy" "lambda_permissions" {
   name        = "lambda_permissions"
   description = "Permissions for Lambda to interact with Cognito and other services"
@@ -76,14 +77,14 @@ resource "aws_iam_policy" "lambda_permissions" {
           "cognito-idp:AdminCreateUser",
           "cognito-idp:AdminAddUserToGroup",
           "cognito-idp:AdminDeleteUser"
-          # Add more permissions as needed 
         ],
-        "Resource" : "*" # Adjust the resource ARNs to be more specific if possible
+        "Resource" : "*"
       }
     ]
   })
 }
 
+# Attaching the lambda permissions policy to the lambda role.
 resource "aws_iam_role_policy_attachment" "lambda_permissions_attach" {
   policy_arn = aws_iam_policy.lambda_permissions.arn
   role       = aws_iam_role.lambda_role.name
@@ -92,6 +93,12 @@ resource "aws_iam_role_policy_attachment" "lambda_permissions_attach" {
 # Attaching the AWSLambdaBasicExecutionRole policy to the lambda role.
 resource "aws_iam_role_policy_attachment" "lambda_basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role       = aws_iam_role.lambda_role.name
+}
+
+# Attatching the AmazonDynamoDBFullAccess policy to the lambda role.
+resource "aws_iam_role_policy_attachment" "dynamodb_full_access" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
   role       = aws_iam_role.lambda_role.name
 }
 
