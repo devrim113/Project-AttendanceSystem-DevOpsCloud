@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   documentation:
@@ -64,8 +65,17 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          git checkout -b update-docs
           git add README.md
           git commit -m "Update documentation" -a || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
-          git push -f origin main
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin update-docs
 
+      - name: Create Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "Update Documentation"
+          pr_body: "Automatically generated documentation update"
+          destination_branch: "main"
+          source_branch: "update-docs"
