@@ -4,16 +4,19 @@ on:
   push:
     branches:
       - main
-      - auto_doc
     paths:
       - 'terraform/*.tf'
       - 'lambda_functions/*.py'
       - 'tests/*.py'
-      - '.github/workflows/generate_documentation.yml'
+      - '.github/workflows/generate-docs.yml'
+      - 'docs/*'
+
+permissions:
+  contents: write
 
 jobs:
   documentation:
-    name: Generate Unified Documentation
+    name: Generate Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -47,22 +50,22 @@ jobs:
 
       - name: Combine Documentation into Single Markdown File
         run: |
-          echo "# Project Documentation" > README.md
-          echo "\n## Terraform Documentation\n" >> README.md
+          echo -e "# Project Documentation" > README.md
+          echo -e "\n# Terraform Documentation\n" >> README.md
           cat TERRAFORM.md >> README.md
-          echo "\n## Python Documentation\n" >> README.md
+          echo -e "\n# Python Documentation\n" >> README.md
           cat PYTHON.md >> README.md
 
       - name: Display Documentation
         run: |
           cat README.md
 
-      # - name: Commit and Push Documentation
-      #   run: |
-      #     git config --global user.email "action@github.com"
-      #     git config --global user.name "GitHub Action"
-      #     git add README.md
-      #     git commit -m "Update documentation" -a || echo "No changes to commit"
-      #     git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
-      #     git push origin main
+      - name: Commit and Push Documentation
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update documentation" -a || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin main
 

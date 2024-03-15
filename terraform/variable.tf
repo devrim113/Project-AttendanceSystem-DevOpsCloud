@@ -1,9 +1,12 @@
+
+# Specify the region where we want to deploy the infrastructure.
 variable "region" {
   description = "AWS region"
   type        = string
   default     = "eu-central-1"
 }
 
+# Specify the AWS account ID to access the resources.
 variable "account_id" {
   description = "AWS account ID"
   type        = string

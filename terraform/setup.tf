@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-central-1"
+  region = var.region
 }
 
 resource "aws_s3_bucket" "bucket" {
@@ -29,6 +29,18 @@ terraform {
     key            = "terraform.tfstate"
     region         = "eu-central-1"
     dynamodb_table = "terraform-developmentuva"
+  }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.0"
+    }
   }
 }
 

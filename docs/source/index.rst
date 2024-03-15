@@ -10,7 +10,9 @@ Welcome to Attendance System's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   modules
+   lambda_functions
+   tests
 
 Indices and tables
 ==================
