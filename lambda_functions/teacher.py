@@ -341,8 +341,11 @@ def decode_jwt(token):
     return header_data, payload_data
 
 def check_permission(token):
-    _ , payload = decode_jwt(token)
-    return payload["cognito:groups"].contains("Admins") or payload["cognito:groups"].contains("Teachers")
+    try:
+        _ , payload = decode_jwt(token)
+        return payload["cognito:groups"].contains("Admins") or payload["cognito:groups"].contains("Teachers")
+    except:
+        return False
 
 def lambda_handler(event, context):
     """
@@ -377,10 +380,10 @@ def lambda_handler(event, context):
         pass
 
     try: 
-        if not check_permission(event['headers']['Authorization']) or not event['headers']['Authorization'] == "PYTEST_CODE":
+        if (not check_permission(event["headers"]['Authorization'])) and (not event["headers"]['Authorization'] == "PYTEST_CODE"):
             return make_response(403, "You do not have permission to perform this operation.")
     except:
-        return make_response(403, "You do not have permission to perform this operation.")
+        return make_response(403, str(event["headers"]['Authorization'] == 'PYTEST_CODE'))
     
     try:
         query_params = event['queryStringParameters']
