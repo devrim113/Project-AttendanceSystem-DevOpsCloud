@@ -1,4 +1,4 @@
-import { API_SCHEMA, FULL_API_URL, API_PATH_TEACHER } from "../Helper/static";
+import { API_SCHEMA, FULL_API_URL, API_PATH_TEACHER, getBearerToken } from "../Helper/static";
 
 // This is a default function to make the call, so that we don't have to repeat the same code for each function
 function get_URL(parameters: { [key: string]: string }, method: string, body?: { [key: string]: string }) {
@@ -15,6 +15,7 @@ function get_URL(parameters: { [key: string]: string }, method: string, body?: {
         method: method,
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${getBearerToken()}`
         },
         body: body === undefined ? undefined : JSON.stringify(body),
     }))
@@ -56,6 +57,7 @@ export function get_all_course_attendance(CourseId: string) {
         undefined
     )
 }
+
 
 // export function create_teacher(email: string, UserName: string) {
 //     return get_URL(

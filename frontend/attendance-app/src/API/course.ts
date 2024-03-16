@@ -1,4 +1,4 @@
-import { API_PATH_COURSE, API_SCHEMA, FULL_API_URL } from "../Helper/static";
+import { API_PATH_COURSE, API_SCHEMA, FULL_API_URL, getBearerToken } from "../Helper/static";
 
 function get_URL(parameters: { [key: string]: string }, method: string, body: { [key: string]: any } | undefined) {
     // Check if 'func' is in parameters
@@ -14,6 +14,7 @@ function get_URL(parameters: { [key: string]: string }, method: string, body: { 
         method: method,
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${getBearerToken()}`
         },
         body: body === undefined ? undefined : JSON.stringify(body),
     }))
