@@ -24,7 +24,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     create_event = {
         'path': '/student',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'create_student'},
         'body': {
@@ -40,7 +42,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     get_event = {
         'path': '/student',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_student', 'ItemId': '1'},
         'body': None,
@@ -90,7 +94,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
         create_event = {
             'path': '/course',
             'httpMethod': 'PUT',
-            'headers': {},
+            'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
             'pathParameters': {},
             'queryStringParameters': {'func': 'create_course'},
             'body': {
@@ -114,7 +120,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     enlist_event = {
         'path': '/student',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'enlist_student'},
         'body': {
@@ -144,7 +152,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     update_event = {
         'path': '/student',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'update_attendance'},
         'body': {
@@ -160,7 +170,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     get_attendance_event = {
         'path': '/student/',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '101'},
         'body': None,
@@ -182,7 +194,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     enlist_event2 = {
         'path': '/student',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'enlist_student'},
         'body': {
@@ -198,7 +212,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     get_attendance_event = {
         'path': '/student/',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_student_course_attendance', 'UserId': '1', 'CourseId': '102'},
         'body': None,
@@ -213,7 +229,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     get_courses = {
         'path': '/student',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_student_courses', 'UserId': '1'},
         'body': None,
@@ -229,7 +247,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     get_course_names = {
         'path': '/student',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_student_course_names', 'UserId': '1'},
         'body': None,
@@ -244,7 +264,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     delete_event = {
         'path': '/student',
         'httpMethod': 'DELETE',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'delete_student'},
         'body': {
@@ -260,7 +282,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     delete_event = {
         'path': '/student',
         'httpMethod': 'DELETE',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'delete_student'},
         'body': {
@@ -281,7 +305,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     delete_event = {
         'path': '/student',
         'httpMethod': 'DELETE',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'delete_student'},
         'body': {
@@ -302,7 +328,9 @@ def test_student_record_lifecycle(create_dynamodb_table, student_lambda, course_
     get_courses_event = {
         'path': '/student',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_all_courses'},
         'body': None,

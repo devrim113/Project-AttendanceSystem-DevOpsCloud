@@ -31,7 +31,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     create_event = {
         'path': '/teacher',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'create_teacher'},
         'body': {
@@ -47,7 +49,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     get_event = {
         'path': '/teacher',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_teacher', 'ItemId': '1'},
         'body': None,
@@ -69,7 +73,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     update_event = {
         'path': '/teacher',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'update_teacher'},
         'body': {
@@ -107,7 +113,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     create_event = {
         'path': '/course',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'create_course'},
         'body': {
@@ -130,7 +138,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     enlist_event_teacher = {
         'path': '/teacher',
         'httpMethod': 'PUT',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'assign_course'},
         'body': {
@@ -146,7 +156,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     get_courses_event = {
         'path': '/teacher',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_teacher_courses', 'UserId': '1'},
         'body': None,
@@ -173,7 +185,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
         create_event = {
             'path': '/student',
             'httpMethod': 'PUT',
-            'headers': {},
+            'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
             'pathParameters': {},
             'queryStringParameters': {'func': 'create_student'},
             'body': {
@@ -217,7 +231,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
         enlist_event_student = {
             'path': '/student',
             'httpMethod': 'PUT',
-            'headers': {},
+            'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
             'pathParameters': {},
             'queryStringParameters': {'func': 'enlist_student'},
             'body': {
@@ -232,7 +248,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     get_attendance_event = {
         'path': '/teacher',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_course_attendance', 'CourseId': '101'},
         'body': None,
@@ -250,7 +268,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     get_course_names_event = {
         'path': '/teacher',
         'httpMethod': 'GET',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'get_teacher_course_names', 'UserId': '1'},
         'body': None,
@@ -264,7 +284,9 @@ def test_admin_lambda_handler(create_dynamodb_table, teacher_lambda, student_lam
     delete_event = {
         'path': '/teacher',
         'httpMethod': 'DELETE',
-        'headers': {},
+        'headers': {
+            "Authorization": "PYTEST_CODE"
+        },
         'pathParameters': {},
         'queryStringParameters': {'func': 'delete_teacher', 'ItemId': '1'},
         'body': None,
