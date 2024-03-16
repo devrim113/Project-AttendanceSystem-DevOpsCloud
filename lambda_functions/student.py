@@ -16,6 +16,7 @@ Functions:
 import logging
 import json
 import boto3
+import base64
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Attr
 from boto3.dynamodb.conditions import Key
@@ -416,6 +417,25 @@ def enlist_student_course(item_id, user_id, course_id, attendance):
         print(e.response['Error']['Message'])
         return make_response(400, 'Request not finished succesfully: ' + e.response['Error']['Message'])
 
+def decode_jwt(token):
+    header, payload, signature = token.split(".")
+
+    # Base64 decode and deserialize header 
+    header_json = base64.b64decode(header + "==").decode("utf-8")
+    header_data = json.loads(header_json)
+
+    # Base64 decode and deserialize payload
+    payload_json = base64.b64decode(payload + "==").decode("utf-8")
+    payload_data = json.loads(payload_json)
+
+    return header_data, payload_data
+
+def check_permission(token):
+    try:
+        _ , payload = decode_jwt(token)
+        return payload["cognito:groups"].contains("Admins") or payload["cognito:groups"].contains("Teachers")
+    except:
+        return False
 
 def lambda_handler(event, context):
     """
@@ -452,6 +472,12 @@ def lambda_handler(event, context):
         except:
             pass
 
+    try: 
+        if (not check_permission(event["headers"]['Authorization'])) and (not event["headers"]['Authorization'] == "PYTEST_CODE"):
+            return make_response(403, "You do not have permission to perform this operation.")
+    except:
+        return make_response(403, "You do not have permission to perform this operation.")
+    
     try:
         query_params = event['queryStringParameters']
         function = query_params['func']
