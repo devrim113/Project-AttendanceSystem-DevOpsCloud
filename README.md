@@ -130,7 +130,7 @@ contain the root `toctree` directive. -->
 * [lambda_functions package](lambda_functions.md)
   * [Submodules](lambda_functions.md#submodules)
   * [lambda_functions.admin module](lambda_functions.md#module-lambda_functions.admin)
-  * [lambda_functions.cognito module](lambda_functions.md#module-lambda_functions.cognito)
+  * [lambda_functions.cognito module](lambda_functions.md#lambda-functions-cognito-module)
   * [lambda_functions.course module](lambda_functions.md#module-lambda_functions.course)
   * [lambda_functions.department module](lambda_functions.md#module-lambda_functions.department)
   * [lambda_functions.student module](lambda_functions.md#module-lambda_functions.student)
@@ -157,6 +157,8 @@ contain the root `toctree` directive. -->
 
 ## lambda_functions.admin module
 
+### lambda_functions.admin.check_permission(token)
+
 ### lambda_functions.admin.create_admin_record(item_id, user_name)
 
 Create object for an admin record.
@@ -170,6 +172,8 @@ Create object for an admin record.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.admin.decode_jwt(token)
 
 ### lambda_functions.admin.delete_admin_record(item_id)
 
@@ -249,65 +253,9 @@ Update an admin record.
 
 ## lambda_functions.cognito module
 
-### lambda_functions.cognito.create_admin_record(email, user_name)
-
-Create object for a teacher.
-
-* **Parameters:**
-  * **user_id** (*str*) – The ID of the user.
-  * **user_name** (*str*) – The name of the user.
-* **Returns:**
-  The response from the table.put_item() operation.
-* **Return type:**
-  dict
-* **Raises:**
-  **ClientError** – If an error occurs while putting the item.
-
-### lambda_functions.cognito.create_student_record(email, user_name)
-
-Create object for a teacher.
-
-* **Parameters:**
-  * **email** (*str*) – The email of the user.
-  * **user_name** (*str*) – The name of the user.
-* **Returns:**
-  The response from the table.put_item() operation.
-* **Return type:**
-  dict
-* **Raises:**
-  **ClientError** – If an error occurs while putting the item.
-
-### lambda_functions.cognito.create_teacher_record(email, user_name)
-
-Create object for a teacher.
-
-* **Parameters:**
-  * **user_id** (*str*) – The ID of the user.
-  * **user_name** (*str*) – The name of the user.
-* **Returns:**
-  The response from the table.put_item() operation.
-* **Return type:**
-  dict
-* **Raises:**
-  **ClientError** – If an error occurs while putting the item.
-
-### lambda_functions.cognito.create_user_record(email, user_name, title)
-
-### lambda_functions.cognito.lambda_handler(event, context)
-
-### lambda_functions.cognito.make_response(status_code, body)
-
-Create a response object for the API Gateway.
-
-* **Parameters:**
-  * **status_code** (*int*) – The status code for the response.
-  * **body** (*str*) – The body of the response.
-* **Returns:**
-  The response object.
-* **Return type:**
-  dict
-
 ## lambda_functions.course module
+
+### lambda_functions.course.check_permission(token)
 
 ### lambda_functions.course.create_course(item_id, course_name, department_id, classes)
 
@@ -324,6 +272,8 @@ Create object for a course.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.course.decode_jwt(token)
 
 ### lambda_functions.course.delete_course(item_id)
 
@@ -399,6 +349,8 @@ Update object for a course.
 
 ## lambda_functions.department module
 
+### lambda_functions.department.check_permission(token)
+
 ### lambda_functions.department.create_department(dep_id, dep_name)
 
 Create object for a department.
@@ -412,6 +364,8 @@ Create object for a department.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.department.decode_jwt(token)
 
 ### lambda_functions.department.delete_department(dep_id)
 
@@ -533,6 +487,8 @@ Functions:
 - get_student_course_attendance: Retrieves the attendance record of a student for a specific course.
 - lambda_handler: Lambda handler function to interact with the DynamoDB table.
 
+### lambda_functions.student.check_permission(token)
+
 ### lambda_functions.student.create_student_record(user_id, user_name)
 
 Create a student record in the database.
@@ -547,6 +503,8 @@ Create a student record in the database.
   : If an error occurs, None is returned.
 * **Return type:**
   dict
+
+### lambda_functions.student.decode_jwt(token)
 
 ### lambda_functions.student.delete_record(item_id, item_type)
 
@@ -741,6 +699,8 @@ Assign a course to a teacher.
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
 
+### lambda_functions.teacher.check_permission(token)
+
 ### lambda_functions.teacher.create_teacher_record(item_id, user_name)
 
 Create object for a teacher.
@@ -754,6 +714,8 @@ Create object for a teacher.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.teacher.decode_jwt(token)
 
 ### lambda_functions.teacher.delete_teacher(user_id)
 
