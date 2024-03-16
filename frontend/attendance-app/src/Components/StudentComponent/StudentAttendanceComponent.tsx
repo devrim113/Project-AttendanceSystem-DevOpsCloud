@@ -28,6 +28,10 @@ const mockdata = [
     ["1", "John Doe", { "2022-01-01": { "from": "08:00", "to": "10:00", "status": "present" } }]
 ];
 
+/**
+ * Renders the attendance component for a student.
+ * @returns The JSX element representing the student attendance component.
+ */
 function StudentAttendanceComponent() {
     const [attendance, setAttendance] = useState<AttendanceObject[] | null>(null);
     const [loadingAttendance, setLoadingAttendance] = useState(true);

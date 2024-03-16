@@ -6,6 +6,11 @@ import { bearerCookie, getInformation } from "../../Helper/static";
 import { useNavigate } from "react-router-dom";
 import { removeCookie } from "../../Helper";
 
+/**
+ * Renders the header sidebar component.
+ * 
+ * @returns The JSX element representing the header sidebar.
+ */
 function HeaderSideBar() {
     let navigator = useNavigate();
 

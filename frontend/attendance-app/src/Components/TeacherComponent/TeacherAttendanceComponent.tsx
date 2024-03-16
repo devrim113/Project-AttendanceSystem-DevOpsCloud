@@ -16,6 +16,11 @@ interface AttendanceDateRecord {
 
 type AttendanceObject = [string, string, AttendanceDateRecord];
 
+/**
+ * Represents the Teacher Attendance Component.
+ * This component displays the attendance of students for a specific course.
+ * It also allows the teacher to create a new lesson for the course.
+ */
 function TeacherAttendanceComponent() {
     const [attendance, setAttendance] = useState<AttendanceObject[] | null>(null);
     const [loadingAttendance, setLoadingAttendance] = useState(true);

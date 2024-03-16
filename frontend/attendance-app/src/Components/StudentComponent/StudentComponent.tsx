@@ -16,6 +16,10 @@ interface bigCourse {
     ItemType: string;
 }
 
+/**
+ * Renders the student dashboard component.
+ * Displays the courses the student is enrolled in and allows them to enroll in new courses.
+ */
 function StudentComponent() {
     const [courses, setCourses] = useState<Courses[] | null>(null);
     const [allcourses, setAllCourses] = useState<bigCourse[] | null>(null);
