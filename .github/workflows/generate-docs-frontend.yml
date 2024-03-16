@@ -2,13 +2,15 @@ name: Generate React Documentation
 
 on:
   push:
-    branches: [ main ]  # You can adjust the trigger as needed
+    branches:  
+      -main
+
   paths:
       - 'frontend/attendance-app/src'
 
-  permissions:
-    contents: write
-    pull-requests: write
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   generate_docs:
