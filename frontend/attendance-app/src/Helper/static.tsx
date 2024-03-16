@@ -1,7 +1,7 @@
 import { getCookie } from ".";
 import { parseJwt } from "./decrypter";
 
-export const isProd = false
+export const isProd = true
 
 export const bearerCookie = "bearer"
 export const getBearerToken = () => getCookie(bearerCookie);
