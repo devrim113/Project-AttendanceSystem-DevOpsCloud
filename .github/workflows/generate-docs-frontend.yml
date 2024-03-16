@@ -5,7 +5,8 @@ on:
     branches:  
       - main
     paths:
-      - 'frontend/attendance-app/src'
+      - 'frontend/attendance-app/src/*.ts'
+      - 'frontend/attendance-app/src/*.tsx'
 
 permissions:
   contents: write
