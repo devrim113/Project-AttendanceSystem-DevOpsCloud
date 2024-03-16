@@ -15,7 +15,7 @@ import { bearerCookie, cognitoURL } from './Helper/static';
 import TeacherAttendanceComponent from './Components/TeacherComponent/TeacherAttendanceComponent';
 import AdminAttendanceComponent from './Components/AdminComponent/AdminAttendanceComponent';
 import ProtectionComponent from './Components/ProtectionComponent/ProtectionComponent';
- 
+
 function App() {
   // useEffect(() => {
   let { idToken } = parseCognitoTokensFromUrl()
