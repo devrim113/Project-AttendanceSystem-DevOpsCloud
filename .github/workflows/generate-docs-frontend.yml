@@ -3,9 +3,8 @@ name: Generate React Documentation
 on:
   push:
     branches:  
-      -main
-
-  paths:
+      - main
+    paths:
       - 'frontend/attendance-app/src'
 
 permissions:
