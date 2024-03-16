@@ -9,6 +9,12 @@ type RedirectWithTokenProps = {
     children: React.ReactNode
 }
 
+/**
+ * Renders the RedirectWithToken component.
+ * 
+ * @param props - The component props.
+ * @returns The rendered component.
+ */
 function RedirectWithToken(props: RedirectWithTokenProps) {
     let { idToken } = parseCognitoTokensFromUrl()
     if(idToken === null) {

@@ -7,6 +7,10 @@ import { create_course } from "../../API/course";
 import { create_teacher } from "../../API/cognito";
 
 
+/**
+ * Renders the Admin Dashboard component.
+ * This component displays all the courses and provides functionality to create new courses and teachers.
+ */
 function AdminComponent() {
     const [courses, setCourses] = useState<null | any>(null);
     const [courseInput, setCourseInput] = useState("");
