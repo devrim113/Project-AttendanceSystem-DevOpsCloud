@@ -26,7 +26,7 @@ jobs:
           node-version: '16'  # Choose a suitable Node.js version
 
       - name: Install dependencies
-        run: npm install --save-dev react-docgen react-docgen-markdown-renderer
+        run: cd ./frontend/attendance-app && npm install --save-dev react-docgen react-docgen-markdown-renderer
 
       - name: Generate Markdown documentation
         run: npx react-docgen src/components -o docs/components.md --pretty --markdown-renderer react-docgen-markdown-renderer
