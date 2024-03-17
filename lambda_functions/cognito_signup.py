@@ -52,5 +52,5 @@ def lambda_handler(event, context):
             ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
         )
         return make_response(200, "User added to group and table")
-    except:
-        return make_response(403, "Something went wrong. Please try again.")
+    except Exception as e:
+        return make_response(403, f"Something went wrong. Please try again. Error: {str(e)}" )
