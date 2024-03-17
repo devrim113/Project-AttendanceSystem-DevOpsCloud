@@ -33,6 +33,10 @@ resource "aws_cognito_user_pool" "student_pool" {
   #     allow_admin_create_user_only = true
   # }
 
+  lambda_config {
+    pre_sign_up = aws_lambda_function.cognito_signup.arn
+  }
+
   password_policy {
     minimum_length                   = 8
     require_lowercase                = true
@@ -369,6 +373,9 @@ resource "aws_cognito_identity_pool_roles_attachment" "authenticator_role_attach
     "authenticated" = aws_iam_role.authentication_role.arn
   }
 }
+
+
+
 
 # resource "aws_cognito_identity_pool_roles_attachment" "teacher_role_attachment" {
 #   identity_pool_id = aws_cognito_identity_pool.teacher_identity_pool.id
