@@ -25,6 +25,23 @@ resource "aws_lambda_function" "lambda" {
   role          = aws_iam_role.lambda_role.arn
 }
 
+# ----------------- Create lambda for the cognito signup flow -----------------
+data "archive_file" "cognito_signup_lambda" {
+  type        = "zip"
+  source_file = "../lambda_functions/cognito_signup.py"
+  output_path = "../lambda_functions/cognito_signup.zip"
+}
+
+resource "aws_lambda_function" "cognito_signup" {
+  function_name = "cognito_signup"
+  filename      = data.archive_file.cognito_signup_lambda.output_path
+  handler       = "cognito_signup.lambda_handler"
+  runtime       = "python3.12"
+  role          = aws_iam_role.lambda_role.arn
+}
+
+
+
 # ----------------- Creating the IAM role for execution of the lambda functions -----------------
 
 # Creating the IAM role for the lambda functions so that they can be invoked by the API Gateway.
@@ -57,27 +74,13 @@ resource "aws_iam_policy" "lambda_permissions" {
         "Action" : [
           "cognito-idp:AdminCreateUser",
           "cognito-idp:AdminAddUserToGroup",
-          "cognito-idp:AdminDeleteUser"
+          "cognito-idp:AdminDeleteUser",
+          "cognito-idp:AdminUpdateUserAttributes"
         ],
         "Resource" : "*"
       }
     ]
   })
-}
-
-# Add the 'cognito_signup' Lambda function
-data "archive_file" "cognito_signup_lambda" {
-  type        = "zip"
-  source_file = "../lambda_functions/cognito_signup.py"
-  output_path = "../lambda_functions/cognito_signup.zip"
-}
-
-resource "aws_lambda_function" "cognito_signup" {
-  function_name = "cognito_signup"
-  filename      = data.archive_file.cognito_signup_lambda.output_path
-  handler       = "cognito_signup.lambda_handler"
-  runtime       = "python3.12"
-  role          = aws_iam_role.lambda_role.arn
 }
 
 # Create an IAM role specifically for the Cognito pre-signup Lambda
