@@ -63,7 +63,6 @@ resource "aws_cognito_user_group" "students" {
   name         = "Students"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for student users"
-  role_arn     = aws_iam_role.student_role.arn
 }
 
 # Generate teacher group
@@ -71,7 +70,6 @@ resource "aws_cognito_user_group" "teacher" {
   name         = "Teachers"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for teacher users"
-  role_arn     = aws_iam_role.teacher_role.arn
 }
 
 # Generate admin group
@@ -79,5 +77,4 @@ resource "aws_cognito_user_group" "admins" {
   name         = "Admins"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for admin users"
-  role_arn     = aws_iam_role.admin_role.arn
 }
