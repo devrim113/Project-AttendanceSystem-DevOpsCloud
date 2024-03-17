@@ -84,3 +84,11 @@ resource "aws_cognito_user_group" "admins" {
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for admin users"
 }
+
+resource "aws_lambda_permission" "cognito_trigger_permission" {
+  statement_id  = "AllowCognitoInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cognito_signup.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.student_pool.arn
+}
