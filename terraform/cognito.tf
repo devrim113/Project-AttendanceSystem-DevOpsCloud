@@ -1,7 +1,3 @@
-locals {
-  cognito_identity_client_provider = "cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.student_pool.id}"
-}
-
 # Cognito User Pool
 resource "aws_cognito_user_pool" "student_pool" {
   name                     = "student-login"
@@ -66,14 +62,11 @@ resource "aws_cognito_user_pool_domain" "main" {
   user_pool_id = aws_cognito_user_pool.student_pool.id
 }
 
-
 # Generate user group
 resource "aws_cognito_user_group" "students" {
   name         = "Students"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for student users"
-  role_arn     = aws_iam_role.student_role.arn
-  precedence   = 2
 }
 
 # Generate teacher group
@@ -81,8 +74,6 @@ resource "aws_cognito_user_group" "teacher" {
   name         = "Teachers"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for teacher users"
-  role_arn     = aws_iam_role.teacher_role.arn
-  precedence   = 1
 }
 
 # Generate admin group
@@ -90,8 +81,6 @@ resource "aws_cognito_user_group" "admins" {
   name         = "Admins"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for admin users"
-  role_arn     = aws_iam_role.admin_role.arn
-  precedence   = 0
 }
 
 # ----------------- Creating the Cognito Identity Pool -----------------

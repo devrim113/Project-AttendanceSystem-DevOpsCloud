@@ -61,4 +61,4 @@ jobs:
           pr_title: "Update Documentation"
           pr_body: "Automatically generated documentation update"
           destination_branch: "main"
-          source_branch: "update-documentation"
+          source_branch: "update-documentation-front"
