@@ -115,7 +115,9 @@ resource "aws_iam_policy" "cognito_signup_lambda_permissions" {
       {
         "Effect" : "Allow",
         "Action" : [
-          "cognito-idp:AdminAddUserToGroup"
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminAddUserToGroup",
+          "cognito-idp:AdminDeleteUser"
         ],
         "Resource" : "*"
       }
