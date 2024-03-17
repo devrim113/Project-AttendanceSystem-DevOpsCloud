@@ -77,7 +77,7 @@ resource "aws_lambda_function" "cognito_signup" {
   filename      = data.archive_file.cognito_signup_lambda.output_path
   handler       = "cognito_signup.lambda_handler"
   runtime       = "python3.12"
-  role          = aws_iam_role.cognito_signup_lambda_role.arn
+  role          = aws_iam_role.lambda_role.arn
 }
 
 # Create an IAM role specifically for the Cognito pre-signup Lambda
@@ -106,13 +106,6 @@ resource "aws_iam_policy" "cognito_signup_lambda_permissions" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        Action = "sts:AssumeRole",
-        Effect = "Allow",
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      },
-      {
         "Effect" : "Allow",
         "Action" : [
           "cognito-idp:AdminCreateUser",
@@ -120,7 +113,8 @@ resource "aws_iam_policy" "cognito_signup_lambda_permissions" {
           "cognito-idp:AdminDeleteUser"
         ],
         "Resource" : "*"
-      }
+      },
+
     ]
   })
 }
