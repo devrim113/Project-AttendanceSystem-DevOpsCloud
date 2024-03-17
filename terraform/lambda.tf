@@ -137,6 +137,12 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
   role       = aws_iam_role.lambda_role.name
 }
 
+# Add adding to cognito to the group.
+resource "aws_iam_role_policy_attachment" "cognitoFullAccess" {
+  policy_arn = aws_iam_policy.cognito_signup_lambda_permissions.arn
+  role       = aws_iam_role.lambda_role.name
+}
+
 # Attatching the AmazonDynamoDBFullAccess policy to the lambda role.
 resource "aws_iam_role_policy_attachment" "dynamodb_full_access" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
