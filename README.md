@@ -41,8 +41,6 @@ No modules.
 | [aws_cloudwatch_log_group.api_gateway_access_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_metric_alarm.cloudfront_5xx_errors](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.cloudfront_5xx_errors_15m](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
-| [aws_cognito_identity_pool.authenticator_identity_pool](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_identity_pool) | resource |
-| [aws_cognito_identity_pool_roles_attachment.authenticator_role_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_identity_pool_roles_attachment) | resource |
 | [aws_cognito_user_group.admins](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_group) | resource |
 | [aws_cognito_user_group.students](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_group) | resource |
 | [aws_cognito_user_group.teacher](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_group) | resource |
@@ -51,28 +49,18 @@ No modules.
 | [aws_cognito_user_pool_domain.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_pool_domain) | resource |
 | [aws_dynamodb_table.attendance_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 | [aws_dynamodb_table.table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
-| [aws_iam_policy.admin_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.authentication_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.cognito_signup_lambda_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.lambda_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.student_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.teacher_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_role.admin_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.api_gateway_cloudwatch_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.authentication_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.cognito_signup_lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.student_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.teacher_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.api_gateway_cloudwatch_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy_attachment.admin_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.authentication_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.cognitoFullAccess](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.cognito_permissions_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.dynamodb_full_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_basic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_permissions_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.student_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.student_to_admin_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.student_to_teacher_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.teacher_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.teacher_to_admin_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_lambda_function.cognito_signup](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_function.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_permission.api_gateway_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_s3_bucket.S3_Bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
@@ -86,6 +74,7 @@ No modules.
 | [aws_s3_bucket_policy.bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.S3_Bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_versioning.bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
+| [archive_file.cognito_signup_lambda](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [archive_file.lambda_package](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 
 ## Inputs
@@ -131,6 +120,7 @@ contain the root `toctree` directive. -->
   * [Submodules](lambda_functions.md#submodules)
   * [lambda_functions.admin module](lambda_functions.md#module-lambda_functions.admin)
   * [lambda_functions.cognito module](lambda_functions.md#module-lambda_functions.cognito)
+  * [lambda_functions.cognito_signup module](lambda_functions.md#module-lambda_functions.cognito_signup)
   * [lambda_functions.course module](lambda_functions.md#module-lambda_functions.course)
   * [lambda_functions.department module](lambda_functions.md#module-lambda_functions.department)
   * [lambda_functions.student module](lambda_functions.md#module-lambda_functions.student)
@@ -157,6 +147,8 @@ contain the root `toctree` directive. -->
 
 ## lambda_functions.admin module
 
+### lambda_functions.admin.check_permission(token)
+
 ### lambda_functions.admin.create_admin_record(item_id, user_name)
 
 Create object for an admin record.
@@ -170,6 +162,8 @@ Create object for an admin record.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.admin.decode_jwt(token)
 
 ### lambda_functions.admin.delete_admin_record(item_id)
 
@@ -249,6 +243,8 @@ Update an admin record.
 
 ## lambda_functions.cognito module
 
+### lambda_functions.cognito.check_permission(token)
+
 ### lambda_functions.cognito.create_admin_record(email, user_name)
 
 Create object for a teacher.
@@ -293,6 +289,8 @@ Create object for a teacher.
 
 ### lambda_functions.cognito.create_user_record(email, user_name, title)
 
+### lambda_functions.cognito.decode_jwt(token)
+
 ### lambda_functions.cognito.lambda_handler(event, context)
 
 ### lambda_functions.cognito.make_response(status_code, body)
@@ -307,7 +305,25 @@ Create a response object for the API Gateway.
 * **Return type:**
   dict
 
+## lambda_functions.cognito_signup module
+
+### lambda_functions.cognito_signup.lambda_handler(event, context)
+
+### lambda_functions.cognito_signup.make_response(status_code, body)
+
+Create a response object for the API Gateway.
+
+* **Parameters:**
+  * **status_code** (*int*) – The status code for the response.
+  * **body** (*str*) – The body of the response.
+* **Returns:**
+  The response object.
+* **Return type:**
+  dict
+
 ## lambda_functions.course module
+
+### lambda_functions.course.check_permission(token)
 
 ### lambda_functions.course.create_course(item_id, course_name, department_id, classes)
 
@@ -324,6 +340,8 @@ Create object for a course.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.course.decode_jwt(token)
 
 ### lambda_functions.course.delete_course(item_id)
 
@@ -399,6 +417,8 @@ Update object for a course.
 
 ## lambda_functions.department module
 
+### lambda_functions.department.check_permission(token)
+
 ### lambda_functions.department.create_department(dep_id, dep_name)
 
 Create object for a department.
@@ -412,6 +432,8 @@ Create object for a department.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.department.decode_jwt(token)
 
 ### lambda_functions.department.delete_department(dep_id)
 
@@ -533,6 +555,8 @@ Functions:
 - get_student_course_attendance: Retrieves the attendance record of a student for a specific course.
 - lambda_handler: Lambda handler function to interact with the DynamoDB table.
 
+### lambda_functions.student.check_permission(token)
+
 ### lambda_functions.student.create_student_record(user_id, user_name)
 
 Create a student record in the database.
@@ -547,6 +571,8 @@ Create a student record in the database.
   : If an error occurs, None is returned.
 * **Return type:**
   dict
+
+### lambda_functions.student.decode_jwt(token)
 
 ### lambda_functions.student.delete_record(item_id, item_type)
 
@@ -741,6 +767,8 @@ Assign a course to a teacher.
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
 
+### lambda_functions.teacher.check_permission(token)
+
 ### lambda_functions.teacher.create_teacher_record(item_id, user_name)
 
 Create object for a teacher.
@@ -754,6 +782,8 @@ Create object for a teacher.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.teacher.decode_jwt(token)
 
 ### lambda_functions.teacher.delete_teacher(user_id)
 
