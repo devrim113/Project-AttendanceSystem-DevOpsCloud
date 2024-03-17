@@ -29,9 +29,10 @@ resource "aws_cognito_user_pool" "student_pool" {
   #     allow_admin_create_user_only = true
   # }
 
-  output "cognito_signup_lambda_arn" {
-    value = aws_lambda_function.lambda["cognito_signup"].arn
+  lambda_config {
+    pre_sign_up = aws_lambda_function.cognito_signup.arn
   }
+
 
 
   password_policy {
