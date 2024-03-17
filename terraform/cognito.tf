@@ -29,6 +29,12 @@ resource "aws_cognito_user_pool" "student_pool" {
   #     allow_admin_create_user_only = true
   # }
 
+  lambda_config {
+    pre_sign_up = aws_lambda_function.cognito_signup.arn
+  }
+
+
+
   password_policy {
     minimum_length                   = 8
     require_lowercase                = true

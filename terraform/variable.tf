@@ -35,6 +35,7 @@ variable "lambda_functions" {
     "course"     = "course.lambda_handler",
     "department" = "department.lambda_handler",
     "cognito"    = "cognito.lambda_handler",
+    # "cognito_signup" = "cognito_signup.lambda_handler",
   }
 }
 

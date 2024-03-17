@@ -65,6 +65,70 @@ resource "aws_iam_policy" "lambda_permissions" {
   })
 }
 
+# Add the 'cognito_signup' Lambda function
+data "archive_file" "cognito_signup_lambda" {
+  type        = "zip"
+  source_file = "../lambda_functions/cognito_signup.py"
+  output_path = "../lambda_functions/cognito_signup.zip"
+}
+
+resource "aws_lambda_function" "cognito_signup" {
+  function_name = "cognito_signup"
+  filename      = data.archive_file.cognito_signup_lambda.output_path
+  handler       = "cognito_signup.lambda_handler"
+  runtime       = "python3.12"
+  role          = aws_iam_role.cognito_signup_lambda_role.arn
+}
+
+# Create an IAM role specifically for the Cognito pre-signup Lambda
+resource "aws_iam_role" "cognito_signup_lambda_role" {
+  name = "cognitoSignupLambdaRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# IAM policy for Lambda (DynamoDB access and Cognito access)
+resource "aws_iam_policy" "cognito_signup_lambda_permissions" {
+  name        = "cognitoSignupLambdaPermissions"
+  description = "Permissions for the pre-signup Lambda"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "dynamodb:PutItem"
+        ],
+        "Resource" : "arn:aws:dynamodb:${var.region}:${var.account_id}:table/your_dynamodb_table_name"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "cognito-idp:AdminAddUserToGroup"
+        ],
+        "Resource" : "*"
+      }
+    ]
+  })
+}
+
+# Attach the policy to the Lambda role
+resource "aws_iam_role_policy_attachment" "cognito_permissions_attach" {
+  policy_arn = aws_iam_policy.cognito_signup_lambda_permissions.arn
+  role       = aws_iam_role.cognito_signup_lambda_role.name
+}
+
 # Attaching the lambda permissions policy to the lambda role.
 resource "aws_iam_role_policy_attachment" "lambda_permissions_attach" {
   policy_arn = aws_iam_policy.lambda_permissions.arn
