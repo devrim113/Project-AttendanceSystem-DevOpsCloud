@@ -29,12 +29,12 @@ variable "to_define_methods" {
 variable "lambda_functions" {
   type = map(string)
   default = {
-    "student"        = "student.lambda_handler",
-    "admin"          = "admin.lambda_handler",
-    "teacher"        = "teacher.lambda_handler",
-    "course"         = "course.lambda_handler",
-    "department"     = "department.lambda_handler",
-    "cognito"        = "cognito.lambda_handler",
+    "student"    = "student.lambda_handler",
+    "admin"      = "admin.lambda_handler",
+    "teacher"    = "teacher.lambda_handler",
+    "course"     = "course.lambda_handler",
+    "department" = "department.lambda_handler",
+    "cognito"    = "cognito.lambda_handler",
     # "cognito_signup" = "cognito_signup.lambda_handler",
   }
 }
