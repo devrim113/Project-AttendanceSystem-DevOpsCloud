@@ -106,11 +106,11 @@ resource "aws_iam_policy" "cognito_signup_lambda_permissions" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "dynamodb:PutItem"
-        ],
-        "Resource" : "arn:aws:dynamodb:${var.region}:${var.account_id}:table/your_dynamodb_table_name"
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
       },
       {
         "Effect" : "Allow",
