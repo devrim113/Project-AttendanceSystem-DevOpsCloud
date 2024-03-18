@@ -51,21 +51,20 @@ jobs:
           find docs/build/markdown -name '*.md' -exec cat {} + > PYTHON.md
 
       - name: Install Node Dependencies
-        run: cd ./frontend/attendance-app && npm install --save-dev react-docgen react-docgen-markdown-renderer
+        run: npm install --save-dev react-docgen react-docgen-markdown-renderer
 
       - name: Generate Reach Documentation
-        run: npx react-docgen src/component/**/*.tsx -o doc.md --pretty --markdown-renderer react-docgen-markdown-renderer
+        run: npx react-docgen frontend/attendance-app/src/component/**/*.tsx -o REACT.md --pretty --markdown-renderer react-docgen-markdown-renderer
 
       - name: Combine Documentation into Single Markdown File
         run: |
-          cd ./
           echo -e "# Project Documentation" > README.md
           echo -e "\n# Terraform Documentation\n" >> README.md
           cat TERRAFORM.md >> README.md
           echo -e "\n# Python Documentation\n" >> README.md
           cat PYTHON.md >> README.md
           echo -e "\n# React Documentation\n" >> README.md
-          cat ./frontend/attendance-app/doc.md >> README.md
+          cat REACT.md >> README.md
 
       - name: Setup Git
         run: |
