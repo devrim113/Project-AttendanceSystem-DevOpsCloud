@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "artillery_permissions" {
-  name        = "Artillery permissions"
+  name        = "Artillery_permissions"
   description = "Permissions for Artillery to interact with services"
 
   policy = jsonencode({
