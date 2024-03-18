@@ -55,10 +55,10 @@ jobs:
 
       - name: Generate React Documentation
         run: |
-          cd frontend/attendance-app
+          cd frontend/attendance-app/src/API
           npx typedoc
           cd ../../../
-          mv ./frontend/attendance-app/docs ./frontend-docs
+          mv ./frontend/attendance-app/src/API/docs ./frontend-docs
 
       - name: Combine Documentation into Single Markdown File
         run: |
