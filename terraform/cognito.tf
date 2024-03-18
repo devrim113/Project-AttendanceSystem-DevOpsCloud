@@ -30,7 +30,7 @@ resource "aws_cognito_user_pool" "student_pool" {
   # }
 
   lambda_config {
-    pre_sign_up = aws_lambda_function.cognito_signup.arn
+    post_confirmation = aws_lambda_function.cognito_signup.arn
   }
 
 
