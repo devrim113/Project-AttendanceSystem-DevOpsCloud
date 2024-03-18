@@ -226,7 +226,7 @@ def decode_jwt(token):
 def check_permission(token):
     try:
         _ , payload = decode_jwt(token)
-        return payload["cognito:groups"].contains("Admins") or payload["cognito:groups"].contains("Teachers")
+        return ("Admins" in payload["cognito:groups"]) or ("Teachers" in payload["cognito:groups"])
     except:
         return False
 
