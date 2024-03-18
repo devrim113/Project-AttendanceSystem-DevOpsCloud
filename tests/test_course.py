@@ -9,6 +9,9 @@ def course_lambda(dynamodb):
 
 
 def test_admin_lambda_handler(create_dynamodb_table, course_lambda):
+    """
+    Test course lambda handler
+    """
     # Create a course record
     course_object = {
         'ItemId': '1',
