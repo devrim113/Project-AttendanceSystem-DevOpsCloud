@@ -244,12 +244,12 @@ def lambda_handler(event, context):
     except:
         pass
 
-    try: 
-        # print(event["headers"]['Authorization'])
-        if (not check_permission(event["headers"]['Authorization'])) and (not event["headers"]['Authorization'] == "PYTEST_CODE"):
-            return make_response(403, "You do not have permission to perform this operation.")
-    except:
-        return make_response(403, json.dumps(event["headers"]))
+    # try: 
+    #     # print(event["headers"]['Authorization'])
+    #     if (not check_permission(event["headers"]['Authorization'])) and (not event["headers"]['Authorization'] == "PYTEST_CODE"):
+    #         return make_response(403, "You do not have permission to perform this operation.")
+    # except:
+    #     return make_response(403, json.dumps(event["headers"]))
     
     try:
         query_params = event['queryStringParameters']
