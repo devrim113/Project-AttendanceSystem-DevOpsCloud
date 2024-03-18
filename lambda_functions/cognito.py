@@ -145,7 +145,7 @@ def decode_jwt(token):
 
 def check_permission(token):
     _ , payload = decode_jwt(token)
-    return payload["cognito:groups"].contains("Admins")
+    return "Admins" in payload["cognito:groups"]
 
 def lambda_handler(event, context):
     # Add logging of context information
