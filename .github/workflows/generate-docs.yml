@@ -56,7 +56,7 @@ jobs:
       - name: Generate React Documentation
         run: |
           cd frontend/attendance-app/src/API
-          npx typedoc --plugin typedoc-plugin-markdown --out ./docs .
+          npx typedoc --plugin typedoc-plugin-markdown --out ./docs *.ts
           cd ../../../../
           find ./frontend/attendance-app/src/API/docs -name '*.md' -exec cat {} + > REACT.md
 
