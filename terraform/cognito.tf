@@ -29,6 +29,12 @@ resource "aws_cognito_user_pool" "student_pool" {
   #     allow_admin_create_user_only = true
   # }
 
+  lambda_config {
+    pre_sign_up = aws_lambda_function.cognito_signup.arn
+  }
+
+
+
   password_policy {
     minimum_length                   = 8
     require_lowercase                = true
@@ -77,4 +83,12 @@ resource "aws_cognito_user_group" "admins" {
   name         = "Admins"
   user_pool_id = aws_cognito_user_pool.student_pool.id
   description  = "A group for admin users"
+}
+
+resource "aws_lambda_permission" "cognito_trigger_permission" {
+  statement_id  = "AllowCognitoInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cognito_signup.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.student_pool.arn
 }
