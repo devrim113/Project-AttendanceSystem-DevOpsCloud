@@ -4,9 +4,17 @@
     push:
       branches:
         - main
+      paths:
+        - 'lambda_functions/**'
+        - 'tests/**'
+        - '.github/workflows/lambda_tests.yml'
     pull_request:
       branches:
         - main
+      paths:
+        - 'lambda_functions/**'
+        - 'tests/**'
+        - '.github/workflows/lambda_tests.yml'
 
   jobs:
     test-lambda-functions:

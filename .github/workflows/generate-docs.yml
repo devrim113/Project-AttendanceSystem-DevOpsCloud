@@ -58,7 +58,7 @@ jobs:
           cd frontend/attendance-app/src
           npx typedoc
           cd ../../../
-          mv frontend/attendance-app/docs frontend-docs
+          mv ./frontend/attendance-app/docs ./frontend-docs
 
       - name: Combine Documentation into Single Markdown File
         run: |
