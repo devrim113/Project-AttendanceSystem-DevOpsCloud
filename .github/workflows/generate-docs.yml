@@ -55,7 +55,7 @@ jobs:
 
       - name: Generate React Documentation
         run: |
-          cd frontend/attendance-app/src
+          cd frontend/attendance-app
           npx typedoc
           cd ../../../
           mv ./frontend/attendance-app/docs ./frontend-docs
