@@ -1,0 +1,13 @@
+# usage: artillery run scale_test/load_test_frontend.yaml
+
+config:
+  target: "https://d5j4m0w9schy1.cloudfront.net"
+  phases:
+    - duration: 120
+      arrivalRate: 50
+      name: Spike phase
+
+scenarios:
+  - flow:
+      - get:
+          url: "/"
