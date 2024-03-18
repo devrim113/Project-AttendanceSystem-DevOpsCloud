@@ -69,7 +69,7 @@ resource "aws_iam_role" "artillery_role" {
       {
         "Sid" : "Statement1",
         "Effect" : "Allow",
-        "Principal" : {},
+        "Principal" : { "Service" : "lambda.amazonaws.com" },
         "Action" : "sts:AssumeRole"
       }
     ]
