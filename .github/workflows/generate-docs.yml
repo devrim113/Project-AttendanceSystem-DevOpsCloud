@@ -53,8 +53,8 @@ jobs:
       - name: Install Node Dependencies
         run: npm install --save-dev react-docgen react-docgen-markdown-renderer
 
-      - name: Generate Reach Documentation
-        run: npx react-docgen frontend/attendance-app/src/component/**/*.tsx -o REACT.md --pretty --markdown-renderer react-docgen-markdown-renderer
+      - name: Generate React Documentation
+        run: npx react-docgen ./frontend/attendance-app/src/component/**/*.tsx -o REACT.md --pretty --markdown-renderer react-docgen-markdown-renderer
 
       - name: Combine Documentation into Single Markdown File
         run: |
