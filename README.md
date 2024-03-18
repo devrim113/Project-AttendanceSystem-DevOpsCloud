@@ -41,8 +41,6 @@ No modules.
 | [aws_cloudwatch_log_group.api_gateway_access_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_metric_alarm.cloudfront_5xx_errors](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.cloudfront_5xx_errors_15m](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
-| [aws_cognito_identity_pool.authenticator_identity_pool](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_identity_pool) | resource |
-| [aws_cognito_identity_pool_roles_attachment.authenticator_role_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_identity_pool_roles_attachment) | resource |
 | [aws_cognito_user_group.admins](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_group) | resource |
 | [aws_cognito_user_group.students](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_group) | resource |
 | [aws_cognito_user_group.teacher](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_group) | resource |
@@ -51,30 +49,24 @@ No modules.
 | [aws_cognito_user_pool_domain.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_pool_domain) | resource |
 | [aws_dynamodb_table.attendance_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 | [aws_dynamodb_table.table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
-| [aws_iam_policy.admin_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.authentication_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.artillery_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.cognito_signup_lambda_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.lambda_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.student_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.teacher_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_role.admin_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.api_gateway_cloudwatch_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.authentication_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.artillery_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.cognito_signup_lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.student_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.teacher_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.api_gateway_cloudwatch_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy_attachment.admin_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.authentication_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.artillery_permissions_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.cognitoFullAccess](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.cognito_permissions_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.dynamodb_full_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_basic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_permissions_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.student_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.student_to_admin_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.student_to_teacher_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.teacher_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.teacher_to_admin_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_lambda_function.cognito_signup](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_function.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_permission.api_gateway_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
+| [aws_lambda_permission.cognito_trigger_permission](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_s3_bucket.S3_Bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.S3_Bucket_Logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
@@ -86,6 +78,7 @@ No modules.
 | [aws_s3_bucket_policy.bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.S3_Bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_versioning.bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
+| [archive_file.cognito_signup_lambda](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [archive_file.lambda_package](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 
 ## Inputs
@@ -93,9 +86,12 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID | `string` | `"590183910477"` | no |
+| <a name="input_attendance_frontend_logs"></a> [attendance\_frontend\_logs](#input\_attendance\_frontend\_logs) | n/a | `string` | `"attendance-frontend-logs"` | no |
 | <a name="input_lambda_functions"></a> [lambda\_functions](#input\_lambda\_functions) | Defining the lambda functions and their handlers. | `map(string)` | <pre>{<br>  "admin": "admin.lambda_handler",<br>  "cognito": "cognito.lambda_handler",<br>  "course": "course.lambda_handler",<br>  "department": "department.lambda_handler",<br>  "student": "student.lambda_handler",<br>  "teacher": "teacher.lambda_handler"<br>}</pre> | no |
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | `"eu-central-1"` | no |
+| <a name="input_s3_name_frontend"></a> [s3\_name\_frontend](#input\_s3\_name\_frontend) | name for S3 bucket front-end | `string` | `"attendance-frontend-bucket"` | no |
 | <a name="input_s3_origin_id"></a> [s3\_origin\_id](#input\_s3\_origin\_id) | Defining the s3 origin id for the CloudFront distribution. | `string` | `"s3CodeBucketOrigin"` | no |
+| <a name="input_student_pool_name"></a> [student\_pool\_name](#input\_student\_pool\_name) | Name of the student\_pool\_id. | `string` | `"student-attendance-system"` | no |
 | <a name="input_to_define_methods"></a> [to\_define\_methods](#input\_to\_define\_methods) | Defining the methods that have to be created for the API Gateway. | `list(string)` | <pre>[<br>  "GET",<br>  "OPTIONS",<br>  "PUT",<br>  "POST",<br>  "DELETE",<br>  "HEAD"<br>]</pre> | no |
 | <a name="input_to_define_paths"></a> [to\_define\_paths](#input\_to\_define\_paths) | Defining the paths that have to be created for the API Gateway. | `list(string)` | <pre>[<br>  "admin",<br>  "teacher",<br>  "course",<br>  "department",<br>  "student",<br>  "cognito"<br>]</pre> | no |
 
@@ -131,6 +127,7 @@ contain the root `toctree` directive. -->
   * [Submodules](lambda_functions.md#submodules)
   * [lambda_functions.admin module](lambda_functions.md#module-lambda_functions.admin)
   * [lambda_functions.cognito module](lambda_functions.md#module-lambda_functions.cognito)
+  * [lambda_functions.cognito_signup module](lambda_functions.md#module-lambda_functions.cognito_signup)
   * [lambda_functions.course module](lambda_functions.md#module-lambda_functions.course)
   * [lambda_functions.department module](lambda_functions.md#module-lambda_functions.department)
   * [lambda_functions.student module](lambda_functions.md#module-lambda_functions.student)
@@ -157,6 +154,8 @@ contain the root `toctree` directive. -->
 
 ## lambda_functions.admin module
 
+### lambda_functions.admin.check_permission(token)
+
 ### lambda_functions.admin.create_admin_record(item_id, user_name)
 
 Create object for an admin record.
@@ -170,6 +169,8 @@ Create object for an admin record.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.admin.decode_jwt(token)
 
 ### lambda_functions.admin.delete_admin_record(item_id)
 
@@ -249,6 +250,8 @@ Update an admin record.
 
 ## lambda_functions.cognito module
 
+### lambda_functions.cognito.check_permission(token)
+
 ### lambda_functions.cognito.create_admin_record(email, user_name)
 
 Create object for a teacher.
@@ -293,6 +296,8 @@ Create object for a teacher.
 
 ### lambda_functions.cognito.create_user_record(email, user_name, title)
 
+### lambda_functions.cognito.decode_jwt(token)
+
 ### lambda_functions.cognito.lambda_handler(event, context)
 
 ### lambda_functions.cognito.make_response(status_code, body)
@@ -307,7 +312,13 @@ Create a response object for the API Gateway.
 * **Return type:**
   dict
 
+## lambda_functions.cognito_signup module
+
+### lambda_functions.cognito_signup.lambda_handler(event, context)
+
 ## lambda_functions.course module
+
+### lambda_functions.course.check_permission(token)
 
 ### lambda_functions.course.create_course(item_id, course_name, department_id, classes)
 
@@ -324,6 +335,8 @@ Create object for a course.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.course.decode_jwt(token)
 
 ### lambda_functions.course.delete_course(item_id)
 
@@ -399,6 +412,8 @@ Update object for a course.
 
 ## lambda_functions.department module
 
+### lambda_functions.department.check_permission(token)
+
 ### lambda_functions.department.create_department(dep_id, dep_name)
 
 Create object for a department.
@@ -412,6 +427,8 @@ Create object for a department.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.department.decode_jwt(token)
 
 ### lambda_functions.department.delete_department(dep_id)
 
@@ -533,6 +550,8 @@ Functions:
 - get_student_course_attendance: Retrieves the attendance record of a student for a specific course.
 - lambda_handler: Lambda handler function to interact with the DynamoDB table.
 
+### lambda_functions.student.check_permission(token)
+
 ### lambda_functions.student.create_student_record(user_id, user_name)
 
 Create a student record in the database.
@@ -547,6 +566,8 @@ Create a student record in the database.
   : If an error occurs, None is returned.
 * **Return type:**
   dict
+
+### lambda_functions.student.decode_jwt(token)
 
 ### lambda_functions.student.delete_record(item_id, item_type)
 
@@ -741,6 +762,8 @@ Assign a course to a teacher.
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
 
+### lambda_functions.teacher.check_permission(token)
+
 ### lambda_functions.teacher.create_teacher_record(item_id, user_name)
 
 Create object for a teacher.
@@ -754,6 +777,8 @@ Create object for a teacher.
   dict
 * **Raises:**
   **ClientError** – If an error occurs while putting the item.
+
+### lambda_functions.teacher.decode_jwt(token)
 
 ### lambda_functions.teacher.delete_teacher(user_id)
 
@@ -891,3 +916,576 @@ Update object for a teacher.
 ## tests.test_teacher module
 
 ## Module contents
+
+# React Documentation
+
+[attendance-app](README.md) / Modules
+
+# attendance-app
+
+## Table of contents
+
+### Modules
+
+- [admin](modules/admin.md)
+- [cognito](modules/cognito.md)
+- [course](modules/course.md)
+- [student](modules/student.md)
+- [teacher](modules/teacher.md)
+[attendance-app](../README.md) / [Modules](../modules.md) / teacher
+
+# Module: teacher
+
+## Table of contents
+
+### Functions
+
+- [assign\_course\_to\_teacher](teacher.md#assign_course_to_teacher)
+- [get\_all\_course\_attendance](teacher.md#get_all_course_attendance)
+- [get\_teacher\_course\_names](teacher.md#get_teacher_course_names)
+
+## Functions
+
+### assign\_course\_to\_teacher
+
+▸ **assign_course_to_teacher**(`ItemId`, `CourseId`, `UserId`): () => `Promise`\<`Response`\>
+
+Assigns a course to a teacher.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the item. |
+| `CourseId` | `string` | The ID of the course. |
+| `UserId` | `string` | The ID of the user. |
+
+#### Returns
+
+`fn`
+
+A Promise that resolves to the result of the API call.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[teacher.ts:57](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/teacher.ts#L57)
+
+___
+
+### get\_all\_course\_attendance
+
+▸ **get_all_course_attendance**(`CourseId`): () => `Promise`\<`Response`\>
+
+Retrieves the attendance data for a specific course.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `CourseId` | `string` | The ID of the course to retrieve attendance data for. |
+
+#### Returns
+
+`fn`
+
+A Promise that resolves to the attendance data for the specified course.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[teacher.ts:76](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/teacher.ts#L76)
+
+___
+
+### get\_teacher\_course\_names
+
+▸ **get_teacher_course_names**(`ItemId`): () => `Promise`\<`Response`\>
+
+Retrieves the course names associated with a teacher.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the teacher. |
+
+#### Returns
+
+`fn`
+
+A Promise that resolves to the course names.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[teacher.ts:38](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/teacher.ts#L38)
+[attendance-app](../README.md) / [Modules](../modules.md) / course
+
+# Module: course
+
+## Table of contents
+
+### Functions
+
+- [create\_course](course.md#create_course)
+- [get\_course](course.md#get_course)
+- [update\_course](course.md#update_course)
+
+## Functions
+
+### create\_course
+
+▸ **create_course**(`ItemId`, `CourseName`, `DepartmentId`): () => `Promise`\<`Response`\>
+
+Creates a new course.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the course item. |
+| `CourseName` | `string` | The name of the course. |
+| `DepartmentId` | `string` | The ID of the department the course belongs to. |
+
+#### Returns
+
+`fn`
+
+A promise that resolves to the result of the API call.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[course.ts:38](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/course.ts#L38)
+
+___
+
+### get\_course
+
+▸ **get_course**(`ItemId`): () => `Promise`\<`Response`\>
+
+Retrieves a course based on the provided ItemId.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The unique identifier of the course. |
+
+#### Returns
+
+`fn`
+
+A Promise that resolves to the course data.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[course.ts:58](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/course.ts#L58)
+
+___
+
+### update\_course
+
+▸ **update_course**(`ItemId`, `CourseName`, `DepartmentId`, `Classes`): () => `Promise`\<`Response`\>
+
+Updates a course with the specified details.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the course to update. |
+| `CourseName` | `string` | The new name of the course. |
+| `DepartmentId` | `string` | The ID of the department the course belongs to. |
+| `Classes` | `Object` | An object containing the classes associated with the course. |
+
+#### Returns
+
+`fn`
+
+A Promise that resolves to the updated course.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[course.ts:77](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/course.ts#L77)
+[attendance-app](../README.md) / [Modules](../modules.md) / student
+
+# Module: student
+
+## Table of contents
+
+### Functions
+
+- [create\_student](student.md#create_student)
+- [enlist\_student\_course](student.md#enlist_student_course)
+- [get\_all\_courses](student.md#get_all_courses)
+- [get\_student\_course\_attendance](student.md#get_student_course_attendance)
+- [get\_student\_course\_names](student.md#get_student_course_names)
+- [get\_student\_courses](student.md#get_student_courses)
+- [get\_student\_list](student.md#get_student_list)
+- [update\_attendance](student.md#update_attendance)
+
+## Functions
+
+### create\_student
+
+▸ **create_student**(`ItemId`, `UserName`, `ItemType`): () => `Promise`\<`Response`\>
+
+Creates a new student.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the student item. |
+| `UserName` | `string` | The username of the student. |
+| `ItemType` | `string` | The type of the student item. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to create a new student.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:40](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L40)
+
+___
+
+### enlist\_student\_course
+
+▸ **enlist_student_course**(`ItemId`, `UserId`, `CourseId`): () => `Promise`\<`Response`\>
+
+Enlists a student in a course.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the item. |
+| `UserId` | `string` | The ID of the user. |
+| `CourseId` | `string` | The ID of the course. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to enlist a student in a course.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:123](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L123)
+
+___
+
+### get\_all\_courses
+
+▸ **get_all_courses**(): () => `Promise`\<`Response`\>
+
+Retrieves all courses.
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to get all courses.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:106](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L106)
+
+___
+
+### get\_student\_course\_attendance
+
+▸ **get_student_course_attendance**(`UserId`, `CourseId`): () => `Promise`\<`Response`\>
+
+Retrieves the attendance of a student in a specific course.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `UserId` | `string` | The ID of the user. |
+| `CourseId` | `string` | The ID of the course. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to get the student's course attendance.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:144](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L144)
+
+___
+
+### get\_student\_course\_names
+
+▸ **get_student_course_names**(`ItemId`): () => `Promise`\<`Response`\>
+
+Retrieves the course names of a specific student.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the student. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to get the student's course names.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:91](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L91)
+
+___
+
+### get\_student\_courses
+
+▸ **get_student_courses**(`ItemId`): () => `Promise`\<`Response`\>
+
+Retrieves the courses of a specific student.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the student. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to get the student's courses.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:75](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L75)
+
+___
+
+### get\_student\_list
+
+▸ **get_student_list**(`ItemId`): () => `Promise`\<`Response`\>
+
+Retrieves the list of students for a specific item.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the item. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to get the student list.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:59](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L59)
+
+___
+
+### update\_attendance
+
+▸ **update_attendance**(`ItemId`, `Attendance`, `courseId`): () => `Promise`\<`Response`\>
+
+Updates the attendance of a student for a specific course.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ItemId` | `string` | The ID of the item. |
+| `Attendance` | `AttendanceDateRecord` | The attendance record. |
+| `courseId` | `string` | The ID of the course. |
+
+#### Returns
+
+`fn`
+
+A function that performs a fetch request to update the student's attendance.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[student.ts:179](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/student.ts#L179)
+[attendance-app](../README.md) / [Modules](../modules.md) / admin
+
+# Module: admin
+[attendance-app](../README.md) / [Modules](../modules.md) / cognito
+
+# Module: cognito
+
+## Table of contents
+
+### Functions
+
+- [create\_teacher](cognito.md#create_teacher)
+
+## Functions
+
+### create\_teacher
+
+▸ **create_teacher**(`username`, `email`): () => `Promise`\<`Response`\>
+
+Creates a teacher record in the system.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `username` | `string` | The username of the teacher. |
+| `email` | `string` | The email of the teacher. |
+
+#### Returns
+
+`fn`
+
+A Promise that resolves to the result of the API call.
+
+▸ (): `Promise`\<`Response`\>
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[cognito.ts:39](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/7af7634/frontend/attendance-app/src/API/cognito.ts#L39)
+attendance-app / [Modules](modules.md)
+
+# Getting Started with Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
