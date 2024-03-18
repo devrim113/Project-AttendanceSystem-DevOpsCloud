@@ -15,6 +15,9 @@ def student_lambda(dynamodb):
 
 
 def test_admin_lambda_handler(create_dynamodb_table, admin_lambda, student_lambda):
+    """
+    Test admin lambda handler
+    """
     # Create an admin record
     admin_object = {
         'ItemId': '1',
