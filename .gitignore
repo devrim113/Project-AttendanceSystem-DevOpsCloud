@@ -57,3 +57,4 @@ yarn-debug.log*
 yarn-error.log*
 
 docs/build
+frontend/attendance-app/src/API/docs

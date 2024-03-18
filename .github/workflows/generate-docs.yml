@@ -10,6 +10,7 @@ on:
       - 'tests/*.py'
       - '.github/workflows/generate-docs.yml'
       - 'docs/src/*'
+      - 'frontend/attendance-app/src/*'
 
 permissions:
   contents: write
@@ -49,6 +50,16 @@ jobs:
           sphinx-build -b markdown docs/source docs/build/markdown
           find docs/build/markdown -name '*.md' -exec cat {} + > PYTHON.md
 
+      - name: Install Node Dependencies
+        run: npm install --save-dev typedoc typedoc-plugin-markdown
+
+      - name: Generate React Documentation
+        run: |
+          cd frontend/attendance-app/src/API
+          npx typedoc --plugin typedoc-plugin-markdown --out ./docs *.ts
+          cd ../../../../
+          find ./frontend/attendance-app/src/API/docs -name '*.md' -exec cat {} + > REACT.md
+
       - name: Combine Documentation into Single Markdown File
         run: |
           echo -e "# Project Documentation" > README.md
@@ -56,10 +67,8 @@ jobs:
           cat TERRAFORM.md >> README.md
           echo -e "\n# Python Documentation\n" >> README.md
           cat PYTHON.md >> README.md
-
-      - name: Display Documentation
-        run: |
-          cat README.md
+          echo -e "\n# React Documentation\n" >> README.md
+          cat frontend-docs/README.md >> README.md
 
       - name: Setup Git
         run: |

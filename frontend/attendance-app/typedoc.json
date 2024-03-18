@@ -1,0 +1,6 @@
+{
+    "out": "./frontend-docs",
+    "entryPoints": [
+        "src"
+    ]
+}
