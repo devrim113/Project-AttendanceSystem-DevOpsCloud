@@ -57,9 +57,11 @@ jobs:
 
       - name: Generate React Documentation
         run: |
-          cd src/API
+          cd frontend/attendance-app/src/API
           npx typedoc --plugin typedoc-plugin-markdown --out ./docs *.ts
-          cd ../../../../
+
+      - name: Combine React Documentation into Single Markdown File
+        run: |
           find ./frontend/attendance-app/src/API/docs -name '*.md' -exec cat {} + > REACT.md
 
       - name: Combine Documentation into Single Markdown File
