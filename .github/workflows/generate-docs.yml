@@ -54,7 +54,7 @@ jobs:
         run: npm install --save-dev react-docgen react-docgen-markdown-renderer
 
       - name: Generate React Documentation
-        run: npx react-docgen "./frontend/attendance-app/src/Components/**/*.tsx" -o REACT.md --pretty --markdown-renderer react-docgen-markdown-renderer
+        run: npx react-docgen "./frontend/attendance-app/src/Components/AdminComponent/AdminComponent.tsx" -o REACT.md --pretty --markdown-renderer react-docgen-markdown-renderer
 
       - name: Combine Documentation into Single Markdown File
         run: |
