@@ -4,13 +4,9 @@
     push:
       branches:
         - main
-      paths:
-        - 'lambda-functions/*.py'
     pull_request:
       branches:
         - main
-      paths:
-        - 'lambda-functions/*.py'
 
   jobs:
     test-lambda-functions:
