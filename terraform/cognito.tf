@@ -60,7 +60,7 @@ resource "aws_cognito_user_pool_client" "student_pool_client" {
 }
 
 resource "aws_cognito_user_pool_domain" "main" {
-  domain       = "student-attendance-system"
+  domain       = var.student_pool_name
   user_pool_id = aws_cognito_user_pool.student_pool.id
 }
 

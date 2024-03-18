@@ -10,7 +10,7 @@
 
 # Creating the S3 bucket where the frontend code will be stored.
 resource "aws_s3_bucket" "S3_Bucket" {
-  bucket = "attendance-frontend-bucket"
+  bucket = var.s3_name_frontend
 
   tags = {
     Name = "The code bucket"
@@ -52,7 +52,7 @@ resource "aws_s3_bucket_logging" "b_logging" {
 
 # Creating the S3 bucket where the logs will be stored.
 resource "aws_s3_bucket" "S3_Bucket_Logs" {
-  bucket = "attendance-frontend-logs"
+  bucket = var.attendance_frontend_logs
   tags = {
     Name = "The logs bucket"
   }
