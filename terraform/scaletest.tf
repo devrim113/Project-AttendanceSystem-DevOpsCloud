@@ -1,3 +1,11 @@
+/* Scale test
+ * This is the terraform file that enables that scalability tests to run in a lambda function,
+ * the workflow is as follows:
+ * 1. Creating the IAM role for Artillery to create the necessary resources to run the tests.
+*/
+
+# ----------------- Creating the IAM role -----------------
+
 resource "aws_iam_policy" "artillery_permissions" {
   name        = "Artillery_permissions"
   description = "Permissions for Artillery to interact with services"
