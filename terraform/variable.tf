@@ -44,3 +44,20 @@ variable "s3_origin_id" {
   type    = string
   default = "s3CodeBucketOrigin"
 }
+
+# Name of the student_pool_id.
+variable "student_pool_name" {
+  type    = string
+  default = "student-attendance-system"
+}
+
+# name for S3 bucket front-end
+variable "s3_name_frontend" {
+  type    = string
+  default = "attendance-frontend-bucket"
+}
+
+variable "attendance_frontend_logs" {
+  type    = string
+  default = "attendance-frontend-logs"
+}

@@ -51,13 +51,17 @@ jobs:
           find docs/build/markdown -name '*.md' -exec cat {} + > PYTHON.md
 
       - name: Install Node Dependencies
-        run: npm install --save-dev typedoc typedoc-plugin-markdown
+        run: |
+          cd frontend/attendance-app
+          npm install --save-dev typedoc typedoc-plugin-markdown
 
       - name: Generate React Documentation
         run: |
           cd frontend/attendance-app/src/API
           npx typedoc --plugin typedoc-plugin-markdown --out ./docs *.ts
-          cd ../../../../
+
+      - name: Combine React Documentation into Single Markdown File
+        run: |
           find ./frontend/attendance-app/src/API/docs -name '*.md' -exec cat {} + > REACT.md
 
       - name: Combine Documentation into Single Markdown File
@@ -68,7 +72,7 @@ jobs:
           echo -e "\n# Python Documentation\n" >> README.md
           cat PYTHON.md >> README.md
           echo -e "\n# React Documentation\n" >> README.md
-          cat frontend-docs/README.md >> README.md
+          cat REACT.md >> README.md
 
       - name: Setup Git
         run: |

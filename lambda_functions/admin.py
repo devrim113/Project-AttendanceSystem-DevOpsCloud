@@ -194,14 +194,14 @@ def decode_jwt(token):
     header, payload, signature = token.split(".")
 
     # Base64 decode and deserialize header 
-    header_json = base64.b64decode(header + "==").decode("utf-8")
-    header_data = json.loads(header_json)
+    # header_json = base64.b64decode(header + "==").decode("utf-8")
+    # header_data = json.loads(header_json)
 
     # Base64 decode and deserialize payload
     payload_json = base64.b64decode(payload + "==").decode("utf-8")
     payload_data = json.loads(payload_json)
 
-    return header_data, payload_data
+    return "", payload_data
 
 def check_permission(token):
     try:
@@ -244,12 +244,12 @@ def lambda_handler(event, context):
     except:
         pass
 
-    # try: 
-    #     # print(event["headers"]['Authorization'])
-    #     if (not check_permission(event["headers"]['Authorization'])) and (not event["headers"]['Authorization'] == "PYTEST_CODE"):
-    #         return make_response(403, "You do not have permission to perform this operation.")
-    # except:
-    #     return make_response(403, json.dumps(event["headers"]))
+    try: 
+        # print(event["headers"]['Authorization'])
+        if (not check_permission(event["headers"]['Authorization'])) and (not event["headers"]['Authorization'] == "PYTEST_CODE"):
+            return make_response(403, "You do not have permission to perform this operation.")
+    except:
+        return make_response(403, json.dumps(event["headers"]))
     
     try:
         query_params = event['queryStringParameters']
