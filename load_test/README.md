@@ -1,6 +1,6 @@
 # README: Artillery Load Testing
 
-This folder contains the files allow load testing on the web application.
+This directory contains the files allow load testing on the web application.
 The program uses Artillery (https://artillery.io/) to perform the tests.
 
 ## Requirements:
@@ -21,22 +21,26 @@ The program uses Artillery (https://artillery.io/) to perform the tests.
 **2. Test Configurations:**
 
 - This folder includes two test configuration files:
-  - load_test_frontend.yaml: 6000 requests in 120 seconds will be sent to the homepage of the frontend.
-  - load_test_backend.yaml: In the first phase, 180 api requests in 60 seconds will be sent as a buffer to start up the lambda resource. After that, 6000 api requests will be sent in 120 seconds.
+  - `load_test_frontend.yaml`: 6000 requests in 120 seconds will be sent to the homepage of the frontend.
+  - `load_test_backend.yaml`: In the first phase, 180 api requests in 60 seconds will be sent as a buffer to start up the lambda resource. After that, 6000 api requests will be sent in 120 seconds.
 
 ## Running the Tests:
 
-1. Install Dependencies:
+**1. Change Directory:**
+
+Ensure you are currently in the directory `/load_test`.
+
+**2. Install Dependencies:**
 
 `npm install`
 
-2. Frontend Test:
+**3. Frontend Test:**
 
 This script runs the tests defined in load_test_frontend.yaml.
 
 `npm run test:frontend`
 
-3. Backend Test:
+**4. Backend Test:**
 
 This script runs the tests defined in load_test_frontend.yaml.
 
