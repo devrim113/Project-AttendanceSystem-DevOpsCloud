@@ -134,6 +134,22 @@ resource "aws_cloudwatch_dashboard" "my_dashboard" {
     {
       "type": "metric",
       "x": 12,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["AWS/Cloudfront", "Requests", "Region", "Global", "DistributionId", "E2T6940QFH3ACC", { "stat": "Sum", "period": 300 }]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "title": "Cloudfront requests",
+        "region": "eu-central-1"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
       "y": 18,
       "width": 12,
       "height": 6,
