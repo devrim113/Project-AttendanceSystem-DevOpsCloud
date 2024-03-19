@@ -1,14 +1,13 @@
 {
-    "name": "artillery-load-testing",
-    "version": "1.0.0",
-    "description": "A project using Artillery for load testing",
-    "main": "index.js",
-    "dependencies": {
-      "artillery": "^2.0.7"
-    },
-    "scripts": {
-        "test:frontend": "artillery run load_test_frontend.yaml",
-        "test:backend": "artillery run --variables '{ \"authToken\": process.env.JWT_TOKEN }' load_test_backend.yaml"
-    }
+  "name": "artillery-load-testing",
+  "version": "1.0.0",
+  "description": "A project using Artillery for load testing",
+  "main": "index.js",
+  "dependencies": {
+    "artillery": "^2.0.7"
+  },
+  "scripts": {
+      "test:frontend": "artillery run load_test_frontend.yaml",
+      "test:backend": "artillery run --variables '{ \"authToken\": \"<<JWT_TOKEN>>\" }' load_test_backend.yaml"
   }
-  
+}
