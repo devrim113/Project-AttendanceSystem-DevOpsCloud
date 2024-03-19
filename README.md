@@ -974,7 +974,7 @@ A Promise that resolves to the result of the API call.
 
 #### Defined in
 
-[teacher.ts:57](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/teacher.ts#L57)
+[teacher.ts:57](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/teacher.ts#L57)
 
 ___
 
@@ -1004,7 +1004,7 @@ A Promise that resolves to the attendance data for the specified course.
 
 #### Defined in
 
-[teacher.ts:76](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/teacher.ts#L76)
+[teacher.ts:76](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/teacher.ts#L76)
 
 ___
 
@@ -1034,7 +1034,7 @@ A Promise that resolves to the course names.
 
 #### Defined in
 
-[teacher.ts:38](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/teacher.ts#L38)
+[teacher.ts:38](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/teacher.ts#L38)
 [attendance-app](../README.md) / [Modules](../modules.md) / course
 
 # Module: course
@@ -1077,7 +1077,7 @@ A promise that resolves to the result of the API call.
 
 #### Defined in
 
-[course.ts:38](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/course.ts#L38)
+[course.ts:38](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/course.ts#L38)
 
 ___
 
@@ -1107,7 +1107,7 @@ A Promise that resolves to the course data.
 
 #### Defined in
 
-[course.ts:58](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/course.ts#L58)
+[course.ts:58](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/course.ts#L58)
 
 ___
 
@@ -1140,7 +1140,7 @@ A Promise that resolves to the updated course.
 
 #### Defined in
 
-[course.ts:77](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/course.ts#L77)
+[course.ts:77](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/course.ts#L77)
 [attendance-app](../README.md) / [Modules](../modules.md) / student
 
 # Module: student
@@ -1188,7 +1188,7 @@ A function that performs a fetch request to create a new student.
 
 #### Defined in
 
-[student.ts:40](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L40)
+[student.ts:40](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L40)
 
 ___
 
@@ -1220,7 +1220,7 @@ A function that performs a fetch request to enlist a student in a course.
 
 #### Defined in
 
-[student.ts:123](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L123)
+[student.ts:123](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L123)
 
 ___
 
@@ -1244,7 +1244,7 @@ A function that performs a fetch request to get all courses.
 
 #### Defined in
 
-[student.ts:106](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L106)
+[student.ts:106](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L106)
 
 ___
 
@@ -1275,7 +1275,7 @@ A function that performs a fetch request to get the student's course attendance.
 
 #### Defined in
 
-[student.ts:144](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L144)
+[student.ts:144](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L144)
 
 ___
 
@@ -1305,7 +1305,7 @@ A function that performs a fetch request to get the student's course names.
 
 #### Defined in
 
-[student.ts:91](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L91)
+[student.ts:91](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L91)
 
 ___
 
@@ -1335,7 +1335,7 @@ A function that performs a fetch request to get the student's courses.
 
 #### Defined in
 
-[student.ts:75](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L75)
+[student.ts:75](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L75)
 
 ___
 
@@ -1365,7 +1365,7 @@ A function that performs a fetch request to get the student list.
 
 #### Defined in
 
-[student.ts:59](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L59)
+[student.ts:59](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L59)
 
 ___
 
@@ -1397,7 +1397,7 @@ A function that performs a fetch request to update the student's attendance.
 
 #### Defined in
 
-[student.ts:179](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/student.ts#L179)
+[student.ts:179](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/student.ts#L179)
 [attendance-app](../README.md) / [Modules](../modules.md) / admin
 
 # Module: admin
@@ -1440,7 +1440,7 @@ A Promise that resolves to the result of the API call.
 
 #### Defined in
 
-[cognito.ts:39](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/214655f/frontend/attendance-app/src/API/cognito.ts#L39)
+[cognito.ts:39](https://github.com/devrim113/Project-AttendanceSystem-DevOpsCloud/blob/3ae9131/frontend/attendance-app/src/API/cognito.ts#L39)
 attendance-app / [Modules](modules.md)
 
 # Getting Started with Create React App
