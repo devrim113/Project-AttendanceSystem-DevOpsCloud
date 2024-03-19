@@ -11,7 +11,7 @@ def lambda_handler(event, context):
     # try:
     name = event['request']['userAttributes'].get('name', "Unknown")
     userPoolId = event['userPoolId']
-    
+
     client = boto3.client('cognito-idp')
     response_Add_To_Group = client.admin_add_user_to_group(
         UserPoolId=userPoolId,
@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         Item={
             'ItemId': user_id,
             'UserName': name,
-            'ItemType': "Students"
+            'ItemType': "Student"
         },
         ConditionExpression='attribute_not_exists(ItemId) AND attribute_not_exists(ItemType)'
     )
@@ -33,4 +33,3 @@ def lambda_handler(event, context):
 
     # Always return the event object in its expected format for Cognito triggers
     return event
-    
