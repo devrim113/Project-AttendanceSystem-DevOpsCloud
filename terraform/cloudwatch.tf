@@ -139,7 +139,7 @@ resource "aws_cloudwatch_dashboard" "my_dashboard" {
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/Cloudfront", "Requests", "Region", "Global", "DistributionId", "E2T6940QFH3ACC", { "stat": "Sum", "period": 300 }]
+          [ "AWS/CloudFront", "Requests", "Region", "Global", "DistributionId", "${aws_cloudfront_distribution.s3_distribution.id}", { "stat": "Sum", "period": 300 } ]
         ],
         "view": "timeSeries",
         "stacked": false,
