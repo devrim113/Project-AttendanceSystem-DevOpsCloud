@@ -46,5 +46,8 @@
   "devDependencies": {
     "typedoc": "^0.25.12",
     "typedoc-plugin-markdown": "^3.17.1"
+  },
+  "overrides": {
+    "nth-check": "2.0.1"
   }
 }
