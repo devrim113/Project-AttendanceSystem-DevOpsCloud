@@ -17,6 +17,10 @@ The program uses Artillery (https://artillery.io/) to perform the tests.
   - Login to your web application.
   - Use browser developer tools (e.g., Inspect element in Chrome DevTools) to examine the cookies associated with the application domain.
   - Look for a cookie named "bearer" contains the JWT token. The token value will be a long string of characters.
+ 
+- Replace `<<USER_ID>>` in the package.json file with the user ID of your test account.
+
+**package.json is included in the .gitignore, so that these variables are not accidentally committed.**
 
 **2. Test Configurations:**
 
