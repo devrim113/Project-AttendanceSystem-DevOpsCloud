@@ -58,3 +58,4 @@ yarn-error.log*
 
 docs/build
 frontend/attendance-app/src/API/docs
+load_test/package.json
