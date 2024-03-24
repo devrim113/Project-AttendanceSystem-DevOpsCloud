@@ -8,6 +8,6 @@
   },
   "scripts": {
       "test:frontend": "artillery run load_test_frontend.yaml",
-      "test:backend": "artillery run --variables '{ \"authToken\": \"<<JWT_TOKEN>>\" }' load_test_backend.yaml"
+      "test:backend": "artillery run --variables '{ \"authToken\": \"<<JWT_TOKEN>>\", \"userId\": \"<<USER_ID>>\" }' artillery/load_test_backend.yaml"
   }
 }
